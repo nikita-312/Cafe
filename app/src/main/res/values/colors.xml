@@ -6,4 +6,6 @@
 
     <color name="colorwhite">#FFFFFF</color>
     <color name="colorblack">#000000</color>
+    <color name="colorFont">#333333</color>
+    <color name="colorNotesBorder">#bdbdbd</color>
 </resources>
