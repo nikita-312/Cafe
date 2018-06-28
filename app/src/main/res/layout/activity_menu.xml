@@ -64,7 +64,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3">
+            android:layout_weight="0.25">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/categoryrv"
@@ -78,7 +78,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.7">
+            android:layout_weight="0.75">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/categoryitemrv"
