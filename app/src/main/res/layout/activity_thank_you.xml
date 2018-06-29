@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorwhite"
+    tools:context="com.conceptioni.cafeapp.activity.ThankYouActivity">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/thankyou_drawable"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/dp_30"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/thankyou"/>
+        <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thank You"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp_30"/>
+        <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="For Order"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp_26"/>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -73,9 +73,9 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="bottom"
-            android:padding="15dip"
             app:centered="true"
             app:fillColor="#e77e23"
+            android:padding="15dip"
             app:pageColor="#ffffff"
             app:snap="false" />
     </RelativeLayout>

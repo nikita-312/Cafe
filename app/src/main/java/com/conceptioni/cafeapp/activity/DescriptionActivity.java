@@ -3,7 +3,9 @@ package com.conceptioni.cafeapp.activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +54,7 @@ public class DescriptionActivity extends AppCompatActivity {
 
         indicator.setRadius(4 * density);
         indicator.setStrokeWidth(13);
+        indicator.setRadius(10);
         indicator.setStrokeColor(Color.WHITE);
 
         NUM_PAGES = slider.length;

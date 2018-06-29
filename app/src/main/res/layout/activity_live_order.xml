@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorwhite"
+    tools:context="com.conceptioni.cafeapp.activity.CartActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/dp_5"
+        tools:ignore="UnusedAttribute"
+        android:background="@color/colorToolbar">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingEnd="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:src="@drawable/back"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
+        <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Live order"
+            android:textColor="@color/colorblack"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="HardcodedText" />
+
+    </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvliveOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_above="@+id/bottom"/>
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            tools:ignore="UnusedAttribute"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_5">
+        <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sub total"
+            android:layout_weight="0.6"
+            android:gravity="end"
+            android:textColor="@color/colorFont"/>
+        <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="$ 200.50"
+            android:layout_weight="0.4"
+            android:gravity="end"
+            android:textColor="@color/colorPrimary"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:elevation="@dimen/dp_5"
+            android:background="@color/colorShadow"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_5">
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Fee"
+                android:layout_weight="0.6"
+                android:gravity="end"
+                android:textColor="@color/colorFont"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="$ 10.00"
+                android:layout_weight="0.4"
+                android:gravity="end"
+                android:textColor="@color/colorPrimary"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:elevation="@dimen/dp_5"
+           android:background="@color/colorShadow"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_5">
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:layout_weight="0.6"
+                android:gravity="end"
+                android:textColor="@color/colorFont"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="$ 210.50"
+                android:layout_weight="0.4"
+                android:gravity="end"
+                android:textColor="@color/colorPrimary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp_10"
+            android:gravity="center">
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="make payment"
+                android:textAllCaps="true"
+                android:background="@drawable/login_drawable"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:paddingLeft="45dp"
+                android:paddingRight="45dp"
+                android:textColor="@color/colorwhite"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>
