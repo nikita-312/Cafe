@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/thankyou_drawable"
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/dp_30"
@@ -24,14 +23,17 @@
             android:text="Thank You"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/sp_30"/>
+            android:textSize="@dimen/sp_30"
+            android:includeFontPadding="false"/>
         <com.conceptioni.cafeapp.utils.TextviewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="For Order"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/sp_26"/>
+            android:textSize="24sp"
+            android:layout_marginTop="-20dp"
+            android:includeFontPadding="false"/>
 
     </LinearLayout>
 </RelativeLayout>
