@@ -40,7 +40,10 @@
         <activity
             android:name=".activity.LiveOrderActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ThankYouActivity"></activity>
+        <activity
+            android:name=".activity.ThankYouActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.ReviewActivity"></activity>
     </application>
 
 </manifest>
