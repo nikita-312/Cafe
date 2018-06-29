@@ -26,6 +26,7 @@ public class DescriptionActivity extends AppCompatActivity {
     private static int NUM_PAGES = 0;
     int slider[]={R.drawable.slider,R.drawable.slider,R.drawable.slider};
 
+    /**/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
