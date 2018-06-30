@@ -6,5 +6,11 @@
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
     <string name="dummytext">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been</string>
+
     <string name="otpText">Enter the code you have received\nby SMS in order to verify your\naccount</string>
+    <string name="need_sms_read">We need read sms permission</string>
+    <string name="denied_read_sms">you denied read sms permission</string>
+    <string name="grant_permission">grant_permission</string>
+
+    <string name="permissionmsg">Without this permission the app is unable to receive and read sms.\nAre you sure you want to deny permission?\nTo grant permission press <b>Grant Permission</b> then press on <b> Permissions </b> and allow all the permissions. </string>
 </resources>

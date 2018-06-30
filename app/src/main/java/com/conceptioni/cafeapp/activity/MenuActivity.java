@@ -11,11 +11,14 @@ import android.widget.ImageView;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
+import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
 public class MenuActivity extends AppCompatActivity {
 
-    RecyclerView categoryrv,categoryitemrv;
     ImageView ivCart;
+    ShimmerRecyclerView rvCategory,rvCategoryitem;
+    MenuAdapter menuAdapter;
+    MenuItemAdapter menuItemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +36,36 @@ public class MenuActivity extends AppCompatActivity {
 
     private void initmenu() {
         ivCart = findViewById(R.id.ivCart);
-        categoryrv = findViewById(R.id.categoryrv);
-        categoryitemrv = findViewById(R.id.categoryitemrv);
+        rvCategory = findViewById(R.id.rvCategory);
+        rvCategoryitem = findViewById(R.id.rvCategoryitem);
+
+        menuAdapter = new MenuAdapter();
+        menuItemAdapter = new MenuItemAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
-        categoryrv.setLayoutManager(linearLayoutManager);
+        rvCategory.setLayoutManager(linearLayoutManager);
+        rvCategory.setAdapter(menuAdapter);
+        rvCategory.showShimmerAdapter();
 
-        MenuAdapter menuAdapter = new MenuAdapter();
-        categoryrv.setAdapter(menuAdapter);
+        rvCategory.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rvCategory.hideShimmerAdapter();
+            }
+        }, 5000);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MenuActivity.this);
-        categoryitemrv.setLayoutManager(linearLayoutManager1);
+        rvCategoryitem.setLayoutManager(linearLayoutManager1);
+        rvCategoryitem.setAdapter(menuItemAdapter);
+        rvCategoryitem.showShimmerAdapter();
 
-        MenuItemAdapter menuItemAdapter = new MenuItemAdapter();
-        categoryitemrv.setAdapter(menuItemAdapter);
+        rvCategoryitem.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rvCategoryitem.hideShimmerAdapter();
+            }
+        }, 5000);
     }
+
+
 }

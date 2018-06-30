@@ -72,18 +72,11 @@
             android:orientation="vertical"
             android:layout_weight="0.25">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/categoryrv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutAnimation="@anim/layout_animation_fall_down"
-                android:visibility="gone"/>
-
-
             <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
-                android:id="@+id/rvImages"
+                android:id="@+id/rvCategory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
                 app:demo_layout="@layout/row_item_menu_shimmer_view"
                 app:demo_layout_manager_type="linear_vertical"/>
 
@@ -100,15 +93,18 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_weight="0.7">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/categoryitemrv"
+            <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
+                android:id="@+id/rvCategoryitem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutAnimation="@anim/layout_animation_fall_down">
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                app:demo_layout="@layout/row_item_menu_category_shimmer_view"
+                app:demo_layout_manager_type="linear_vertical"/>
 
-            </android.support.v7.widget.RecyclerView>
+
         </LinearLayout>
 
     </LinearLayout>
