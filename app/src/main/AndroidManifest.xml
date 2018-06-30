@@ -43,7 +43,11 @@
         <activity
             android:name=".activity.ThankYouActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ReviewActivity"></activity>
+        <activity android:name=".activity.ReviewActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.OTPActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

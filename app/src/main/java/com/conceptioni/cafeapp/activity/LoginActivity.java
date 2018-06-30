@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void clicklogin() {
         sendotpll.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this,MenuActivity.class));
+            startActivity(new Intent(LoginActivity.this,OTPActivity.class));
             finish();
         });
     }

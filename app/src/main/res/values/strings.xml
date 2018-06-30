@@ -6,4 +6,5 @@
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
     <string name="dummytext">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been</string>
+    <string name="otpText">Enter the code you have received\nby SMS in order to verify your\naccount</string>
 </resources>
