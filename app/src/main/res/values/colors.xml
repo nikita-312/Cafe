@@ -12,4 +12,6 @@
     <color name="colorShadow">#15000000</color>
     <color name="colorCardbg">#eaeaea</color>
 
+    <color name="demo_dark_transparent">#24000000</color>
+
 </resources>

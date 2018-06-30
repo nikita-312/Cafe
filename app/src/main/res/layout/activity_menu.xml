@@ -80,12 +80,12 @@
                 android:visibility="gone"/>
 
 
-            <!--<com.tabassum.shimmerRecyclerView.ShimmerRecyclerView-->
-                <!--android:id="@+id/rvImages"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--app:demo_layout="@layout/item_image_shimmer_view"-->
-                <!--app:demo_layout_manager_type="linear_vertical"/>-->
+            <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
+                android:id="@+id/rvImages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:demo_layout="@layout/row_item_menu_shimmer_view"
+                app:demo_layout_manager_type="linear_vertical"/>
 
         </LinearLayout>
 
