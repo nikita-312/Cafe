@@ -3,13 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorwhite"
     android:orientation="vertical"
     tools:context=".activity.MenuActivity">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/dp_10"
+        android:background="@color/colorToolbar"
+        android:elevation="@dimen/dp_5"
         tools:ignore="UnusedAttribute">
 
         <ImageView
@@ -66,15 +69,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
+            android:orientation="vertical"
             android:layout_weight="0.25">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/categoryrv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layoutAnimation="@anim/layout_animation_fall_down">
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                android:visibility="gone"/>
 
-            </android.support.v7.widget.RecyclerView>
+
+            <!--<com.tabassum.shimmerRecyclerView.ShimmerRecyclerView-->
+                <!--android:id="@+id/rvImages"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:demo_layout="@layout/item_image_shimmer_view"-->
+                <!--app:demo_layout_manager_type="linear_vertical"/>-->
 
         </LinearLayout>
 
