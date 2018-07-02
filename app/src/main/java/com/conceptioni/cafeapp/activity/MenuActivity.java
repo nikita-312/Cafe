@@ -81,7 +81,7 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
+//
             }
 
             @Override
