@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.conceptioni.cafeapp.R;
@@ -37,11 +38,20 @@ public class OTPActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-        tvrVerify.setOnClickListener(v -> startActivity(new Intent(OTPActivity.this,MenuActivity.class)));
+        tvrVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!pinview1.getValue().equalsIgnoreCase("")){
+                    checkOTP();
+                }else {
+                    new MakeToast("Please Enter OTP");
+                }
+            }
+        });
         pinview1.setPinViewEventListener(new Pinview.PinViewEventListener() {
             @Override
             public void onDataEntered(Pinview pinview, boolean fromUser) {
-                Toast.makeText(OTPActivity.this, pinview.getValue(), Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -57,9 +67,9 @@ public class OTPActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String otp = intent.getStringExtra("otp_confirm");
+            Log.d("+++++otp","++++"+otp.toString());
             if (!otp.equalsIgnoreCase("null") && otp.length() > 5) {
                 pinview1.setValue(otp);
-                checkOTP();
             }
 
         }
@@ -74,7 +84,7 @@ public class OTPActivity extends AppCompatActivity {
         Log.d("+++++++jsonobject","+++++"+jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.sendotp(  "application/json", jsonObject);
+        Call<JsonObject> call = service.verifyotp(  "application/json", jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
@@ -82,14 +92,14 @@ public class OTPActivity extends AppCompatActivity {
                 JsonObject res = response.body();
                 Log.e("====Responce", "===" + res);
                 if (res != null) {
-
+                    startActivity(new Intent(OTPActivity.this,MenuActivity.class));
                 } else {
                     new MakeToast("Please enter correct otp");
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
             }
         });
