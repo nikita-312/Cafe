@@ -54,10 +54,15 @@
                 android:paddingTop="@dimen/dp_10"
                 tools:ignore="UnusedAttribute">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <EditText
+                    android:id="@+id/phonenoet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phone Number"
+                    android:background="@android:color/transparent"
+                    android:text=""
+                    android:hint="Phone Number"
+                    android:textColorHint="@color/colorFont"
+                    android:textColor="@color/colorFont"
                     android:textSize="@dimen/sp_14"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />

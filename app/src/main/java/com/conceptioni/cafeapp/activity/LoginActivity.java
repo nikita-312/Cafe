@@ -12,10 +12,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.utils.MakeToast;
+import com.google.gson.JsonObject;
 
 import java.security.Permission;
 
@@ -26,12 +29,16 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.PermissionUtils;
 import permissions.dispatcher.RuntimePermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @RuntimePermissions
 public class LoginActivity extends AppCompatActivity {
 
     LinearLayout sendotpll;
     int REQUEST_PERMISSION_SETTING = 0;
+    EditText phonenoet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +52,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void clicklogin() {
         sendotpll.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this,OTPActivity.class));
-            finish();
+           SendOtp();
         });
     }
 
     private void initlogin() {
         sendotpll = findViewById(R.id.sendotpll);
+        phonenoet = findViewById(R.id.phonenoet);
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS})
@@ -116,5 +123,35 @@ public class LoginActivity extends AppCompatActivity {
         new MakeToast(R.string.denied_read_sms);
         Log.d("++++++++result","+++++"+PermissionUtils.hasSelfPermissions(LoginActivity.this,Manifest.permission.READ_PHONE_STATE));
 
+    }
+
+    public void SendOtp(){
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("user_phoneno", "+91"+phonenoet.getText().toString());
+
+        Log.d("+++++++jsonobject","+++++"+jsonObject.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.sendotp(  "application/json", jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> callback, @NonNull Response<JsonObject> response) {
+                JsonObject res = response.body();
+                Log.e("====Responce", "===" + res);
+                if (res != null) {
+                    startActivity(new Intent(LoginActivity.this,OTPActivity.class));
+                    finish();
+                } else {
+                    new MakeToast("Please enter correct otp");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 }
