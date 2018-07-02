@@ -50,6 +50,11 @@
         <activity android:name=".activity.OTPActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"/>
+        <receiver android:name=".broadcast.MySMSBroadCastReceiver" >
+            <intent-filter android:priority="999" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

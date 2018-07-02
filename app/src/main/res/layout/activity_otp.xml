@@ -32,6 +32,29 @@
             android:layout_marginTop="@dimen/dp_20"
             android:gravity="center">
 
+            <com.goodiebag.pinview.Pinview
+                android:id="@+id/pinview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cursorVisible="false"
+                app:hint=""
+                app:inputType="number"
+                app:forceKeyboard="true"
+                app:password="false"
+                app:pinBackground="@drawable/example_drawable_with_grey_disabled"
+                app:pinHeight="40dp"
+                app:pinLength="4"
+                app:pinWidth="40dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+            android:visibility="gone">
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
@@ -59,7 +82,6 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:src="@drawable/round" />
 
                 <EditText

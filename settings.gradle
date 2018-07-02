@@ -1,1 +1,1 @@
-include ':app', ':ViewPagerIndicator-Library',':shimmer'
+include ':app', ':ViewPagerIndicator-Library',':shimmer',':pinview'

@@ -78,7 +78,7 @@
                 android:layout_height="match_parent"
                 android:layoutAnimation="@anim/layout_animation_fall_down"
                 app:demo_layout="@layout/row_item_menu_shimmer_view"
-                app:demo_layout_manager_type="linear_vertical"/>
+                app:demo_layout_manager_type="linear_vertical" />
 
         </LinearLayout>
 
@@ -102,7 +102,7 @@
                 android:layout_height="match_parent"
                 android:layoutAnimation="@anim/layout_animation_fall_down"
                 app:demo_layout="@layout/row_item_menu_category_shimmer_view"
-                app:demo_layout_manager_type="linear_vertical"/>
+                app:demo_layout_manager_type="linear_vertical" />
 
 
         </LinearLayout>
