@@ -13,4 +13,8 @@
     <string name="grant_permission">grant_permission</string>
 
     <string name="permissionmsg">Without this permission the app is unable to receive and read sms.\nAre you sure you want to deny permission?\nTo grant permission press <b>Grant Permission</b> then press on <b> Permissions </b> and allow all the permissions. </string>
+
+
+    <string name="phoneno">Please Enter Phone Number</string>
+    <string name="validphoneno">Please Enter valid Phone Number</string>
 </resources>

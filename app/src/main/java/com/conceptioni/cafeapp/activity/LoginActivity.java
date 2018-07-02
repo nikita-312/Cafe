@@ -12,12 +12,16 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
+import com.conceptioni.cafeapp.utils.Validations;
 import com.google.gson.JsonObject;
 
 import java.security.Permission;
@@ -39,11 +43,14 @@ public class LoginActivity extends AppCompatActivity {
     LinearLayout sendotpll;
     int REQUEST_PERMISSION_SETTING = 0;
     EditText phonenoet;
+    ProgressBar loginprogress;
+    Validations validations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        validations = new Validations();
         initlogin();
         clicklogin();
         LoginActivityPermissionsDispatcher.read_smsWithPermissionCheck(LoginActivity.this);
@@ -52,13 +59,24 @@ public class LoginActivity extends AppCompatActivity {
 
     private void clicklogin() {
         sendotpll.setOnClickListener(v -> {
-           SendOtp();
+           if (!validations.isEmpty(phonenoet)){
+               if (validations.isValidPhoneNumber(phonenoet)){
+                   loginprogress.setVisibility(View.VISIBLE);
+                   SendOtp();
+               }else {
+                   phonenoet.setError(getString(R.string.validphoneno));
+               }
+           }else {
+               phonenoet.setError(getString(R.string.phoneno));
+           }
+
         });
     }
 
     private void initlogin() {
         sendotpll = findViewById(R.id.sendotpll);
         phonenoet = findViewById(R.id.phonenoet);
+        loginprogress = findViewById(R.id.loginprogress);
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS})
@@ -141,16 +159,20 @@ public class LoginActivity extends AppCompatActivity {
                 JsonObject res = response.body();
                 Log.e("====Responce", "===" + res);
                 if (res != null) {
+                    if (response.isSuccessful())
+                    loginprogress.setVisibility(View.GONE);
+                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Phone_No,phonenoet.getText().toString()).apply();
                     startActivity(new Intent(LoginActivity.this,OTPActivity.class));
                     finish();
                 } else {
+                    loginprogress.setVisibility(View.GONE);
                     new MakeToast("Please enter correct otp");
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                loginprogress.setVisibility(View.GONE);
             }
         });
     }

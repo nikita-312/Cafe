@@ -13,6 +13,6 @@ public interface Service {
     @POST("userapi/userLogin")
     Call<JsonObject> sendotp(@Header("Content-Type") String content,@Body JsonObject object);
 
-//    @POST("validate")
-//    Call<JsonObject> verifyotp(@Header("Authorization") String authorization, @Header("Content-Type") String content, @Header("Accept-type") String Accept_type, @Body JsonObject object);
+    @POST("userapi/verifyOTP")
+    Call<JsonObject> verifyotp(@Header("Content-Type") String content,@Body JsonObject object);
 }

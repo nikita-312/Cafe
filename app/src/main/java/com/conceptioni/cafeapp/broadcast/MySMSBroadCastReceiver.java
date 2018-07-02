@@ -11,27 +11,30 @@ public class MySMSBroadCastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Get Bundle object contained in the SMS intent passed in
-        Bundle bundle = intent.getExtras();
-        SmsMessage[] smsm = null;
-        String sms_str ="";
+        final Bundle bundle = intent.getExtras();
+        try {
+            if (bundle != null) {
+                Object[] pdusObj = (Object[]) bundle.get("pdus");
+                for (Object aPdusObj : pdusObj) {
+                    SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) aPdusObj);
+                    // String senderAddress = currentMessage.getDisplayOriginatingAddress();
+                    String message = currentMessage.getDisplayMessageBody();
 
-        if (bundle != null) {
-            // Get the SMS message
-            Object[] pdus = (Object[]) bundle.get("pdus");
-            smsm = new SmsMessage[pdus.length];
-            for (int i = 0; i < smsm.length; i++) {
-                smsm[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                    String verificationCode = getVerificationCode(message);
 
-                sms_str += "\r\nMessage: ";
-                sms_str += smsm[i].getMessageBody().toString();
-                sms_str += "\r\n";
-
-                String Sender = smsm[i].getOriginatingAddress();
-                //Check here sender is yours
-                Intent smsIntent = new Intent("otp");
-                smsIntent.putExtra("message", sms_str);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(smsIntent);
+                    Intent hhtpIntent = new Intent(context, MySMSBroadCastReceiver.class);
+                    hhtpIntent.putExtra("otp", verificationCode);
+                    context.startService(hhtpIntent);
+                }
             }
+        } catch (Exception e) {
+            // Log.e(TAG, "Exception: " + e.getMessage());
         }
+    }
+
+    private String getVerificationCode(String message) {
+        String code = null;
+        code=message.substring(message.length()-7,message.length()-1);
+        return code;
     }
 }
