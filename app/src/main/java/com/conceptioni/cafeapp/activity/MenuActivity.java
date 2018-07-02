@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,10 +13,18 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
+import com.conceptioni.cafeapp.model.Category;
+import com.conceptioni.cafeapp.model.Items;
+import com.conceptioni.cafeapp.model.Menu;
+import com.conceptioni.cafeapp.model.MenuModel;
+import com.conceptioni.cafeapp.utils.MakeToast;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +36,7 @@ public class MenuActivity extends AppCompatActivity {
     ShimmerRecyclerView rvCategory,rvCategoryitem;
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
+    List<Category> menuModels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,54 +57,63 @@ public class MenuActivity extends AppCompatActivity {
         rvCategory = findViewById(R.id.rvCategory);
         rvCategoryitem = findViewById(R.id.rvCategoryitem);
 
-        menuAdapter = new MenuAdapter();
+        menuAdapter = new MenuAdapter(menuModels);
         menuItemAdapter = new MenuItemAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
-        rvCategory.setAdapter(menuAdapter);
-        rvCategory.showShimmerAdapter();
 
-        rvCategory.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rvCategory.hideShimmerAdapter();
-            }
-        }, 5000);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MenuActivity.this);
         rvCategoryitem.setLayoutManager(linearLayoutManager1);
         rvCategoryitem.setAdapter(menuItemAdapter);
         rvCategoryitem.showShimmerAdapter();
 
-        rvCategoryitem.postDelayed(new Runnable() {
+        rvCategoryitem.postDelayed(() -> rvCategoryitem.hideShimmerAdapter(), 5000);
+
+        GetMenu();
+
+        rvCategory.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
-            public void run() {
-                rvCategoryitem.hideShimmerAdapter();
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
             }
-        }, 5000);
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
     }
     public void GetMenu(){
         JsonObject object = new JsonObject();
         object.addProperty("cafeid","1");
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.getMenuItem("application/json",object);
+        Call<Menu> call = service.getMenuItem("application/json",object);
 
-        call.enqueue(new Callback<JsonObject>() {
+        call.enqueue(new Callback<Menu>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject res = response.body();
-                if (res != null){
+            public void onResponse(Call<Menu> call, Response<Menu> response) {
                     if (response.isSuccessful()){
+                        menuModels.clear();
+                        menuModels = response.body().getCategory();
+                        rvCategory.setAdapter(menuAdapter);
+                        rvCategory.showShimmerAdapter();
 
-                    }
-                }
+                        rvCategory.postDelayed(() -> rvCategory.hideShimmerAdapter(), 5000);
+                        menuModels.get(1).getItems();
+                    }else
+                        new MakeToast("Error while getting data");
             }
-
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
+            public void onFailure(Call<Menu> call, Throwable t) {
+                new MakeToast("Error while getting result");
             }
         });
     }

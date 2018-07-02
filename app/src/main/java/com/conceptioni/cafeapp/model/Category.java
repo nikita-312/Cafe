@@ -2,9 +2,6 @@ package com.conceptioni.cafeapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
-/**
- * Awesome Pojo Generator
- * */
 public class Category{
   @SerializedName("cname")
   @Expose

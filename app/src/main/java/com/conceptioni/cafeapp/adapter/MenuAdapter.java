@@ -8,12 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.model.Category;
+import com.conceptioni.cafeapp.utils.TextviewRegular;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
 
     private Context context;
+    List<Category> categories;
 
-    public MenuAdapter(){
+    public MenuAdapter(List<Category> categories){
 
     }
 
@@ -29,17 +35,20 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-
+        categories.get(position).getItems();
+        holder.tvrCatName.setText(categories.get(position).getCname());
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return categories.size();
     }
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
+        TextviewRegular tvrCatName;
         public MenuViewHolder(View itemView) {
             super(itemView);
+            tvrCatName = itemView.findViewById(R.id.tvrCatName);
         }
     }
 }
