@@ -1,6 +1,7 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,7 +58,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withText("Scanning...")
                 .withResultListener(barcode -> {
                     barcodeResult = barcode;
-                    scaninfotv.setText(barcode.rawValue);
+                    startActivity(new Intent(QrCodeScanActivity.this,MenuActivity.class));
+                    finish();
+//                    scaninfotv.setText(barcode.rawValue);
                 })
                 .build();
         materialBarcodeScanner.startScan();

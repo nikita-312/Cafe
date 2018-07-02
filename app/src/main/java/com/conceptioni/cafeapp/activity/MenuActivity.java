@@ -101,7 +101,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Menu> call, Response<Menu> response) {
                     if (response.isSuccessful()){
-                        menuModels.clear();
+//                        menuModels.clear();
                         menuModels = response.body().getCategory();
                         rvCategory.setAdapter(menuAdapter);
                         rvCategory.showShimmerAdapter();

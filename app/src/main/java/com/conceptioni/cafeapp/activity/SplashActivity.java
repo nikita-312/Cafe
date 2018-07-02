@@ -28,6 +28,8 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(new Intent(SplashActivity.this,SignUpActivity.class));
             finish();
         });
+
+
     }
 
     private void initsplash() {

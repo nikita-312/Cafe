@@ -35,13 +35,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        categories.get(position).getItems();
-        holder.tvrCatName.setText(categories.get(position).getCname());
+//        categories.get(position).getItems();
+//        holder.tvrCatName.setText(categories.get(position).getCname());
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return 10;
     }
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {

@@ -21,6 +21,7 @@ public class SharedPrefs {
 
     public interface userSharedPrefData {
        String Phone_No = "Phone_No";
+       String User_id = "User_id";
     }
 
 }
