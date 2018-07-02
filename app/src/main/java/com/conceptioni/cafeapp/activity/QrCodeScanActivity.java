@@ -36,7 +36,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
         QrCodeScanActivityPermissionsDispatcher.opencameraWithPermissionCheck(QrCodeScanActivity.this);
         if(savedInstanceState != null){
             Barcode restoredBarcode = savedInstanceState.getParcelable(BARCODE_KEY);
-            if(restoredBarcode != null){
+            if(restoredBarcode != null) {
                 scaninfotv.setText(restoredBarcode.rawValue);
                 barcodeResult = restoredBarcode;
             }
@@ -55,12 +55,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withBleepEnabled(true)
                 .withBackfacingCamera()
                 .withText("Scanning...")
-                .withResultListener(new MaterialBarcodeScanner.OnResultListener() {
-                    @Override
-                    public void onResult(Barcode barcode) {
-                        barcodeResult = barcode;
-                        scaninfotv.setText(barcode.rawValue);
-                    }
+                .withResultListener(barcode -> {
+                    barcodeResult = barcode;
+                    scaninfotv.setText(barcode.rawValue);
                 })
                 .build();
         materialBarcodeScanner.startScan();

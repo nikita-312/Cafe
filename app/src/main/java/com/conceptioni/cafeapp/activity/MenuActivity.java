@@ -9,9 +9,17 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
+import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
+
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -66,6 +74,29 @@ public class MenuActivity extends AppCompatActivity {
             }
         }, 5000);
     }
+    public void GetMenu(){
+        JsonObject object = new JsonObject();
+        object.addProperty("cafeid","1");
 
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.getMenuItem("application/json",object);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject res = response.body();
+                if (res != null){
+                    if (response.isSuccessful()){
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
 
 }
