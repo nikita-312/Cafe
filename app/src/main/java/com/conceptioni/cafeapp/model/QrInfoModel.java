@@ -20,4 +20,5 @@ public class QrInfoModel {
     public void setCafe_Tabel_Name_No(String cafe_Tabel_Name_No) {
         Cafe_Tabel_Name_No = cafe_Tabel_Name_No;
     }
+    //
 }
