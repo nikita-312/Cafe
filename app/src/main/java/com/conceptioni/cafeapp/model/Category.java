@@ -2,7 +2,13 @@ package com.conceptioni.cafeapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
+/**
+ * Awesome Pojo Generator
+ * */
 public class Category{
+  @SerializedName("cimage")
+  @Expose
+  private String cimage;
   @SerializedName("cname")
   @Expose
   private String cname;
@@ -12,6 +18,12 @@ public class Category{
   @SerializedName("cid")
   @Expose
   private Integer cid;
+  public void setCimage(String cimage){
+   this.cimage=cimage;
+  }
+  public String getCimage(){
+   return cimage;
+  }
   public void setCname(String cname){
    this.cname=cname;
   }

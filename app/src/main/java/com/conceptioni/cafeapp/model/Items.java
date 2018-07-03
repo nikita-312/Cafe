@@ -1,14 +1,25 @@
 package com.conceptioni.cafeapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+/**
+ * Awesome Pojo Generator
+ * */
 public class Items{
+  @SerializedName("image")
+  @Expose
+  private String image;
   @SerializedName("item_id")
   @Expose
   private Integer item_id;
   @SerializedName("item_name")
   @Expose
   private String item_name;
+  public void setImage(String image){
+   this.image=image;
+  }
+  public String getImage(){
+   return image;
+  }
   public void setItem_id(Integer item_id){
    this.item_id=item_id;
   }
