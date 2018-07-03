@@ -74,13 +74,12 @@ public class OTPActivity extends AppCompatActivity {
         pinview1 = findViewById(R.id.pinview1);
         verifyll = findViewById(R.id.verifyll);
 
-        verifyll.setVisibility(View.VISIBLE);
+
 
         smsVerifyCatcher = new SmsVerifyCatcher(this, message -> {
             String code = parseCode(message);//Parse verification code
             pinview1.setValue(code);//set code in edit text
             //then you can send verification code to server
-            verifyll.setVisibility(View.GONE);
         });
     }
 
