@@ -32,7 +32,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.65"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/dp_5">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,8 +45,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:maxLines="1"
-                    android:text="The Coffe Macchiato mnjfjdhu"
-                    android:textSize="@dimen/sp_12" />
+                    android:text="The Coffe Macchiato"
+                    android:textSize="@dimen/sp_14" />
 
             </LinearLayout>
 
@@ -61,7 +62,7 @@
                     android:maxLines="1"
                     android:text="$5.277"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/sp_12" />
+                    android:textSize="@dimen/sp_14" />
 
             </LinearLayout>
 
@@ -74,9 +75,9 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/dp_10"
-                    >
+                    android:paddingBottom="@dimen/dp_7">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -125,18 +126,17 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true">
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/add_cart"/>
+                        android:src="@drawable/add_cart" />
 
                 </RelativeLayout>
 
             </RelativeLayout>
-
 
         </LinearLayout>
 
