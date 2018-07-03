@@ -85,8 +85,8 @@
                         android:layout_weight="0.8">
 
                         <ImageView
-                            android:layout_width="@dimen/dp_30"
-                            android:layout_height="@dimen/dp_30"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginRight="@dimen/dp_5"
                             android:src="@drawable/minus" />
@@ -97,8 +97,8 @@
                             android:layout_gravity="center">
 
                             <ImageView
-                                android:layout_width="@dimen/dp_40"
-                                android:layout_height="@dimen/dp_40"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:src="@drawable/round" />
 
@@ -112,8 +112,8 @@
                         </RelativeLayout>
 
                         <ImageView
-                            android:layout_width="@dimen/dp_30"
-                            android:layout_height="@dimen/dp_30"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/dp_5"
                             android:src="@drawable/plus" />
@@ -129,8 +129,8 @@
                     android:layout_alignParentBottom="true">
 
                     <ImageView
-                        android:layout_width="@dimen/dp_40"
-                        android:layout_height="@dimen/dp_40"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/add_cart"/>
 
                 </RelativeLayout>
