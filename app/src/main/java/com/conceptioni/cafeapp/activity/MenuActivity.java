@@ -68,29 +68,10 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem.setLayoutManager(linearLayoutManager1);
         rvCategoryitem.setAdapter(menuItemAdapter);
         rvCategoryitem.showShimmerAdapter();
-
         rvCategoryitem.postDelayed(() -> rvCategoryitem.hideShimmerAdapter(), 5000);
-
         GetMenu();
-
-        rvCategory.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-//
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
     }
-    public void GetMenu(){
+    public void GetMenu() {
         JsonObject object = new JsonObject();
         object.addProperty("cafeid","1");
 

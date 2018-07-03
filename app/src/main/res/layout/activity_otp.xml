@@ -42,7 +42,7 @@
                 app:inputType="number"
                 app:forceKeyboard="true"
                 app:password="false"
-                app:pinBackground="@drawable/round_shape"
+                app:pinBackground="@drawable/round"
                 app:pinHeight="50dp"
                 app:pinLength="4"
                 app:pinWidth="50dp"

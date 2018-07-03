@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.model.Category;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
 
@@ -37,6 +40,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 //        categories.get(position).getItems();
 //        holder.tvrCatName.setText(categories.get(position).getCname());
+        Glide.with(context).load("").into(holder.civ);
     }
 
     @Override
@@ -46,9 +50,11 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
         TextviewRegular tvrCatName;
+        CircleImageView civ;
         public MenuViewHolder(View itemView) {
             super(itemView);
             tvrCatName = itemView.findViewById(R.id.tvrCatName);
+            civ = itemView.findViewById(R.id.civ);
         }
     }
 }
