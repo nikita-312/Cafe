@@ -29,6 +29,8 @@ public class QrCodeScanActivity extends AppCompatActivity {
     public static final String BARCODE_KEY = "BARCODE";
     TextviewRegular scaninfotv;
 
+    /*pppp*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
