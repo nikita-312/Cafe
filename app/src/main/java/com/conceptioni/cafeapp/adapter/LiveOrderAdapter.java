@@ -32,9 +32,9 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        holder.itemll.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, DescriptionActivity.class));
-        });
+//        holder.itemll.setOnClickListener(v -> {
+//            context.startActivity(new Intent(context, DescriptionActivity.class));
+//        });
     }
 
     @Override

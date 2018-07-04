@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
-public class Example{
+public class Cafe{
   @SerializedName("cafe_title")
   @Expose
   private String cafe_title;

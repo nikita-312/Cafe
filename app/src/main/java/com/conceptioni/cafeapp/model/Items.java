@@ -1,16 +1,19 @@
 package com.conceptioni.cafeapp.model;
+import android.media.Image;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
 public class Items{
   @SerializedName("image")
   @Expose
-  private String image;
+  private List<Image> image;
   @SerializedName("item_id")
   @Expose
-  private Integer item_id;
+  private String item_id;
   @SerializedName("price")
   @Expose
   private String price;
@@ -20,16 +23,16 @@ public class Items{
   @SerializedName("desc")
   @Expose
   private String desc;
-  public void setImage(String image){
+  public void setImage(List<Image> image){
    this.image=image;
   }
-  public String getImage(){
+  public Object getImage(){
    return image;
   }
-  public void setItem_id(Integer item_id){
+  public void setItem_id(String item_id){
    this.item_id=item_id;
   }
-  public Integer getItem_id(){
+  public String getItem_id(){
    return item_id;
   }
   public void setPrice(String price){

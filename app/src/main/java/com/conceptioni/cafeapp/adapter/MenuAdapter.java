@@ -10,10 +10,8 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
-import com.conceptioni.cafeapp.model.Category;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -21,10 +19,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
 
     private Context context;
-    List<Category> categories;
+    private List<Category> categories;
 
     public MenuAdapter(List<Category> categories){
-
+        this.categories = categories;
     }
 
     @NonNull
@@ -40,17 +38,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 //        categories.get(position).getItems();
-//        holder.tvrCatName.setText(categories.get(position).getCname());
-        Glide.with(context).load("").into(holder.civ);
-        holder.llMain.setOnClickListener(v -> {
-            holder.llMain.setBackgroundResource(R.drawable.orange_menu_drawable);
-            holder.tvrCatName.setVisibility(View.GONE);
-        });
+        holder.tvrCatName.setText(categories.get(position).getCname());
+        Glide.with(context).load(categories.get(position).getCname()).into(holder.civ);
+//        holder.llMain.setOnClickListener(v -> {
+//            holder.llMain.setBackgroundResource(R.drawable.orange_menu_drawable);
+//            holder.tvrCatName.setVisibility(View.GONE);
+//        });
     }
 //
     @Override
     public int getItemCount() {
-        return 10;
+        return categories.size();
     }
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {

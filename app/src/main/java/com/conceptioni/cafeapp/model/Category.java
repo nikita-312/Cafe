@@ -17,7 +17,7 @@ public class Category{
   private List<Items> items;
   @SerializedName("cid")
   @Expose
-  private Integer cid;
+  private String cid;
   public void setCimage(String cimage){
    this.cimage=cimage;
   }
@@ -36,10 +36,10 @@ public class Category{
   public List<Items> getItems(){
    return items;
   }
-  public void setCid(Integer cid){
+  public void setCid(String cid){
    this.cid=cid;
   }
-  public Integer getCid(){
+  public String getCid(){
    return cid;
   }
 }

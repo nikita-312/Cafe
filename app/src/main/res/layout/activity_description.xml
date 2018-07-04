@@ -23,6 +23,7 @@
             tools:ignore="ContentDescription,RtlSymmetry" />
 
         <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:id="@+id/Itemnametvr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -94,6 +95,7 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:gravity="center">
                 <com.conceptioni.cafeapp.utils.TextviewRegular
+                    android:id="@+id/ItemPricetvr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$ 20.00"
@@ -123,7 +125,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="1"
+                            android:text="0"
                             android:textSize="@dimen/sp_12" />
                     </RelativeLayout>
 
@@ -136,6 +138,7 @@
                 </LinearLayout>
 
                 <com.conceptioni.cafeapp.utils.TextviewRegular
+                    android:id="@+id/Itemdesctvr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dummytext"
@@ -149,6 +152,7 @@
                     android:background="@drawable/notes_drawable">
 
                     <EditText
+                        android:id="@+id/noteset"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"

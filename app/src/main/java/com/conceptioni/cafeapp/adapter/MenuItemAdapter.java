@@ -9,15 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
-import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuViewHolder> {
@@ -42,10 +39,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         holder.itemll.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, DescriptionActivity.class));
+            context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",itemsArrayList.get(position).getItem_id()));
         });
 
-        Glide.with(context).load(itemsArrayList.get(position).getImage()).into(holder.imageView1);
+//        Glide.with(context).load(itemsArrayList.get(position).getImage()).into(holder.imageView1);
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
     }

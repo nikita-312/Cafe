@@ -13,9 +13,9 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
+import com.conceptioni.cafeapp.model.Cafe;
 import com.conceptioni.cafeapp.model.Category;
 import com.conceptioni.cafeapp.model.Items;
-import com.conceptioni.cafeapp.model.Menu;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
@@ -23,9 +23,12 @@ import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,7 +69,12 @@ public class MenuActivity extends AppCompatActivity {
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-
+                view.findViewById(R.id.llMain).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange_menu_drawable);
+                    }
+                });
             }
 
             @Override
@@ -91,29 +99,82 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("+++++++jsonobject","+++++"+object.toString());
+        Log.d("++++jsonobject","+++++"+object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<Menu> call = service.getMenuItem("application/json", object);
+        Call<JsonObject> call = service.getMenuItem("application/json", object);
 
-        call.enqueue(new Callback<Menu>() {
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(@NonNull Call<Menu> call, @NonNull Response<Menu> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
-                        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData,response.body().toString()).apply();
-                        categoryList = response.body().getCategory();
-                        rvCategory.hideShimmerAdapter();
-                        menuAdapter = new MenuAdapter(categoryList);
-                        rvCategory.setAdapter(menuAdapter);
-                        itemsArrayList.clear();
-                        for (int i = 0; i <1 ; i++) {
-                            itemsArrayList = categoryList.get(i).getItems();
-                            menuItemAdapter = new MenuItemAdapter(itemsArrayList);
-                            rvCategoryitem.hideShimmerAdapter();
-                            rvCategoryitem.setAdapter(menuItemAdapter);
+                        try {
+                            JSONObject data = new JSONObject(response.body().toString());
+                            if (data.optString("success").equalsIgnoreCase("1")){
+                                JSONArray categoryarray = data.getJSONArray("category");
+                                for (int i = 0; i <categoryarray.length() ; i++) {
+                                    JSONObject categorydata = categoryarray.getJSONObject(i);
+                                    Category category = new Category();
+                                    category.setCid(categorydata.optString("cid"));
+                                    category.setCname(categorydata.optString("cname"));
+                                    category.setCimage(categorydata.optString("cimage"));
 
+                                    JSONArray itemarray = categorydata.getJSONArray("items");
+                                    for (int j = 0; j <itemarray.length() ; j++) {
+                                        JSONObject itemdata = itemarray.getJSONObject(i);
+                                        Items items = new Items();
+                                        items.setItem_id(itemdata.optString("item_id"));
+                                        items.setItem_name(itemdata.optString("item_name"));
+                                        items.setPrice(itemdata.optString("price"));
+                                        items.setDesc(itemdata.optString("desc"));
+                                        JSONArray images = itemdata.getJSONArray("image");
+                                        for (int k = 0; k <images.length() ; k++) {
+                                            Items items1 = new Items();
+
+                                        }
+                                    }
+                                }
+
+                            }else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+//                        try {
+//                            JSONObject data = new JSONObject(response.body().toString());
+//                            if (data.optString("success").equalsIgnoreCase("1")){
+//                                JSONArray categoryarry = data.getJSONArray("category");
+//                                for (int i = 0; i <categoryarry.length() ; i++) {
+//                                    JSONObject categorydata = categoryarry.getJSONObject(i);
+//                                    Category category = new Category();
+//                                    category.setCid(categorydata.optString("cid"));
+//                                    category.setCname(categorydata.optString("cname"));
+//                                    category.setCimage(categorydata.optString("cimage"));
+//                                }
+//                            }else {
+//
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                        assert response.body() != null;
+//                        categoryList = Objects.requireNonNull(response.body()).getCategory();
+//                        rvCategory.hideShimmerAdapter();
+//                        menuAdapter = new MenuAdapter(categoryList);
+//                        rvCategory.setAdapter(menuAdapter);
+//                        itemsArrayList.clear();
+//                        for (int i = 0; i <1 ; i++) {
+//                            itemsArrayList = categoryList.get(i).getItems();
+//                            Gson gson = new Gson();
+//                            String json = gson.toJson(itemsArrayList);
+//                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData,json).apply();
+//                            menuItemAdapter = new MenuItemAdapter(itemsArrayList);
+//                            rvCategoryitem.hideShimmerAdapter();
+//                            rvCategoryitem.setAdapter(menuItemAdapter);
+//                        }
 
                     } else{
                         new MakeToast("Error while getting data");
@@ -127,9 +188,9 @@ public class MenuActivity extends AppCompatActivity {
                 }
 
             }
-
             @Override
-            public void onFailure(@NonNull Call<Menu> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Log.d("+++++successelse","+++++" +t.getMessage());
                 new MakeToast("Error while getting result");
                 rvCategory.hideShimmerAdapter();
                 rvCategoryitem.hideShimmerAdapter();

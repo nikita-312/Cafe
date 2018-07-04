@@ -11,16 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.conceptioni.cafeapp.R;
-import com.conceptioni.cafeapp.model.Category;
-import com.conceptioni.cafeapp.model.Items;
-import com.conceptioni.cafeapp.model.Menu;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
+import com.conceptioni.cafeapp.utils.TextviewRegular;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -32,9 +34,10 @@ public class DescriptionActivity extends AppCompatActivity {
     ViewPager viewPager;
     CirclePageIndicator indicator;
     int slider[] = {R.drawable.slider, R.drawable.slider, R.drawable.slider};
-    String ItemData;
-    List<Category> categoryList = new ArrayList<>();
+    String ItemData,ItemId;
     List<Items> itemsArrayList = new ArrayList<>();
+    TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr;
+    EditText noteset;
 
     /**/
     @Override
@@ -47,8 +50,25 @@ public class DescriptionActivity extends AppCompatActivity {
     private void init() {
         viewPager = findViewById(R.id.pager);
         indicator = findViewById(R.id.indicator);
+        ItemPricetvr = findViewById(R.id.ItemPricetvr);
+        Itemnametvr = findViewById(R.id.Itemnametvr);
+        Itemdesctvr = findViewById(R.id.Itemdesctvr);
+        noteset = findViewById(R.id.noteset);
 
-        ItemData = SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.ItemData, Constant.notAvailable);
+
+        if (getIntent().getExtras() != null){
+            ItemId = getIntent().getStringExtra("ItemId");
+        }
+
+        itemsArrayList.clear();
+        itemsArrayList = getArrayList();
+        for (int i = 0; i <itemsArrayList.size() ; i++) {
+            if (ItemId.equalsIgnoreCase(itemsArrayList.get(i).getItem_id())){
+                Itemnametvr.setText(itemsArrayList.get(i).getItem_name());
+                ItemPricetvr.setText(itemsArrayList.get(i).getPrice() + " Rs");
+                Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
+            }
+        }
 
         SlidePageAdapter slidePageAdapter = new SlidePageAdapter();
         if (viewPager != null) {
@@ -103,6 +123,13 @@ public class DescriptionActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public ArrayList<Items> getArrayList(){
+        Gson gson = new Gson();
+        ItemData = SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.ItemData, Constant.notAvailable);
+        Type type = new TypeToken<ArrayList<Items>>() {}.getType();
+        return gson.fromJson(ItemData, type);
     }
 
     class SlidePageAdapter extends PagerAdapter {
