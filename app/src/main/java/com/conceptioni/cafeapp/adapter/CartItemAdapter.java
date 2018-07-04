@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
+import com.conceptioni.cafeapp.utils.TextviewBold;
+import com.conceptioni.cafeapp.utils.TextviewRegular;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuViewHolder> {
 
@@ -44,9 +47,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
         LinearLayout itemll;
+        RoundedImageView imageView1;
+        TextviewRegular tvrCartName,tvrCartQty;
+        TextviewBold tvbCartPrice;
         public MenuViewHolder(View itemView) {
             super(itemView);
             itemll = itemView.findViewById(R.id.itemll);
+            imageView1 = itemView.findViewById(R.id.imageView1);
+            tvrCartName = itemView.findViewById(R.id.tvrCartName);
+            tvbCartPrice = itemView.findViewById(R.id.tvbCartPrice);
+            tvrCartQty = itemView.findViewById(R.id.tvrCartQty);
         }
     }
 }

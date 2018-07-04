@@ -1,6 +1,5 @@
 package com.conceptioni.cafeapp.activity.retrofitinterface;
 
-import com.conceptioni.cafeapp.model.Cafe;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -16,4 +15,6 @@ public interface Service {
     Call<JsonObject> getMenuItem(@Header("Content-Type") String content, @Body JsonObject jsonObject);
     @POST("userapi/verifyOTP")
     Call<JsonObject> verifyotp(@Header("Content-Type") String content,@Body JsonObject object);
+    @POST("userapi/view_cart")
+    Call<JsonObject> viewCart(@Header("userapi/view_cart") String content, @Body JsonObject object);
 }

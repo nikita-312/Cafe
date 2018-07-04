@@ -168,39 +168,6 @@ public class MenuActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-//                        try {
-//                            JSONObject data = new JSONObject(response.body().toString());
-//                            if (data.optString("success").equalsIgnoreCase("1")){
-//                                JSONArray categoryarry = data.getJSONArray("category");
-//                                for (int i = 0; i <categoryarry.length() ; i++) {
-//                                    JSONObject categorydata = categoryarry.getJSONObject(i);
-//                                    Category category = new Category();
-//                                    category.setCid(categorydata.optString("cid"));
-//                                    category.setCname(categorydata.optString("cname"));
-//                                    category.setCimage(categorydata.optString("cimage"));
-//                                }
-//                            }else {
-//
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                        assert response.body() != null;
-//                        categoryList = Objects.requireNonNull(response.body()).getCategory();
-//                        rvCategory.hideShimmerAdapter();
-//                        menuAdapter = new MenuAdapter(categoryList);
-//                        rvCategory.setAdapter(menuAdapter);
-//                        itemsArrayList.clear();
-//                        for (int i = 0; i <1 ; i++) {
-//                            itemsArrayList = categoryList.get(i).getItems();
-//                            Gson gson = new Gson();
-//                            String json = gson.toJson(itemsArrayList);
-//                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData,json).apply();
-//                            menuItemAdapter = new MenuItemAdapter(itemsArrayList);
-//                            rvCategoryitem.hideShimmerAdapter();
-//                            rvCategoryitem.setAdapter(menuItemAdapter);
-//                        }
-
                     } else{
                         new MakeToast("Error while getting data");
                         rvCategory.hideShimmerAdapter();
