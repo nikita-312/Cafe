@@ -24,6 +24,9 @@ import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.Validations;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.Permission;
 
 import permissions.dispatcher.NeedsPermission;
@@ -77,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         sendotpll = findViewById(R.id.sendotpll);
         phonenoet = findViewById(R.id.phonenoet);
         loginprogress = findViewById(R.id.loginprogress);
+
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS})
@@ -156,17 +160,20 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> callback, @NonNull Response<JsonObject> response) {
-                JsonObject res = response.body();
-                Log.e("====Responce", "===" + res);
-                if (res != null) {
-                    if (response.isSuccessful())
-                    loginprogress.setVisibility(View.GONE);
-                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Phone_No,phonenoet.getText().toString()).apply();
-                    startActivity(new Intent(LoginActivity.this,OTPActivity.class));
-                    finish();
-                } else {
-                    loginprogress.setVisibility(View.GONE);
-                    new MakeToast("Please enter correct otp");
+                try {
+                    JSONObject jsonObject1 = new JSONObject(response.body().toString());
+                    Log.d("++++jsonobject","+++++"+jsonObject1.toString());
+                    if (jsonObject1.optString("success").equalsIgnoreCase("1")){
+                        loginprogress.setVisibility(View.GONE);
+                        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Phone_No,phonenoet.getText().toString()).apply();
+                        startActivity(new Intent(LoginActivity.this,OTPActivity.class));
+                        finish();
+                    }else {
+                        new MakeToast("Please Enter Correct Phone Number");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 

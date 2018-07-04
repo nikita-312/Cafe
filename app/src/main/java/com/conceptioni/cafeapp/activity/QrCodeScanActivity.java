@@ -100,4 +100,10 @@ public class QrCodeScanActivity extends AppCompatActivity {
     void showNeverAskeddialogue() {
         new MakeToast(R.string.never_ask_camera);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
