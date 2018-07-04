@@ -47,7 +47,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             holder.tvrCatName.setVisibility(View.GONE);
         });
     }
-
+//
     @Override
     public int getItemCount() {
         return 10;
