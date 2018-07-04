@@ -13,13 +13,14 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
-import com.conceptioni.cafeapp.model.Cafe;
 import com.conceptioni.cafeapp.model.Category;
+import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
@@ -42,6 +43,8 @@ public class MenuActivity extends AppCompatActivity {
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
     List<Items> itemsArrayList = new ArrayList<>();
+    List<Items> itemsArrayList1 = new ArrayList<>();
+    List<Images> imagesArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange_menu_drawable);
+                        view.findViewById(R.id.tvrCatName).setVisibility(View.GONE);
                     }
                 });
             }
@@ -99,8 +103,6 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("++++jsonobject","+++++"+object.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getMenuItem("application/json", object);
 
@@ -112,6 +114,7 @@ public class MenuActivity extends AppCompatActivity {
                         try {
                             JSONObject data = new JSONObject(response.body().toString());
                             if (data.optString("success").equalsIgnoreCase("1")){
+                                categoryList.clear();
                                 JSONArray categoryarray = data.getJSONArray("category");
                                 for (int i = 0; i <categoryarray.length() ; i++) {
                                     JSONObject categorydata = categoryarray.getJSONObject(i);
@@ -120,24 +123,46 @@ public class MenuActivity extends AppCompatActivity {
                                     category.setCname(categorydata.optString("cname"));
                                     category.setCimage(categorydata.optString("cimage"));
 
+                                    itemsArrayList.clear();
                                     JSONArray itemarray = categorydata.getJSONArray("items");
                                     for (int j = 0; j <itemarray.length() ; j++) {
-                                        JSONObject itemdata = itemarray.getJSONObject(i);
+                                        JSONObject itemdata = itemarray.getJSONObject(j);
                                         Items items = new Items();
                                         items.setItem_id(itemdata.optString("item_id"));
                                         items.setItem_name(itemdata.optString("item_name"));
                                         items.setPrice(itemdata.optString("price"));
                                         items.setDesc(itemdata.optString("desc"));
+
                                         JSONArray images = itemdata.getJSONArray("image");
                                         for (int k = 0; k <images.length() ; k++) {
-                                            Items items1 = new Items();
-
+                                            Images images1 = new Images();
+                                            images1.setImages(images.getString(k));
+                                            imagesArrayList.add(images1);
+                                            items.setImage(imagesArrayList);
                                         }
+                                        itemsArrayList.add(items);
+                                        category.setItems(itemsArrayList);
                                     }
+
+                                    categoryList.add(category);
+                                }
+                                rvCategory.hideShimmerAdapter();
+                                menuAdapter = new MenuAdapter(categoryList);
+                                rvCategory.setAdapter(menuAdapter);
+
+                                itemsArrayList1.clear();
+                                for (int i = 0; i <1 ; i++) {
+                                    itemsArrayList1 = categoryList.get(i).getItems();
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(itemsArrayList1);
+                                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+                                    menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
+                                    rvCategoryitem.hideShimmerAdapter();
+                                    rvCategoryitem.setAdapter(menuItemAdapter);
                                 }
 
                             }else {
-
+                                new MakeToast(data.optString("msg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

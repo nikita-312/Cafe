@@ -116,7 +116,7 @@ public class OTPActivity extends AppCompatActivity {
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Auth_token,object.optString("auth_token")).apply();
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.User_id,object.optString("id")).apply();
                                     new MakeToast(object.optString("msg"));
-                                    startActivity(new Intent(OTPActivity.this,HomeActivity.class));
+                                    startActivity(new Intent(OTPActivity.this,MenuActivity.class));
                                     finish();
                                 }else {
                                     new MakeToast("Please Enter Correct Otp");

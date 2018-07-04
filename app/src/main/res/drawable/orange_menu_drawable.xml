@@ -1,20 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >-->
+
+    <!--&lt;!&ndash;<item android:top="@dimen/dp_30">&ndash;&gt;-->
+        <!--&lt;!&ndash;<rotate&ndash;&gt;-->
+            <!--&lt;!&ndash;android:fromDegrees="45"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:pivotX="90%"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:pivotY="0%"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:toDegrees="0" >&ndash;&gt;-->
+            <!--&lt;!&ndash;<shape android:shape="rectangle" >&ndash;&gt;-->
+                <!--&lt;!&ndash;<padding&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:bottom="1dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:left="1dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:right="1dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:top="1dp" />&ndash;&gt;-->
+                <!--&lt;!&ndash;<corners android:radius="7dp" />&ndash;&gt;-->
+                <!--&lt;!&ndash;<solid android:color="#e77e23" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</shape>&ndash;&gt;-->
+        <!--&lt;!&ndash;</rotate>&ndash;&gt;-->
+    <!--&lt;!&ndash;</item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<item android:right="20dp">&ndash;&gt;-->
+        <!--&lt;!&ndash;<shape android:shape="rectangle" >&ndash;&gt;-->
+            <!--&lt;!&ndash;<padding&ndash;&gt;-->
+                <!--&lt;!&ndash;android:bottom="1dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:left="1dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:right="1dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:top="1dp" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<corners android:radius="7dp" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<solid android:color="#e77e23" />&ndash;&gt;-->
+        <!--&lt;!&ndash;</shape>&ndash;&gt;-->
+    <!--&lt;!&ndash;</item>&ndash;&gt;-->
+
+<!--</layer-list>-->
+
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:top="@dimen/dp_50">
+    <item android:top="30dp">
         <rotate
             android:fromDegrees="45"
-            android:pivotX="100%"
+            android:pivotX="87%"
             android:pivotY="0%"
-            android:toDegrees="0" >
+            android:toDegrees="45" >
             <shape android:shape="rectangle" >
-                <solid android:color="#e77e23" />
+                <padding
+                    android:bottom="1dp"
+                    android:left="1dp"
+                    android:right="1dp"
+                    android:top="1dp" />
+                <solid android:color="@color/colorPrimary" />
             </shape>
         </rotate>
     </item>
     <item android:right="20dp">
         <shape android:shape="rectangle" >
-            <solid android:color="#e77e23" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
+            <solid android:color="@color/colorPrimary" />
+
             <corners android:radius="5dp" />
         </shape>
     </item>

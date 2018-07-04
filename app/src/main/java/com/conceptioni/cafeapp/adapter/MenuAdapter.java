@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.model.Category;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 
 import java.util.List;
@@ -39,7 +42,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 //        categories.get(position).getItems();
         holder.tvrCatName.setText(categories.get(position).getCname());
-        Glide.with(context).load(categories.get(position).getCname()).into(holder.civ);
+        Glide.with(context).load(categories.get(position).getCimage()).into(holder.civ);
 //        holder.llMain.setOnClickListener(v -> {
 //            holder.llMain.setBackgroundResource(R.drawable.orange_menu_drawable);
 //            holder.tvrCatName.setVisibility(View.GONE);
@@ -53,8 +56,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
         TextviewRegular tvrCatName;
-        CircleImageView civ;
-        LinearLayout llMain;
+        ImageView civ;
+        RelativeLayout llMain;
         public MenuViewHolder(View itemView) {
             super(itemView);
             tvrCatName = itemView.findViewById(R.id.tvrCatName);

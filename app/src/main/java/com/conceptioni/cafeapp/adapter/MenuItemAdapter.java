@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
+import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.makeramen.roundedimageview.RoundedImageView;
