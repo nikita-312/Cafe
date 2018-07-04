@@ -14,8 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.model.Category;
+import com.conceptioni.cafeapp.model.Items;
+import com.conceptioni.cafeapp.model.Menu;
+import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,6 +32,9 @@ public class DescriptionActivity extends AppCompatActivity {
     ViewPager viewPager;
     CirclePageIndicator indicator;
     int slider[] = {R.drawable.slider, R.drawable.slider, R.drawable.slider};
+    String ItemData;
+    List<Category> categoryList = new ArrayList<>();
+    List<Items> itemsArrayList = new ArrayList<>();
 
     /**/
     @Override
@@ -37,6 +47,8 @@ public class DescriptionActivity extends AppCompatActivity {
     private void init() {
         viewPager = findViewById(R.id.pager);
         indicator = findViewById(R.id.indicator);
+
+        ItemData = SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.ItemData, Constant.notAvailable);
 
         SlidePageAdapter slidePageAdapter = new SlidePageAdapter();
         if (viewPager != null) {

@@ -3,9 +3,12 @@ package com.conceptioni.cafeapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -35,5 +38,12 @@ public class SplashActivity extends AppCompatActivity {
     private void initsplash() {
         loginll = findViewById(R.id.loginll);
         signupll = findViewById(R.id.signupll);
+
+        Log.d("+++++id","++++"+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+
+        if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)){
+            startActivity(new Intent(SplashActivity.this,MenuActivity.class));
+            finish();
+        }
     }
 }

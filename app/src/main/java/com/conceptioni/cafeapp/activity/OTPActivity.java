@@ -19,6 +19,9 @@ import com.goodiebag.pinview.Pinview;
 import com.google.gson.JsonObject;
 import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,10 +99,9 @@ public class OTPActivity extends AppCompatActivity {
     public void checkOTP(){
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("user_phoneno", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Phone_No, Constant.notAvailable));
+        jsonObject.addProperty("user_phoneno", "+91"+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Phone_No, Constant.notAvailable));
         jsonObject.addProperty("OTP", pinview1.getValue());
 
-        Log.d("+++++++jsonobject","+++++"+jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.verifyotp(  "application/json", jsonObject);
@@ -107,22 +109,28 @@ public class OTPActivity extends AppCompatActivity {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> callback, @NonNull Response<JsonObject> response) {
-                JsonObject res = response.body();
-                if (res != null) {
-                    if (response.isSuccessful()){
-                        startActivity(new Intent(OTPActivity.this,HomeActivity.class));
-                        finish();
-                    }else {
-                        new MakeToast("Please Enter correct Otp");
-                    }
-                } else {
-                    new MakeToast("Please enter correct otp");
-                }
-            }
+                        try {
+                            if (response.body() != null) {
+                                JSONObject object = new JSONObject(response.body().toString());
+                                if (object.optString("success").equalsIgnoreCase("1")){
+                                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Auth_token,object.optString("auth_token")).apply();
+                                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.User_id,object.optString("id")).apply();
+                                    new MakeToast(object.optString("msg"));
+                                    startActivity(new Intent(OTPActivity.this,HomeActivity.class));
+                                    finish();
+                                }else {
+                                    new MakeToast("Please Enter Correct Otp");
+                                }
+                            }
 
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-
+                new MakeToast("Error While Retriving Otp Please Try After Some Time");
             }
         });
     }

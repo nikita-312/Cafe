@@ -23,7 +23,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     List<Category> categories;
 
     public MenuAdapter(List<Category> categories){
-
+        this.categories = categories;
     }
 
     @NonNull
@@ -39,13 +39,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 //        categories.get(position).getItems();
-//        holder.tvrCatName.setText(categories.get(position).getCname());
-        Glide.with(context).load("").into(holder.civ);
+        holder.tvrCatName.setText(categories.get(position).getCname());
+        Glide.with(context).load(categories.get(position).getCimage()).into(holder.civ);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return categories.size();
     }
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
