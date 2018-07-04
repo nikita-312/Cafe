@@ -12,6 +12,7 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.model.CartModel;
+import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
@@ -22,6 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +35,9 @@ public class CartActivity extends AppCompatActivity {
     TextviewRegular tvrPlaceOrder,tvrCartTotal,tvrCartFee,tvrCartSubTotal;
     String subtotal,total,fee;
     CartModel cartModel = new CartModel();
+    List<CartModel> cartModelsarray = new ArrayList<>();
+    List<Images> imagesArrayList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,17 +64,15 @@ public class CartActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
         rvCart.setLayoutManager(linearLayoutManager);
-        CartItemAdapter cartItemAdapter = new CartItemAdapter();
-        rvCart.setAdapter(cartItemAdapter);
+
 
         ViewCart();
     }
     public void ViewCart(){
-        Log.d("++++viewcart","++++in");
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        jsonObject.addProperty("userid", "2");
+        jsonObject.addProperty("auth_token","MmNhZmUxNTMwNjE1NTA3");
 
         Service  service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.viewCart("application/json",jsonObject);
@@ -75,41 +80,48 @@ public class CartActivity extends AppCompatActivity {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.d("++++viewcart","++++onresponse");
 
                 if (response.body() != null){
                     if (response.isSuccessful()){
                         try {
-                            Log.d("++++viewcart","++++try");
                             JSONObject jsonObject1 = new JSONObject(response.body().toString());
-                                if (jsonObject1.optInt("success")==1){
-                                    Log.d("++++viewcart","++++success");
+                                if (jsonObject1.getInt("success")==1){
 
                                     subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                    fee = String.valueOf(jsonObject1.optInt("fee"));
                                    total = String.valueOf(jsonObject1.optInt("total"));
+
+                                    cartModelsarray.clear();
                                     JSONArray jsonArray = jsonObject1.getJSONArray("data");
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
                                         cartModel.setItem_name(object.optString("item_name"));
                                         cartModel.setPrice(object.optString("price"));
                                         cartModel.setQty(object.optString("qty"));
+
+                                        imagesArrayList.clear();
+                                        Images images1 = null;
                                         JSONArray array = object.getJSONArray("image");
                                         for (int j = 0; j < array.length(); j++) {
-                                            array.getString(j);
-
+                                             images1 = new Images();
+                                            images1.setImages(array.getString(0));
+                                            cartModel.setImages(imagesArrayList);
                                         }
+                                        imagesArrayList.add(images1);
+                                        Log.d("+++images","+++ "+imagesArrayList.toString());
+
+                                        cartModelsarray.add(cartModel);
+                                        cartModel.setImages(imagesArrayList);
+                                        CartItemAdapter cartItemAdapter = new CartItemAdapter(cartModelsarray,imagesArrayList);
+                                        rvCart.setAdapter(cartItemAdapter);
                                     }
-                                    Log.d("++++total","+++ "+subtotal);
                                     tvrCartSubTotal.setText(subtotal);
                                     tvrCartFee.setText(fee);
                                     tvrCartTotal.setText(total);
                                 }
-                            Log.d("++++viewcart","++++else");
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d("++++viewcart","++++catch");
 
                         }
                     }else{

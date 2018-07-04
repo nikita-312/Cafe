@@ -143,7 +143,6 @@ public class MenuActivity extends AppCompatActivity {
                                         itemsArrayList.add(items);
                                         category.setItems(itemsArrayList);
                                     }
-
                                     categoryList.add(category);
                                 }
                                 rvCategory.hideShimmerAdapter();

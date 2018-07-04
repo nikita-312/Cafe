@@ -1,12 +1,12 @@
 package com.conceptioni.cafeapp.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CartModel {
     String item_name;
     String price;
     String qty;
-    ArrayList<String> images;
+    List<Images> images;
 
     public String getItem_name() {
         return item_name;
@@ -32,11 +32,11 @@ public class CartModel {
         this.qty = qty;
     }
 
-    public ArrayList<String> getImages() {
+    public List<Images> getImages() {
         return images;
     }
 
-    public void setImages(ArrayList<String> images) {
+    public void setImages(List<Images> images) {
         this.images = images;
     }
 }

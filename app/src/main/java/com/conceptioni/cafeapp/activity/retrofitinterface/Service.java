@@ -16,5 +16,5 @@ public interface Service {
     @POST("userapi/verifyOTP")
     Call<JsonObject> verifyotp(@Header("Content-Type") String content,@Body JsonObject object);
     @POST("userapi/view_cart")
-    Call<JsonObject> viewCart(@Header("userapi/view_cart") String content, @Body JsonObject object);
+    Call<JsonObject> viewCart(@Header("Content-Type") String content, @Body JsonObject object);
 }
