@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
@@ -41,6 +42,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 //        categories.get(position).getItems();
 //        holder.tvrCatName.setText(categories.get(position).getCname());
         Glide.with(context).load("").into(holder.civ);
+        holder.llMain.setOnClickListener(v -> {
+            holder.llMain.setBackgroundResource(R.drawable.orange_menu_drawable);
+            holder.tvrCatName.setVisibility(View.GONE);
+        });
     }
 
     @Override
@@ -51,10 +56,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     public class MenuViewHolder extends RecyclerView.ViewHolder {
         TextviewRegular tvrCatName;
         CircleImageView civ;
+        LinearLayout llMain;
         public MenuViewHolder(View itemView) {
             super(itemView);
             tvrCatName = itemView.findViewById(R.id.tvrCatName);
             civ = itemView.findViewById(R.id.civ);
+            llMain = itemView.findViewById(R.id.llMain);
         }
     }
 }
