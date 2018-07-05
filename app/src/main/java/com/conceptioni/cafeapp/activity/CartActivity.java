@@ -2,6 +2,7 @@ package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +44,7 @@ public class CartActivity extends AppCompatActivity {
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
     CartItemAdapter cartItemAdapter;
-    LinearLayout cartll,emptycartll;
+    LinearLayout cartll, emptycartll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +55,14 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void click() {
-        tvrPlaceOrder.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, LiveOrderActivity.class)));
+        tvrPlaceOrder.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, ThankYouActivity.class))
+        );
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 ImageView ivRemove = view.findViewById(R.id.ivRemove);
-                Log.d("+++++pos","++++"+position + "+++++" + cartModelsarray.get(position).getItem_id());
-                ivRemove.setOnClickListener(v -> showDeleteAlert(position,cartModelsarray.get(position).getItem_id()));
+                Log.d("+++++pos", "++++" + position + "+++++" + cartModelsarray.get(position).getItem_id());
+                ivRemove.setOnClickListener(v -> showDeleteAlert(position, cartModelsarray.get(position).getItem_id()));
             }
 
             @Override
@@ -70,13 +72,13 @@ public class CartActivity extends AppCompatActivity {
         }));
     }
 
-    private void showDeleteAlert(final int pos,String ItemId) {
+    private void showDeleteAlert(final int pos, String ItemId) {
         new AlertDialog.Builder(CartActivity.this)
                 .setTitle("Remove?")
                 .setMessage("Are you sure want to remove the product?")
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> removeCart(pos,ItemId))
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> removeCart(pos, ItemId))
                 .create().show();
     }
 
@@ -100,7 +102,7 @@ public class CartActivity extends AppCompatActivity {
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("++++json","+++++"+jsonObject.toString());
+        Log.d("++++json", "+++++" + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.viewCart("application/json", jsonObject);
@@ -144,7 +146,7 @@ public class CartActivity extends AppCompatActivity {
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
-                            }else {
+                            } else {
                                 cartll.setVisibility(View.GONE);
                                 emptycartll.setVisibility(View.VISIBLE);
                             }
@@ -173,7 +175,7 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    public void removeCart(final int pos,String ItemId) {
+    public void removeCart(final int pos, String ItemId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("itemid", ItemId);
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
