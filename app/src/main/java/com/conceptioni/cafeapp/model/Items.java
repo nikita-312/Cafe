@@ -23,10 +23,22 @@ public class Items{
   @SerializedName("desc")
   @Expose
   private String desc;
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
+    @SerializedName("qty")
+    @Expose
+    private int qty;
   public void setImage(List<Images> image){
    this.image=image;
   }
-  public Object getImage(){
+  public List<Images> getImage(){
    return image;
   }
   public void setItem_id(String item_id){

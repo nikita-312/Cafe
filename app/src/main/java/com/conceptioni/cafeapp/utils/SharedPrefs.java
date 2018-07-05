@@ -25,6 +25,7 @@ public class SharedPrefs {
        String Auth_token = "Auth_token";
 
        String ItemData = "ItemData";
+       String Imageata = "Imageata";
     }
 
 }

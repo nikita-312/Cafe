@@ -75,7 +75,7 @@ public class MenuActivity extends AppCompatActivity {
                 view.findViewById(R.id.llMain).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange_menu_drawable);
+                        view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange);
                         view.findViewById(R.id.tvrCatName).setVisibility(View.GONE);
                     }
                 });
@@ -90,11 +90,6 @@ public class MenuActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MenuActivity.this);
         rvCategoryitem.setLayoutManager(linearLayoutManager1);
         rvCategoryitem.showShimmerAdapter();
-
-
-//        rvCategoryitem.postDelayed(() -> rvCategoryitem.hideShimmerAdapter(), 5000);
-
-
     }
 
     public void GetMenu() {
@@ -102,6 +97,8 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("cafeid", "1");
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+
+        Log.d("++++json","++++"+object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getMenuItem("application/json", object);
@@ -132,7 +129,9 @@ public class MenuActivity extends AppCompatActivity {
                                         items.setItem_name(itemdata.optString("item_name"));
                                         items.setPrice(itemdata.optString("price"));
                                         items.setDesc(itemdata.optString("desc"));
+                                        items.setQty(itemdata.optInt("qty"));
 
+                                        imagesArrayList.clear();
                                         JSONArray images = itemdata.getJSONArray("image");
                                         for (int k = 0; k <images.length() ; k++) {
                                             Images images1 = new Images();
@@ -155,9 +154,15 @@ public class MenuActivity extends AppCompatActivity {
                                     Gson gson = new Gson();
                                     String json = gson.toJson(itemsArrayList1);
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
-                                    menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
+                                    menuItemAdapter = new MenuItemAdapter(itemsArrayList1,imagesArrayList);
                                     rvCategoryitem.hideShimmerAdapter();
                                     rvCategoryitem.setAdapter(menuItemAdapter);
+                                }
+
+                                for (int i = 0; i <categoryList.size() ; i++) {
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(imagesArrayList);
+                                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Imageata, json).apply();
                                 }
 
                             }else {
@@ -181,7 +186,6 @@ public class MenuActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Log.d("+++++successelse","+++++" +t.getMessage());
                 new MakeToast("Error while getting result");
                 rvCategory.hideShimmerAdapter();
                 rvCategoryitem.hideShimmerAdapter();

@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/llMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:background="@drawable/category_drawable"
         android:orientation="vertical"
         android:paddingLeft="@dimen/dp_10"
@@ -27,6 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_round"
+                android:layout_gravity="center"
                 android:visibility="visible">
 
             <ImageView
