@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,8 +51,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        initmenu();
-        clicks();
+
     }
 
     private void clicks() {
@@ -67,17 +67,12 @@ public class MenuActivity extends AppCompatActivity {
         rvCategory.setLayoutManager(linearLayoutManager);
         rvCategory.showShimmerAdapter();
 
-        GetMenu();
-
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                view.findViewById(R.id.llMain).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange);
-                        view.findViewById(R.id.tvrCatName).setVisibility(View.GONE);
-                    }
+                view.findViewById(R.id.llMain).setOnClickListener(v -> {
+                    view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange);
+                    view.findViewById(R.id.tvrCatName).setVisibility(View.GONE);
                 });
             }
 
@@ -92,13 +87,21 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem.showShimmerAdapter();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initmenu();
+        clicks();
+        GetMenu();
+    }
+
     public void GetMenu() {
         JsonObject object = new JsonObject();
         object.addProperty("cafeid", "1");
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("++++json","++++"+object.toString());
+        Log.d("+++++object","++++"+object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getMenuItem("application/json", object);
@@ -109,7 +112,7 @@ public class MenuActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
-                            JSONObject data = new JSONObject(response.body().toString());
+                            JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (data.optString("success").equalsIgnoreCase("1")){
                                 categoryList.clear();
                                 JSONArray categoryarray = data.getJSONArray("category");
@@ -137,20 +140,19 @@ public class MenuActivity extends AppCompatActivity {
                                             Images images1 = new Images();
                                             images1.setImages(images.getString(k));
                                             imagesArrayList.add(images1);
-                                            items.setImage(imagesArrayList);
                                         }
+                                        items.setImage(imagesArrayList);
                                         itemsArrayList.add(items);
-                                        category.setItems(itemsArrayList);
                                     }
+                                    category.setItems(itemsArrayList);
                                     categoryList.add(category);
                                 }
                                 rvCategory.hideShimmerAdapter();
                                 menuAdapter = new MenuAdapter(categoryList);
                                 rvCategory.setAdapter(menuAdapter);
 
-                                itemsArrayList1.clear();
                                 for (int i = 0; i <1 ; i++) {
-                                    itemsArrayList1 = categoryList.get(i).getItems();
+                                    itemsArrayList1 = categoryList.get(0).getItems();
                                     Gson gson = new Gson();
                                     String json = gson.toJson(itemsArrayList1);
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();

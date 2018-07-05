@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
@@ -22,6 +20,7 @@ import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -111,12 +110,12 @@ public class OTPActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<JsonObject> callback, @NonNull Response<JsonObject> response) {
                         try {
                             if (response.body() != null) {
-                                JSONObject object = new JSONObject(response.body().toString());
+                                JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                                 if (object.optString("success").equalsIgnoreCase("1")){
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Auth_token,object.optString("auth_token")).apply();
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.User_id,object.optString("id")).apply();
                                     new MakeToast(object.optString("msg"));
-                                    startActivity(new Intent(OTPActivity.this,MenuActivity.class));
+                                    startActivity(new Intent(OTPActivity.this,HomeActivity.class));
                                     finish();
                                 }else {
                                     new MakeToast("Please Enter Correct Otp");

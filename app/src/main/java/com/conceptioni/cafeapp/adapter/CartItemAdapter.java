@@ -37,8 +37,8 @@ import retrofit2.Response;
 public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuViewHolder> {
 
     Context context;
-    List<CartModel> cartModelsarray = new ArrayList<>();
-    List<Images> imagesarray = new ArrayList<>();
+    List<CartModel> cartModelsarray;
+    List<Images> imagesarray;
 
     public CartItemAdapter(List<CartModel> cartModelsarray,List<Images> imagesarray ){
         this.cartModelsarray= cartModelsarray;
@@ -57,13 +57,17 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        holder.itemll.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",cartModelsarray.get(position).getItem_id()));
-        });
+//        holder.itemll.setOnClickListener(v -> {
+//            context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",cartModelsarray.get(position).getItem_id()));
+//        });
+        Log.d("++++name","+++++"+cartModelsarray.get(position).getItem_name() + "+++++" + position);
         holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
         holder.tvrCartQty.setText(cartModelsarray.get(position).getQty());
         holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
-        Glide.with(context).load(imagesarray.get(position).getImages()).into(holder.imageView1);
+        for (int i = 0; i <imagesarray.size() ; i++) {
+            Glide.with(context).load(imagesarray.get(0).getImages()).into(holder.imageView1);
+        }
+//        Glide.with(context).load(imagesarray.get(position).getImages()).into(holder.imageView1);
     }
 
     @Override

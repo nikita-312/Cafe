@@ -9,7 +9,9 @@ import android.widget.RatingBar;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
+import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
 
@@ -51,10 +53,10 @@ public class ReviewActivity extends AppCompatActivity {
     public void getReview() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("cafeid", "1");
-        jsonObject.addProperty("userid", "2");
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
         jsonObject.addProperty("rating", rating);
         jsonObject.addProperty("comment", edtReview.getText().toString());
-        jsonObject.addProperty("auth_token", "MmNhZmUxNTMwNjE1NTA3");
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getReview("application/json", jsonObject);

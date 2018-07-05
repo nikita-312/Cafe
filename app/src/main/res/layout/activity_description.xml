@@ -13,6 +13,7 @@
         tools:ignore="UnusedAttribute">
 
         <ImageView
+            android:id="@+id/backiv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp_5"
@@ -191,18 +192,5 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="@dimen/sp_14"/>
-        <com.conceptioni.cafeapp.utils.TextviewRegular
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="buy now"
-            android:textAllCaps="true"
-            android:background="@drawable/buynow_drawable"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
-            android:textColor="@color/colorwhite"
-            android:textSize="@dimen/sp_14"
-            android:gravity="center"
-            android:layout_marginLeft="@dimen/dp_10"/>
     </LinearLayout>
 </RelativeLayout>

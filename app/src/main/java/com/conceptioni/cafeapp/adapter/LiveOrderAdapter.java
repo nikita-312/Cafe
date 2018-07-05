@@ -25,8 +25,8 @@ import java.util.List;
 public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.MenuViewHolder> {
 
     Context context;
-    List<CartModel> cartModelsarray = new ArrayList<>();
-    List<Images> imagesarray = new ArrayList<>();
+    List<CartModel> cartModelsarray;
+    List<Images> imagesarray;
     public LiveOrderAdapter(List<CartModel> cartModelsarray, List<Images> imagesarray){
 
         this.cartModelsarray = cartModelsarray;
@@ -51,7 +51,9 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
         holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
         holder.tvrCartQty.setText(cartModelsarray.get(position).getQty());
         holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
-        Glide.with(context).load(imagesarray.get(position).getImages()).into(holder.imageView1);
+        for (int i = 0; i <imagesarray.size() ; i++) {
+            Glide.with(context).load(imagesarray.get(0).getImages()).into(holder.imageView1);
+        }
     }
 
     @Override

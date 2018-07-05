@@ -17,8 +17,10 @@ import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.adapter.LiveOrderAdapter;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.model.Images;
+import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
 
@@ -39,7 +41,6 @@ public class LiveOrderActivity extends AppCompatActivity {
     LinearLayout llBottom;
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal;
     String subtotal,total,fee;
-    CartModel cartModel = new CartModel();
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
     LiveOrderAdapter liveOrderAdapter;
@@ -82,8 +83,8 @@ public class LiveOrderActivity extends AppCompatActivity {
     }
     public void ViewCart(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userid", "2");
-        jsonObject.addProperty("auth_token","MmNhZmUxNTMwNjE1NTA3");
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.viewCart("application/json",jsonObject);
@@ -106,6 +107,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 JSONArray jsonArray = jsonObject1.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object = jsonArray.getJSONObject(i);
+                                    CartModel cartModel = new CartModel();
                                     cartModel.setItem_name(object.optString("item_name"));
                                     cartModel.setItem_id(object.optString("item_id"));
                                     cartModel.setPrice(object.optString("price"));
@@ -120,12 +122,11 @@ public class LiveOrderActivity extends AppCompatActivity {
                                         cartModel.setImages(imagesArrayList);
                                     }
                                     imagesArrayList.add(images1);
-
                                     cartModelsarray.add(cartModel);
                                     cartModel.setImages(imagesArrayList);
-                                    liveOrderAdapter = new LiveOrderAdapter(cartModelsarray,imagesArrayList);
-                                    rvliveOrder.setAdapter(liveOrderAdapter);
                                 }
+                                liveOrderAdapter = new LiveOrderAdapter(cartModelsarray,imagesArrayList);
+                                rvliveOrder.setAdapter(liveOrderAdapter);
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
@@ -153,8 +154,8 @@ public class LiveOrderActivity extends AppCompatActivity {
     public void removeCart(final int pos){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("itemid",cartModelsarray.get(pos).getItem_id());
-        jsonObject.addProperty("userid","2");
-        jsonObject.addProperty("auth_token","MmNhZmUxNTMwNjE1NTA3");
+        jsonObject.addProperty("userid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
 
         Service  service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.removeCart("application/json",jsonObject);

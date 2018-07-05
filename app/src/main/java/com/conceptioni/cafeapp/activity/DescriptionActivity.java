@@ -1,5 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
-import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
 import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
@@ -54,7 +54,7 @@ public class DescriptionActivity extends AppCompatActivity {
     List<Images> imagesArrayList = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr;
     EditText noteset;
-    ImageView plusiv,minusiv;
+    ImageView plusiv,minusiv,backiv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class DescriptionActivity extends AppCompatActivity {
         allclick();
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         viewPager = findViewById(R.id.pager);
         indicator = findViewById(R.id.indicator);
@@ -74,6 +75,7 @@ public class DescriptionActivity extends AppCompatActivity {
         qtytvr = findViewById(R.id.qtytvr);
         plusiv = findViewById(R.id.plusiv);
         minusiv = findViewById(R.id.minusiv);
+        backiv = findViewById(R.id.backiv);
 
 
         if (getIntent().getExtras() != null){
@@ -90,7 +92,7 @@ public class DescriptionActivity extends AppCompatActivity {
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
                     qtytvr.setText(itemsArrayList.get(i).getQty());
                     Qty = itemsArrayList.get(i).getQty();
-//                    imagesArrayList = itemsArrayList.get(i).getImage();
+                    Log.d("++++++++i","+++++"+i + "++++" + Qty);
                 }
             }
 
@@ -151,12 +153,23 @@ public class DescriptionActivity extends AppCompatActivity {
     }
 
     private void allclick() {
-        plusiv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                CallQuantity(Qty,);
-            }
+        plusiv.setOnClickListener(v -> {
+            int count = Integer.parseInt(Qty);
+            int Quantity = count + 1;
+            String finalQuantity = String.valueOf(Quantity);
+            Log.d("+++++quant","++++"+finalQuantity);
+            CallQuantity(finalQuantity,ItemId);
         });
+
+        minusiv.setOnClickListener(v -> {
+            int count = Integer.parseInt(Qty);
+            int Quantity = count - 1;
+            String finalQuantity = String.valueOf(Quantity);
+            Log.d("+++++quant","++++"+finalQuantity);
+            CallQuantity(finalQuantity,ItemId);
+        });
+
+        backiv.setOnClickListener(v -> onBackPressed());
     }
 
     public ArrayList<Items> getArrayList(){
@@ -207,7 +220,7 @@ public class DescriptionActivity extends AppCompatActivity {
         }
     }
 
-    public void CallQuantity(String Quantity, int Position, String ItemId){
+    public void CallQuantity(String Quantity, String ItemId){
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -220,7 +233,6 @@ public class DescriptionActivity extends AppCompatActivity {
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.AddToCart("application/json", object);
 
-
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -228,9 +240,17 @@ public class DescriptionActivity extends AppCompatActivity {
                     try {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
                         if (object1.optInt("success") == 1){
-                            itemsArrayList.get(Position).setQty(object1.optString("qty"));
-                            qtytvr.setText(object1.optString("qty"));
-                            Log.d("+++++quant12","++++"+object1.optString("qty"));
+                            for (int i = 0; i <itemsArrayList.size() ; i++) {
+                                if (ItemId.equalsIgnoreCase(itemsArrayList.get(i).getItem_id())) {
+                                    itemsArrayList.get(i).setQty(object1.optString("qty"));
+                                    qtytvr.setText(object1.optString("qty"));
+                                    Qty = object1.optString("qty");
+                                    SaveArrylistinShared(itemsArrayList);
+                                    Log.d("+++++quant12", "++++" + i + "++++++++++" + object1.optString("qty") + "++++" + itemsArrayList.get(i).getQty());
+                                }
+                            }
+
+
                         }else {
                             if (Quantity.equalsIgnoreCase("0")){
                                 new MakeToast(object1.optString("msg"));
@@ -247,11 +267,24 @@ public class DescriptionActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast("Please Try After Some Time");
             }
         });
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    public void SaveArrylistinShared(List<Items> itemsArrayList){
+        for (int i = 0; i <1 ; i++) {
+            Gson gson = new Gson();
+            String json = gson.toJson(itemsArrayList);
+            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+        }
+    }
 }

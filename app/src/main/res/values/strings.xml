@@ -16,6 +16,7 @@
 
 
     <string name="phoneno">Please Enter Phone Number</string>
+    <string name="username">Please Enter User Name</string>
     <string name="validphoneno">Please Enter valid Phone Number</string>
 
 
