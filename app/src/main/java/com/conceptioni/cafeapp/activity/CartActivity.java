@@ -68,7 +68,7 @@ public class CartActivity extends AppCompatActivity {
         }));
     }
 
-    private void showDeleteAlert(final int pos){
+    private void showDeleteAlert(final int pos) {
         new AlertDialog.Builder(CartActivity.this)
                 .setTitle("Remove?")
                 .setMessage("Are you sure want to remove the product?")

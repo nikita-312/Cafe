@@ -58,7 +58,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withText("Scanning...")
                 .withResultListener(barcode -> {
                     barcodeResult = barcode;
-                    startActivity(new Intent(QrCodeScanActivity.this,MenuActivity.class));
+                    startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class));
                     finish();
 //                    scaninfotv.setText(barcode.rawValue);
                 })
