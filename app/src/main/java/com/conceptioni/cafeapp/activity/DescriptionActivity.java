@@ -56,7 +56,6 @@ public class DescriptionActivity extends AppCompatActivity {
     EditText noteset;
     ImageView plusiv,minusiv;
 
-    /**/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

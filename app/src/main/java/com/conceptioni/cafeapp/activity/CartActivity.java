@@ -53,12 +53,7 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void click() {
-        tvrPlaceOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CartActivity.this,LiveOrderActivity.class));
-            }
-        });
+        tvrPlaceOrder.setOnClickListener(v -> startActivity(new Intent(CartActivity.this,LiveOrderActivity.class)));
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {

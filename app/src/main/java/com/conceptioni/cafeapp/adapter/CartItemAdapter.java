@@ -58,15 +58,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         holder.itemll.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, DescriptionActivity.class));
+            context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",cartModelsarray.get(position).getItem_id()));
         });
         holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
         holder.tvrCartQty.setText(cartModelsarray.get(position).getQty());
         holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
-        Log.d("++++++image","+++ "+imagesarray.get(position).getImages());
         Glide.with(context).load(imagesarray.get(position).getImages()).into(holder.imageView1);
-
-
     }
 
     @Override

@@ -4,20 +4,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
+import com.conceptioni.cafeapp.model.CartModel;
+import com.conceptioni.cafeapp.model.Images;
+import com.conceptioni.cafeapp.utils.TextviewBold;
+import com.conceptioni.cafeapp.utils.TextviewRegular;
+import com.makeramen.roundedimageview.RoundedImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.MenuViewHolder> {
 
     Context context;
+    List<CartModel> cartModelsarray = new ArrayList<>();
+    List<Images> imagesarray = new ArrayList<>();
+    public LiveOrderAdapter(List<CartModel> cartModelsarray, List<Images> imagesarray){
 
-    public LiveOrderAdapter(){
-
+        this.cartModelsarray = cartModelsarray;
+        this.imagesarray = imagesarray;
     }
 
     @NonNull
@@ -32,21 +45,32 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-//        holder.itemll.setOnClickListener(v -> {
-//            context.startActivity(new Intent(context, DescriptionActivity.class));
-//        });
+        holder.itemll.setOnClickListener(v -> {
+            context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",cartModelsarray.get(position).getItem_id()));
+        });
+        holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
+        holder.tvrCartQty.setText(cartModelsarray.get(position).getQty());
+        holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
+        Glide.with(context).load(imagesarray.get(position).getImages()).into(holder.imageView1);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return cartModelsarray.size();
     }
 
     public class MenuViewHolder extends RecyclerView.ViewHolder {
         LinearLayout itemll;
+        RoundedImageView imageView1;
+        TextviewRegular tvrCartName,tvrCartQty;
+        TextviewBold tvbCartPrice;
         public MenuViewHolder(View itemView) {
             super(itemView);
             itemll = itemView.findViewById(R.id.itemll);
+            imageView1 = itemView.findViewById(R.id.imageView1);
+            tvrCartName = itemView.findViewById(R.id.tvrCartName);
+            tvbCartPrice = itemView.findViewById(R.id.tvbCartPrice);
+            tvrCartQty = itemView.findViewById(R.id.tvrCartQty);
         }
     }
 }
