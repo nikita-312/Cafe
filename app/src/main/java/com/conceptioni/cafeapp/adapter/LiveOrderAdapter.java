@@ -28,7 +28,6 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
     List<CartModel> cartModelsarray;
     List<Images> imagesarray;
     public LiveOrderAdapter(List<CartModel> cartModelsarray, List<Images> imagesarray){
-
         this.cartModelsarray = cartModelsarray;
         this.imagesarray = imagesarray;
     }
@@ -45,11 +44,7 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        holder.itemll.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",cartModelsarray.get(position).getItem_id()));
-        });
         holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
-        holder.tvrCartQty.setText(cartModelsarray.get(position).getQty());
         holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
         for (int i = 0; i <imagesarray.size() ; i++) {
             Glide.with(context).load(imagesarray.get(0).getImages()).into(holder.imageView1);
@@ -64,7 +59,7 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
     public class MenuViewHolder extends RecyclerView.ViewHolder {
         LinearLayout itemll;
         RoundedImageView imageView1;
-        TextviewRegular tvrCartName,tvrCartQty;
+        TextviewRegular tvrCartName,tvrQty;
         TextviewBold tvbCartPrice;
         public MenuViewHolder(View itemView) {
             super(itemView);
@@ -72,7 +67,7 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
             imageView1 = itemView.findViewById(R.id.imageView1);
             tvrCartName = itemView.findViewById(R.id.tvrCartName);
             tvbCartPrice = itemView.findViewById(R.id.tvbCartPrice);
-            tvrCartQty = itemView.findViewById(R.id.tvrCartQty);
+            tvrQty = itemView.findViewById(R.id.tvrQty);
         }
     }
 }

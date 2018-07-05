@@ -56,18 +56,6 @@ public class LiveOrderActivity extends AppCompatActivity {
         llBottom.setOnClickListener(v ->
                 startActivity(new Intent(LiveOrderActivity.this,CardActivity.class))
         );
-        rvliveOrder.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvliveOrder, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                ImageView ivRemove = view.findViewById(R.id.ivRemove);
-                ivRemove.setOnClickListener(v -> showDeleteAlert(position));
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
     }
 
     private void init() {
@@ -149,57 +137,5 @@ public class LiveOrderActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    public void removeCart(final int pos){
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("itemid",cartModelsarray.get(pos).getItem_id());
-        jsonObject.addProperty("userid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
-
-        Service  service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.removeCart("application/json",jsonObject);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null){
-                    if (response.isSuccessful()){
-                        try {
-                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            if (object.optInt("success")==1){
-                                new MakeToast(object.optString("msg"));
-                                cartModelsarray.remove(pos);
-                                liveOrderAdapter.notifyDataSetChanged();
-                                if (cartModelsarray.size() == 0){
-                                    tvrCartSubTotal.setText("00.00");
-                                    tvrCartFee.setText("00.00");
-                                    tvrCartTotal.setText("00.00");
-                                }
-                            }else{
-                                new MakeToast(object.optString("msg"));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-
-    }
-
-    private void showDeleteAlert(final int pos){
-        new AlertDialog.Builder(LiveOrderActivity.this)
-                .setTitle("Remove?")
-                .setMessage("Are you sure want to remove the product?")
-                .setCancelable(true)
-                .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> removeCart(pos))
-                .create().show();
     }
 }

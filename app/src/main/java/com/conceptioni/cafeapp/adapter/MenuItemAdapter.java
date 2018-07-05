@@ -94,7 +94,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                 holder.quantytvr.setText(finalQuantity);
                 CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
             }else {
-                new MakeToast("Quantity can not be less then 0");
+                new MakeToast("Quantity can not be less than 0");
             }
 
         });
