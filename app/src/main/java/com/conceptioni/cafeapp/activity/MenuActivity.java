@@ -129,7 +129,7 @@ public class MenuActivity extends AppCompatActivity {
                                         items.setItem_name(itemdata.optString("item_name"));
                                         items.setPrice(itemdata.optString("price"));
                                         items.setDesc(itemdata.optString("desc"));
-                                        items.setQty(itemdata.optInt("qty"));
+                                        items.setQty(itemdata.optString("qty"));
 
                                         imagesArrayList.clear();
                                         JSONArray images = itemdata.getJSONArray("image");

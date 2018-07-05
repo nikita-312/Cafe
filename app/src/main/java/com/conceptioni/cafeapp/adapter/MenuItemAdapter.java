@@ -13,20 +13,33 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
+import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
+import com.google.gson.JsonObject;
 import com.makeramen.roundedimageview.RoundedImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuViewHolder> {
 
     Context context;
-    List<Items> itemsArrayList;
+    List<Items> itemsArrayList = new ArrayList<>();
     List<Images> imagesList = new ArrayList<>();
 
     public MenuItemAdapter(List<Items> itemsArrayList,List<Images> imagesList){
@@ -54,7 +67,28 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         }
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
-//        holder.quantytvr.setText(itemsArrayList.get(position).getQty());
+        holder.quantytvr.setText(itemsArrayList.get(position).getQty());
+
+        holder.plusiv.setOnClickListener(v -> {
+            int count = Integer.parseInt(itemsArrayList.get(position).getQty());
+            int Quantity = count + 1;
+            String finalQuantity = String.valueOf(Quantity);
+            Log.d("+++++quant","++++"+finalQuantity);
+            CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
+        });
+
+        holder.minusiv.setOnClickListener(v -> {
+            if (!itemsArrayList.get(position).getQty().equalsIgnoreCase("0")){
+                int count = Integer.parseInt(itemsArrayList.get(position).getQty());
+                int Quantity = count - 1;
+                String finalQuantity = String.valueOf(Quantity);
+                Log.d("+++++quant","++++"+finalQuantity);
+                CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
+            }else {
+                new MakeToast("Quantity can not be less then 0");
+            }
+
+        });
     }
 
     @Override
@@ -78,5 +112,52 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
             plusiv = itemView.findViewById(R.id.plusiv);
             minusiv = itemView.findViewById(R.id.minusiv);
         }
+    }
+
+    public void CallQuantity(MenuViewHolder holder,String Quantity,int Position,String ItemId){
+
+        JsonObject object = new JsonObject();
+        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        object.addProperty("itemid", ItemId);
+        object.addProperty("qty", Quantity);
+
+        Log.d("+++++quant123","++++"+object.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.AddToCart("application/json", object);
+
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null){
+                    try {
+                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
+                        if (object1.optInt("success") == 1){
+                            itemsArrayList.get(Position).setQty(object1.optString("qty"));
+                            holder.quantytvr.setText(object1.optString("qty"));
+                            Log.d("+++++quant12","++++"+object1.optString("qty"));
+                        }else {
+                            if (Quantity.equalsIgnoreCase("0")){
+                                new MakeToast(object1.optString("msg"));
+                            }else {
+                                int Quan = Integer.parseInt(Quantity);
+                                holder.quantytvr.setText(Quan - 1);
+                                new MakeToast(object1.optString("msg"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                new MakeToast("Please Try After Some Time");
+            }
+        });
+
     }
 }

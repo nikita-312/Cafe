@@ -24,17 +24,17 @@ public class Items{
   @Expose
   private String desc;
 
-    public int getQty() {
+    public String getQty() {
         return qty;
     }
 
-    public void setQty(int qty) {
+    public void setQty(String qty) {
         this.qty = qty;
     }
 
     @SerializedName("qty")
     @Expose
-    private int qty;
+    private String qty;
   public void setImage(List<Images> image){
    this.image=image;
   }

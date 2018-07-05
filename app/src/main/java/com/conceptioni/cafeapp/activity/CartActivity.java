@@ -1,6 +1,9 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,9 +63,7 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 ImageView ivRemove = view.findViewById(R.id.ivRemove);
-
-                ivRemove.setOnClickListener(v -> removeCart(position)
-                );
+                ivRemove.setOnClickListener(v -> showDeleteAlert(position));
             }
 
             @Override
@@ -69,6 +71,16 @@ public class CartActivity extends AppCompatActivity {
 
             }
         }));
+    }
+
+    private void showDeleteAlert(final int pos){
+        new AlertDialog.Builder(CartActivity.this)
+                .setTitle("Remove?")
+                .setMessage("Are you sure want to remove the product?")
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> removeCart(pos))
+                .create().show();
     }
 
     private void init() {
@@ -162,11 +174,11 @@ public class CartActivity extends AppCompatActivity {
         Call<JsonObject> call = service.removeCart("application/json",jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null){
                     if (response.isSuccessful()){
                         try {
-                            JSONObject object = new JSONObject(response.body().toString());
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success")==1){
                                 new MakeToast(object.optString("msg"));
                                 cartModelsarray.remove(pos);

@@ -1,10 +1,9 @@
 package com.conceptioni.cafeapp.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
@@ -26,6 +25,7 @@ public class ReviewActivity extends AppCompatActivity {
     TextviewRegular tvrSubmit;
     float rating;
     EditText edtReview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,27 +35,29 @@ public class ReviewActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-      ratingbar.setOnClickListener(v -> {
-          rating = ratingbar.getRating();
-          Log.d("++++rating","++ "+rating);
-      });
+        ratingbar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            rating = ratingbar.getRating();
+            Log.d("++++rating", "++ " + rating);
+        });
         tvrSubmit.setOnClickListener(v -> getReview());
     }
 
     private void init() {
         ratingbar = findViewById(R.id.ratingbar);
         edtReview = findViewById(R.id.edtReview);
+        tvrSubmit = findViewById(R.id.tvrSubmit);
     }
-    public void getReview(){
+
+    public void getReview() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("cafeid","1");
-        jsonObject.addProperty("userid","2");
-        jsonObject.addProperty("rating",rating);
-        jsonObject.addProperty("comment",edtReview.getText().toString());
-        jsonObject.addProperty("auth_token","MWNhZmUxNTMwNjk2NjQw");
+        jsonObject.addProperty("cafeid", "1");
+        jsonObject.addProperty("userid", "2");
+        jsonObject.addProperty("rating", rating);
+        jsonObject.addProperty("comment", edtReview.getText().toString());
+        jsonObject.addProperty("auth_token", "MmNhZmUxNTMwNjE1NTA3");
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.getReview("application/json",jsonObject);
+        Call<JsonObject> call = service.getReview("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -63,9 +65,9 @@ public class ReviewActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         try {
                             JSONObject object = new JSONObject(response.body().toString());
-                            if (object.optInt("success")==1){
+                            if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
-                            }else
+                            } else
                                 new MakeToast(object.optString("msg"));
 
                         } catch (JSONException e) {

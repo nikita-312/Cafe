@@ -109,6 +109,7 @@
                         android:layout_marginLeft="@dimen/dp_60"
                         android:layout_marginRight="@dimen/dp_10">
                     <ImageView
+                        android:id="@+id/minusiv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -122,6 +123,7 @@
                         android:background="@drawable/round">
 
                         <com.conceptioni.cafeapp.utils.TextviewRegular
+                            android:id="@+id/qtytvr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -130,6 +132,7 @@
                     </RelativeLayout>
 
                     <ImageView
+                        android:id="@+id/plusiv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"

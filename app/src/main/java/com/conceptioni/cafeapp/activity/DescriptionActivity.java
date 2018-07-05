@@ -17,14 +17,21 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
+import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
 import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,17 +39,22 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DescriptionActivity extends AppCompatActivity {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     ViewPager viewPager;
     CirclePageIndicator indicator;
     int slider[] = {R.drawable.slider, R.drawable.slider, R.drawable.slider};
-    String ItemData,ItemId,ImageData;
+    String ItemData,ItemId,ImageData,Qty;
     List<Items> itemsArrayList = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
-    TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr;
+    TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr;
     EditText noteset;
+    ImageView plusiv,minusiv;
 
     /**/
     @Override
@@ -50,6 +62,7 @@ public class DescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
         init();
+        allclick();
     }
 
     private void init() {
@@ -59,6 +72,9 @@ public class DescriptionActivity extends AppCompatActivity {
         Itemnametvr = findViewById(R.id.Itemnametvr);
         Itemdesctvr = findViewById(R.id.Itemdesctvr);
         noteset = findViewById(R.id.noteset);
+        qtytvr = findViewById(R.id.qtytvr);
+        plusiv = findViewById(R.id.plusiv);
+        minusiv = findViewById(R.id.minusiv);
 
 
         if (getIntent().getExtras() != null){
@@ -73,14 +89,13 @@ public class DescriptionActivity extends AppCompatActivity {
                     Itemnametvr.setText(itemsArrayList.get(i).getItem_name());
                     ItemPricetvr.setText(itemsArrayList.get(i).getPrice() + " Rs");
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
+                    qtytvr.setText(itemsArrayList.get(i).getQty());
+                    Qty = itemsArrayList.get(i).getQty();
 //                    imagesArrayList = itemsArrayList.get(i).getImage();
                 }
             }
 
         }
-
-
-
         SlidePageAdapter slidePageAdapter = new SlidePageAdapter();
         if (viewPager != null) {
             viewPager.setAdapter(slidePageAdapter);
@@ -136,6 +151,15 @@ public class DescriptionActivity extends AppCompatActivity {
         });
     }
 
+    private void allclick() {
+        plusiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                CallQuantity(Qty,);
+            }
+        });
+    }
+
     public ArrayList<Items> getArrayList(){
         Gson gson = new Gson();
         ItemData = SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.ItemData, Constant.notAvailable);
@@ -182,6 +206,53 @@ public class DescriptionActivity extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
+    }
+
+    public void CallQuantity(String Quantity, int Position, String ItemId){
+
+        JsonObject object = new JsonObject();
+        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        object.addProperty("itemid", ItemId);
+        object.addProperty("qty", Quantity);
+
+        Log.d("+++++quant123","++++"+object.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.AddToCart("application/json", object);
+
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null){
+                    try {
+                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
+                        if (object1.optInt("success") == 1){
+                            itemsArrayList.get(Position).setQty(object1.optString("qty"));
+                            qtytvr.setText(object1.optString("qty"));
+                            Log.d("+++++quant12","++++"+object1.optString("qty"));
+                        }else {
+                            if (Quantity.equalsIgnoreCase("0")){
+                                new MakeToast(object1.optString("msg"));
+                            }else {
+                                int Quan = Integer.parseInt(Quantity);
+                                qtytvr.setText(Quan - 1);
+                                new MakeToast(object1.optString("msg"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                new MakeToast("Please Try After Some Time");
+            }
+        });
+
     }
 
 }
