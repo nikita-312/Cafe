@@ -52,6 +52,7 @@
                     android:textSize="@dimen/sp_16"
                     android:layout_marginTop="@dimen/dp_10"/>
                 <android.support.v7.widget.AppCompatRatingBar
+                    android:id="@+id/ratingbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -74,6 +75,7 @@
             android:layout_weight="0.4"
             android:orientation="vertical">
             <EditText
+                android:id="@+id/edtReview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/notes_drawable"

@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -15,6 +16,7 @@ import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
@@ -37,7 +39,7 @@ public class CartActivity extends AppCompatActivity {
     CartModel cartModel = new CartModel();
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
-
+    CartItemAdapter cartItemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,20 @@ public class CartActivity extends AppCompatActivity {
                 startActivity(new Intent(CartActivity.this,LiveOrderActivity.class));
             }
         });
+        rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                ImageView ivRemove = view.findViewById(R.id.ivRemove);
+
+                ivRemove.setOnClickListener(v -> removeCart(position)
+                );
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     private void init() {
@@ -61,15 +77,12 @@ public class CartActivity extends AppCompatActivity {
         tvrCartTotal=findViewById(R.id.tvrCartTotal);
         tvrCartFee=findViewById(R.id.tvrCartFee);
         tvrCartSubTotal=findViewById(R.id.tvrCartSubTotal);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
         rvCart.setLayoutManager(linearLayoutManager);
-
 
         ViewCart();
     }
     public void ViewCart(){
-
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", "2");
         jsonObject.addProperty("auth_token","MmNhZmUxNTMwNjE1NTA3");
@@ -96,6 +109,7 @@ public class CartActivity extends AppCompatActivity {
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
                                         cartModel.setItem_name(object.optString("item_name"));
+                                        cartModel.setItem_id(object.optString("item_id"));
                                         cartModel.setPrice(object.optString("price"));
                                         cartModel.setQty(object.optString("qty"));
 
@@ -108,11 +122,10 @@ public class CartActivity extends AppCompatActivity {
                                             cartModel.setImages(imagesArrayList);
                                         }
                                         imagesArrayList.add(images1);
-                                        Log.d("+++images","+++ "+imagesArrayList.toString());
 
                                         cartModelsarray.add(cartModel);
                                         cartModel.setImages(imagesArrayList);
-                                        CartItemAdapter cartItemAdapter = new CartItemAdapter(cartModelsarray,imagesArrayList);
+                                         cartItemAdapter = new CartItemAdapter(cartModelsarray,imagesArrayList);
                                         rvCart.setAdapter(cartItemAdapter);
                                     }
                                     tvrCartSubTotal.setText(subtotal);
@@ -138,4 +151,47 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void removeCart(final int pos){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("itemid",cartModelsarray.get(pos).getItem_id());
+        jsonObject.addProperty("userid","2");
+        jsonObject.addProperty("auth_token","MmNhZmUxNTMwNjE1NTA3");
+
+        Service  service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.removeCart("application/json",jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body() != null){
+                    if (response.isSuccessful()){
+                        try {
+                            JSONObject object = new JSONObject(response.body().toString());
+                            if (object.optInt("success")==1){
+                                new MakeToast(object.optString("msg"));
+                                cartModelsarray.remove(pos);
+                                cartItemAdapter.notifyDataSetChanged();
+                                if (cartModelsarray.size() == 0){
+                                    tvrCartSubTotal.setText("00.00");
+                                    tvrCartFee.setText("00.00");
+                                    tvrCartTotal.setText("00.00");
+                                }
+                            }else{
+                                new MakeToast(object.optString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }

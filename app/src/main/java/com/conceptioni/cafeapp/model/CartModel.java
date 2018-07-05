@@ -6,7 +6,16 @@ public class CartModel {
     String item_name;
     String price;
     String qty;
+    String item_id;
     List<Images> images;
+
+    public String getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
+    }
 
     public String getItem_name() {
         return item_name;

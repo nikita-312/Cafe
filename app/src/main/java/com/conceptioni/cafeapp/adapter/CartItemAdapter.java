@@ -8,19 +8,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.model.Images;
+import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
+import com.google.gson.JsonObject;
 import com.makeramen.roundedimageview.RoundedImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuViewHolder> {
 
@@ -53,6 +65,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
         holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
         Log.d("++++++image","+++ "+imagesarray.get(position).getImages());
         Glide.with(context).load(imagesarray.get(position).getImages()).into(holder.imageView1);
+
+
     }
 
     @Override

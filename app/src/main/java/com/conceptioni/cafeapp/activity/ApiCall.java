@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall {
 
-    static Retrofit getRetrofit() {
+    public static Retrofit getRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(Constant.ApiUrl)
                 .addConverterFactory(GsonConverterFactory.create())
