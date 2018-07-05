@@ -76,7 +76,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
             Log.d("+++++quant","++++"+finalQuantity);
             CallQuantity(holder,finalQuantity,position,cartModelsarray.get(position).getItem_id());
         });
-
+//
         holder.minusiv.setOnClickListener(v -> {
             if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")){
                 int count = Integer.parseInt(cartModelsarray.get(position).getQty());
