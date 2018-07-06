@@ -49,6 +49,7 @@ public class MenuActivity extends AppCompatActivity {
     List<Category> categoryList = new ArrayList<>();
     List<Category> filtercategoryList = new ArrayList<>();
     List<Items> itemsArrayList = new ArrayList<>();
+    List<Items> itemsArrayList2 = new ArrayList<>();
     List<Items> filteritemsArrayList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
@@ -81,23 +82,47 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void ShowData(){
-        if (!categoryList.isEmpty()){
-            filtercategoryList.clear();
-            itemsArrayList.clear();
-            for (int i = 0; i <categoryList.size() ; i++) {
-                filteritemsArrayList = categoryList.get(i).getItems();
-               if (!filteritemsArrayList.isEmpty()){
-                   for (int j = 0; j <filteritemsArrayList.size() ; j++) {
-                       if (filteritemsArrayList.get(j).getItem_type().equalsIgnoreCase("veg")){
-                          itemsArrayList = categoryList.get(j).getItems();
-                       }
-                   }
-                   categoryList.get(i).setItems(itemsArrayList);
-                   Log.d("+++++size","+++++"+itemsArrayList.size());
-//                   SetAdapter(itemsArrayList);
-               }
+        filteritemsArrayList.clear();
+        if (!itemsArrayList.isEmpty()){
+            for (int i = 0; i <itemsArrayList.size() ; i++) {
+                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")){
+                    filteritemsArrayList.get(i).setItem_id(itemsArrayList.get(i).getItem_id());
+                    filteritemsArrayList.get(i).setItem_name(itemsArrayList.get(i).getItem_name());
+                    filteritemsArrayList.get(i).setPrice(itemsArrayList.get(i).getPrice());
+                    filteritemsArrayList.get(i).setDesc(itemsArrayList.get(i).getDesc());
+                    filteritemsArrayList.get(i).setQty(itemsArrayList.get(i).getQty());
+                    filteritemsArrayList.get(i).setItem_type(itemsArrayList.get(i).getItem_type());
+                    filteritemsArrayList.get(i).setImage(itemsArrayList.get(i).getImage());
+//                    Items items = new Items();
+//                    items.setItem_id();
+//                    items.setItem_name(itemdata.optString("item_name"));
+//                    items.setPrice(itemdata.optString("price"));
+//                    items.setDesc(itemdata.optString("desc"));
+//                    items.setQty(itemdata.optString("qty"));
+//                    items.setItem_type(itemdata.optString("item_type"));
+
+                }
+                Log.d("+++++size","++++"+filteritemsArrayList.size());
             }
         }
+//        if (!categoryList.isEmpty()){
+//            filtercategoryList.clear();
+//            itemsArrayList2.clear();
+//            for (int i = 0; i <categoryList.size() ; i++) {
+//                filteritemsArrayList = categoryList.get(i).getItems();
+//               if (!filteritemsArrayList.isEmpty()){
+//                   for (int j = 0; j <filteritemsArrayList.size() ; j++) {
+//                       if (filteritemsArrayList.get(j).getItem_type().equalsIgnoreCase("veg")){
+//                           Log.d("+++++size","+++++"+j);
+////                          itemsArrayList2 = categoryList.get(j).getItems();
+//                       }
+//                   }
+//
+////                   filtercategoryList.get(i).setItems(itemsArrayList2);
+////
+//               }
+//            }
+//        }
     }
 
     private void initmenu() {
