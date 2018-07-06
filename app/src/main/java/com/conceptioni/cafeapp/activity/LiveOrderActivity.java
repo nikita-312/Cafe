@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -77,24 +78,27 @@ public class LiveOrderActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);
-        ViewCart();
+        viewLiveOrder();
     }
-    public void ViewCart(){
+    public void viewLiveOrder(){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
 
+        Log.d("+++++++obiect","++++"+jsonObject.toString());
+
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.viewCart("application/json",jsonObject);
+        Call<JsonObject> call = service.ViewLiveOrder("application/json",jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
 
                 if (response.body() != null){
                     if (response.isSuccessful()){
                         try {
-                            JSONObject jsonObject1 = new JSONObject(response.body().toString());
+                            JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            Log.d("+++++++obiect","++++"+jsonObject1.toString());
                             if (jsonObject1.getInt("success")==1){
 
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
@@ -117,11 +121,11 @@ public class LiveOrderActivity extends AppCompatActivity {
                                     for (int j = 0; j < array.length(); j++) {
                                         images1 = new Images();
                                         images1.setImages(array.getString(0));
-                                        cartModel.setImages(imagesArrayList);
+                                        imagesArrayList.add(images1);
+
                                     }
-                                    imagesArrayList.add(images1);
-                                    cartModelsarray.add(cartModel);
                                     cartModel.setImages(imagesArrayList);
+                                    cartModelsarray.add(cartModel);
                                 }
                                 liveOrderAdapter = new LiveOrderAdapter(cartModelsarray,imagesArrayList);
                                 rvliveOrder.setAdapter(liveOrderAdapter);

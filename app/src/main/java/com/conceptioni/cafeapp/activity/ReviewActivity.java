@@ -2,6 +2,7 @@ package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.util.Log;
@@ -63,10 +64,11 @@ public class ReviewActivity extends AppCompatActivity {
         Call<JsonObject> call = service.getReview("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
+                            assert response.body() != null;
                             JSONObject object = new JSONObject(response.body().toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));

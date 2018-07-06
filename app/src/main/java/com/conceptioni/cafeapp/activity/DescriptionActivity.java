@@ -53,6 +53,7 @@ public class DescriptionActivity extends AppCompatActivity {
     String ItemData,ItemId,ImageData,Qty;
     List<Items> itemsArrayList = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
+    List<Images> imagesArrayList1 = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
     ImageView plusiv,minusiv,backiv;
@@ -86,6 +87,7 @@ public class DescriptionActivity extends AppCompatActivity {
 
             itemsArrayList.clear();
             imagesArrayList.clear();
+            imagesArrayList1.clear();
             itemsArrayList = getArrayList();
             imagesArrayList = getimageArrayList();
             for (int i = 0; i <itemsArrayList.size() ; i++) {
@@ -95,7 +97,8 @@ public class DescriptionActivity extends AppCompatActivity {
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
                     qtytvr.setText(itemsArrayList.get(i).getQty());
                     Qty = itemsArrayList.get(i).getQty();
-                    Log.d("++++++++i","+++++"+i + "++++" + Qty);
+                    imagesArrayList1 = itemsArrayList.get(i).getImage();
+                    Log.d("++++++++i","+++++"+i + "++++" + Qty + "++++"+itemsArrayList.get(i).getImage().size());
                 }
             }
 
@@ -117,7 +120,7 @@ public class DescriptionActivity extends AppCompatActivity {
         indicator.setRadius(10);
         indicator.setStrokeColor(Color.WHITE);
 
-        NUM_PAGES = slider.length;
+        NUM_PAGES = imagesArrayList.size();
 
         final Handler handler = new Handler();
         final Runnable Update = () -> {
@@ -161,7 +164,6 @@ public class DescriptionActivity extends AppCompatActivity {
             int count = Integer.parseInt(Qty);
             int Quantity = count + 1;
             String finalQuantity = String.valueOf(Quantity);
-            Log.d("+++++quant","++++"+finalQuantity);
             CallQuantity(finalQuantity,ItemId);
         });
 
@@ -170,7 +172,6 @@ public class DescriptionActivity extends AppCompatActivity {
             int count = Integer.parseInt(Qty);
             int Quantity = count - 1;
             String finalQuantity = String.valueOf(Quantity);
-            Log.d("+++++quant","++++"+finalQuantity);
             CallQuantity(finalQuantity,ItemId);
         });
 
@@ -204,7 +205,7 @@ public class DescriptionActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return imagesArrayList.size();
+            return imagesArrayList1.size();
         }
 
         @Override
@@ -219,8 +220,8 @@ public class DescriptionActivity extends AppCompatActivity {
             assert layoutInflater != null;
             View view = layoutInflater.inflate(R.layout.row_item_slider, container, false);
             ImageView banneriv = view.findViewById(R.id.banneriv);
-            Log.d("++++++size","++++"+imagesArrayList.size());
-            Glide.with(DescriptionActivity.this).load(imagesArrayList.get(position).getImages()).into(banneriv);
+            Log.d("++++++size","++++"+imagesArrayList1.size());
+            Glide.with(DescriptionActivity.this).load(imagesArrayList1.get(position).getImages()).into(banneriv);
 //            banneriv.setImageResource(imagesArrayList.get(position).getImages());
             container.addView(view);
             return view;

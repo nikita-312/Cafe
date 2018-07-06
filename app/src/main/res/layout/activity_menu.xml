@@ -42,6 +42,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_8"
+        android:gravity="right"
+        tools:ignore="RtlHardcoded">
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/veg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:switchMinWidth="56dp"
+            android:layout_marginRight="@dimen/dp_8"
+            android:text="Veg:"
+            android:checked="false"
+            style="@style/CustomAppTheme"
+            android:textOff="All"
+            android:textOn="Veg"
+            tools:ignore="HardcodedText"
+            android:layout_marginEnd="@dimen/dp_8" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal">
 

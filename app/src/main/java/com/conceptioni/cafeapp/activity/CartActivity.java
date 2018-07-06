@@ -1,8 +1,8 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
@@ -58,14 +57,12 @@ public class CartActivity extends AppCompatActivity {
     private void click() {
 
         tvrPlaceOrder.setOnClickListener(v -> {
-            startActivity(new Intent(CartActivity.this, ThankYouActivity.class));
-            finish();
+            placeOrder();
         });
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 ImageView ivRemove = view.findViewById(R.id.ivRemove);
-                Log.d("+++++pos", "++++" + position + "+++++" + cartModelsarray.get(position).getItem_id());
                 ivRemove.setOnClickListener(v -> showDeleteAlert(position, cartModelsarray.get(position).getItem_id()));
             }
 
@@ -119,7 +116,7 @@ public class CartActivity extends AppCompatActivity {
                         try {
                             emptycartll.setVisibility(View.GONE);
                             cartll.setVisibility(View.VISIBLE);
-                            JSONObject jsonObject1 = new JSONObject(response.body().toString());
+                            JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (jsonObject1.getInt("success") == 1) {
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
@@ -172,7 +169,7 @@ public class CartActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 cartll.setVisibility(View.GONE);
                 emptycartll.setVisibility(View.VISIBLE);
             }
@@ -188,6 +185,7 @@ public class CartActivity extends AppCompatActivity {
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.removeCart("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
@@ -199,9 +197,11 @@ public class CartActivity extends AppCompatActivity {
                                 cartModelsarray.remove(pos);
                                 cartItemAdapter.notifyDataSetChanged();
                                 if (cartModelsarray.size() == 0) {
-                                    tvrCartSubTotal.setText("00.00");
-                                    tvrCartFee.setText("00.00");
-                                    tvrCartTotal.setText("00.00");
+//                                    tvrCartSubTotal.setText("00.00");
+//                                    tvrCartFee.setText("00.00");
+//                                    tvrCartTotal.setText("00.00");
+                                    cartll.setVisibility(View.GONE);
+                                    emptycartll.setVisibility(View.VISIBLE);
                                 }
                             } else {
                                 new MakeToast(object.optString("msg"));
@@ -219,6 +219,42 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void placeOrder(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.placeOrder("application/json", jsonObject);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null){
+                    try {
+                        JSONObject object = new JSONObject(response.body().toString());
+                        if (object.optInt("success") == 1){
+                            new MakeToast(object.optString("msg"));
+                            startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                            finish();
+                        }else {
+                            new MakeToast(object.optString("msg"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 
 }

@@ -1,5 +1,6 @@
 package com.conceptioni.cafeapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -40,10 +41,10 @@ import retrofit2.Response;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuViewHolder> {
 
-    Context context;
-    List<Items> itemsArrayList;
-    List<Images> imagesList;
-    String Flag = "A";
+    private Context context;
+    private List<Items> itemsArrayList;
+    private List<Images> imagesList;
+    private String Flag = "A";
 
     public MenuItemAdapter(List<Items> itemsArrayList,List<Images> imagesList){
         this.itemsArrayList = itemsArrayList;
@@ -60,14 +61,27 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         return new MenuViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         holder.itemll.setOnClickListener(v -> {
             context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",itemsArrayList.get(position).getItem_id()));
         });
-        for (int i = 0; i <imagesList.size() ; i++) {
-            Glide.with(context).load(imagesList.get(0).getImages()).into(holder.imageView1);
-        }
+
+        Glide.with(context).load(imagesList.get(position).getImages()).into(holder.imageView1);
+//        for (int i = 0; i <imagesList.size() ; i++) {
+//            Log.d("image","++++"+imagesList.get(0).getImages());
+////            Glide.with(context).load(imagesList.get(0).getImages()).into(holder.imageView1);
+//        }
+
+
+//        imagesList.clear();
+//        imagesList = itemsArrayList.get(position).getImage();
+//        for (int i = 0; i <imagesList.size() ; i++) {
+//
+//            Log.d("++++image","++++"+imagesList.get(i).getImages());
+//        }
+
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
         holder.quantytvr.setText(itemsArrayList.get(position).getQty());

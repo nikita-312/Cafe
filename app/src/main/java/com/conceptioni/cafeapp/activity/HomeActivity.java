@@ -22,12 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void allclick() {
-        scanqrll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this,QrCodeScanActivity.class));
-            }
-        });
+        scanqrll.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this,QrCodeScanActivity.class)));
     }
 
     private void init() {

@@ -61,6 +61,7 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
             Glide.with(context).load(imagesarray.get(0).getImages()).apply(options).into(holder.imageView1);
 
         }
+        holder.tvrQty.setText(cartModelsarray.get(position).getQty());
     }
 
     @Override

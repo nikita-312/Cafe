@@ -35,7 +35,20 @@ public class Items{
     @SerializedName("qty")
     @Expose
     private String qty;
-  public void setImage(List<Images> image){
+
+    @SerializedName("item_type")
+    @Expose
+    private String item_type;
+
+    public String getItem_type() {
+        return item_type;
+    }
+
+    public void setItem_type(String item_type) {
+        this.item_type = item_type;
+    }
+
+    public void setImage(List<Images> image){
    this.image=image;
   }
   public List<Images> getImage(){

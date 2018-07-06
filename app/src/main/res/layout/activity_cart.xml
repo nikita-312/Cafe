@@ -177,12 +177,12 @@
         android:layout_below="@+id/toolbar"
         android:visibility="gone">
 
-        <ImageView
+        <pl.droidsonroids.gif.GifImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/emptycart"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription" />
+            android:src="@drawable/empty"
+            android:background="@color/colorwhite"
+            />
 
     </RelativeLayout>
 </RelativeLayout>

@@ -22,22 +22,24 @@
         android:layout_marginRight="@dimen/dp_20"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_20"
-        android:paddingBottom="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_40"
+        android:paddingBottom="@dimen/dp_40"
         android:elevation="@dimen/dp_20">
         <com.conceptioni.cafeapp.utils.TextviewRegular
             android:id="@+id/tvrCafeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cafe Name"
+            android:text="Cafe Coffee Day"
             android:gravity="center"
+            android:textSize="25sp"
             android:textColor="@color/colorwhite"/>
         <com.conceptioni.cafeapp.utils.TextviewRegular
             android:id="@+id/tvrtableNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Table number"
+            android:text="Table number:5"
             android:gravity="center"
+            android:textSize="18sp"
             android:layout_marginTop="@dimen/dp_10"
             android:textColor="@color/colorwhite"/>
         <com.conceptioni.cafeapp.utils.TextviewRegular
@@ -51,8 +53,8 @@
             android:textAllCaps="true"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginRight="@dimen/dp_20"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
             android:textColor="@color/colorwhite"/>
     </LinearLayout>
 </RelativeLayout>
