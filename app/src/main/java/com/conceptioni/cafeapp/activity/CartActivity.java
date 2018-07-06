@@ -141,7 +141,6 @@ public class CartActivity extends AppCompatActivity {
                                     cartModel.setImages(imagesArrayList);
                                     cartModelsarray.add(cartModel);
                                 }
-
                                 cartItemAdapter = new CartItemAdapter(cartModelsarray, imagesArrayList);
                                 rvCart.setAdapter(cartItemAdapter);
                                 tvrCartSubTotal.setText(subtotal);

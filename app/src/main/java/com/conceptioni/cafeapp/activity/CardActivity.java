@@ -68,8 +68,9 @@ public class CardActivity extends AppCompatActivity {
                     if (response.isSuccessful()){
                         try {
                             JSONObject object = new JSONObject(response.body().toString());
-                            if (object.optInt("success") == 0){
+                            if (object.optInt("success") == 0) {
                                 new MakeToast(object.optString("msg"));
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.orderid,object.getString("orderid")).apply();
                             }else
                                 new MakeToast(object.optString("msg"));
 

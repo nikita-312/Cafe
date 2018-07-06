@@ -26,6 +26,7 @@ public class SharedPrefs {
 
        String ItemData = "ItemData";
        String Imageata = "Imageata";
+       String orderid = "orderid";
     }
 
 }

@@ -29,4 +29,8 @@ public interface Service {
     Call<JsonObject> ViewLiveOrder(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/make_payment")
     Call<JsonObject> makePayment(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/review_current_order")
+    Call<JsonObject> reviewCurrentOrder(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/review_like_unlike")
+    Call<JsonObject> reviewLikeUnlike(@Header("Content-Type") String content,@Body JsonObject object);
 }
