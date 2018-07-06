@@ -48,6 +48,7 @@
             android:paddingBottom="@dimen/dp_7"
             android:paddingLeft="@dimen/dp_40"
             android:paddingRight="@dimen/dp_40"
-            android:layout_marginTop="@dimen/dp_20"/>
+            android:layout_marginTop="@dimen/dp_20"
+            android:visibility="gone"/>
     </LinearLayout>
 </RelativeLayout>

@@ -39,7 +39,7 @@ import retrofit2.Response;
 public class LiveOrderActivity extends AppCompatActivity {
     RecyclerView rvliveOrder;
     LinearLayout llBottom;
-    TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal;
+    TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
@@ -53,9 +53,17 @@ public class LiveOrderActivity extends AppCompatActivity {
     }
 
     private void click() {
-        llBottom.setOnClickListener(v ->
-                startActivity(new Intent(LiveOrderActivity.this,CardActivity.class))
-        );
+        paymenttvr.setOnClickListener(v -> {
+            startActivity(new Intent(LiveOrderActivity.this,CardActivity.class));
+            finish();
+        });
+        continuetvr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LiveOrderActivity.this,MenuActivity.class));
+                finish();
+            }
+        });
     }
 
     private void init() {
@@ -64,6 +72,8 @@ public class LiveOrderActivity extends AppCompatActivity {
         tvrCartTotal=findViewById(R.id.tvrCartTotal);
         tvrCartFee=findViewById(R.id.tvrCartFee);
         tvrCartSubTotal=findViewById(R.id.tvrCartSubTotal);
+        continuetvr=findViewById(R.id.continuetvr);
+        paymenttvr=findViewById(R.id.paymenttvr);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);

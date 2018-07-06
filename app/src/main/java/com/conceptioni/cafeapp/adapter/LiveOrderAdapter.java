@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
 import com.conceptioni.cafeapp.model.CartModel;
@@ -46,8 +49,17 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
         holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.no_image)
+                .error(R.drawable.no_image)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH);
+
+
         for (int i = 0; i <imagesarray.size() ; i++) {
-            Glide.with(context).load(imagesarray.get(0).getImages()).into(holder.imageView1);
+            Glide.with(context).load(imagesarray.get(0).getImages()).apply(options).into(holder.imageView1);
+
         }
     }
 

@@ -136,6 +136,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         object.addProperty("itemid", ItemId);
         object.addProperty("qty", Quantity);
+        object.addProperty("note", "");
 
         Log.d("+++++quant123","++++"+object.toString());
 

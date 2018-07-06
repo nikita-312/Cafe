@@ -2,6 +2,7 @@ package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,9 +53,10 @@ public class DescriptionActivity extends AppCompatActivity {
     String ItemData,ItemId,ImageData,Qty;
     List<Items> itemsArrayList = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
-    TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr;
+    TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
     ImageView plusiv,minusiv,backiv;
+    String Flag = "A";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class DescriptionActivity extends AppCompatActivity {
         plusiv = findViewById(R.id.plusiv);
         minusiv = findViewById(R.id.minusiv);
         backiv = findViewById(R.id.backiv);
+        addtocarttvr = findViewById(R.id.addtocarttvr);
 
 
         if (getIntent().getExtras() != null){
@@ -154,6 +157,7 @@ public class DescriptionActivity extends AppCompatActivity {
 
     private void allclick() {
         plusiv.setOnClickListener(v -> {
+            Flag = "A";
             int count = Integer.parseInt(Qty);
             int Quantity = count + 1;
             String finalQuantity = String.valueOf(Quantity);
@@ -162,11 +166,20 @@ public class DescriptionActivity extends AppCompatActivity {
         });
 
         minusiv.setOnClickListener(v -> {
+            Flag = "A";
             int count = Integer.parseInt(Qty);
             int Quantity = count - 1;
             String finalQuantity = String.valueOf(Quantity);
             Log.d("+++++quant","++++"+finalQuantity);
             CallQuantity(finalQuantity,ItemId);
+        });
+
+        addtocarttvr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Flag = "C";
+                CallQuantity(Qty,ItemId);
+            }
         });
 
         backiv.setOnClickListener(v -> onBackPressed());
@@ -227,6 +240,7 @@ public class DescriptionActivity extends AppCompatActivity {
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         object.addProperty("itemid", ItemId);
         object.addProperty("qty", Quantity);
+        object.addProperty("note", noteset.getText().toString());
 
         Log.d("+++++quant123","++++"+object.toString());
 
@@ -246,6 +260,10 @@ public class DescriptionActivity extends AppCompatActivity {
                                     qtytvr.setText(object1.optString("qty"));
                                     Qty = object1.optString("qty");
                                     SaveArrylistinShared(itemsArrayList);
+                                    if (Flag.equalsIgnoreCase("C")){
+                                        startActivity(new Intent(DescriptionActivity.this, CartActivity.class));
+                                        finish();
+                                    }
                                     Log.d("+++++quant12", "++++" + i + "++++++++++" + object1.optString("qty") + "++++" + itemsArrayList.get(i).getQty());
                                 }
                             }

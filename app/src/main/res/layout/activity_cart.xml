@@ -34,20 +34,20 @@
             tools:ignore="HardcodedText" />
 
     </android.support.v7.widget.Toolbar>
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/cartll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_above="@+id/bottom"/>
+        />
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
@@ -169,12 +169,13 @@
                 android:layout_marginLeft="@dimen/dp_10"/>
         </LinearLayout>
     </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/emptycartll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar">
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -183,5 +184,5 @@
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

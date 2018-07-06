@@ -56,6 +56,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.CafeInfoActivity"></activity>
+        <activity android:name=".activity.VisitAgainActivity"></activity>
     </application>
 
 </manifest>

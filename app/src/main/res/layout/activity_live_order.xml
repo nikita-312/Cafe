@@ -129,29 +129,40 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llBottom"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp_10"
-            android:gravity="center">
+            android:weightSum="2">
             <com.conceptioni.cafeapp.utils.TextviewRegular
-                android:layout_width="wrap_content"
+                android:id="@+id/continuetvr"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="continue order"
+                android:textAllCaps="true"
+                android:background="@drawable/login_drawable"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:textColor="@color/colorwhite"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/paymenttvr"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="make payment"
                 android:textAllCaps="true"
                 android:background="@drawable/login_drawable"
                 android:paddingTop="7dp"
                 android:paddingBottom="7dp"
-                android:paddingLeft="45dp"
-                android:paddingRight="45dp"
                 android:textColor="@color/colorwhite"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="@dimen/sp_14"/>
+                android:textSize="@dimen/sp_14"
+                android:layout_marginLeft="@dimen/dp_10"/>
 
         </LinearLayout>
     </LinearLayout>
-
-
 </RelativeLayout>

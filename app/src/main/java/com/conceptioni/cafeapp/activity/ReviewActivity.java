@@ -1,5 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRatingBar;
@@ -69,6 +70,7 @@ public class ReviewActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(response.body().toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
+                                startActivity(new Intent(ReviewActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else
                                 new MakeToast(object.optString("msg"));
 
@@ -85,6 +87,11 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(ReviewActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

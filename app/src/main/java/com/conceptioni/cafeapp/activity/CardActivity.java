@@ -20,7 +20,10 @@ public class CardActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-        llNext.setOnClickListener(v -> startActivity(new Intent(CardActivity.this,ThankYouActivity.class)));
+        llNext.setOnClickListener(v -> {
+            startActivity(new Intent(CardActivity.this,VisitAgainActivity.class));
+            finish();
+        });
     }
 
     private void init() {

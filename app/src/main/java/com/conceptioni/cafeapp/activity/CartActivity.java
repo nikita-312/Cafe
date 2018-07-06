@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -44,7 +45,7 @@ public class CartActivity extends AppCompatActivity {
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
     CartItemAdapter cartItemAdapter;
-    LinearLayout cartll, emptycartll;
+    RelativeLayout cartll, emptycartll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +56,11 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void click() {
-        tvrPlaceOrder.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, ThankYouActivity.class))
-        );
+
+        tvrPlaceOrder.setOnClickListener(v -> {
+            startActivity(new Intent(CartActivity.this, ThankYouActivity.class));
+            finish();
+        });
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
