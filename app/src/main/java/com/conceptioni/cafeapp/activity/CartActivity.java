@@ -43,7 +43,7 @@ public class CartActivity extends AppCompatActivity {
     TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal;
     String subtotal, total, fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
-
+    ImageView ivBack;
     CartItemAdapter cartItemAdapter;
     RelativeLayout emptycartll;
     LinearLayout bottom;
@@ -73,6 +73,7 @@ public class CartActivity extends AppCompatActivity {
 
             }
         }));
+        ivBack.setOnClickListener(v -> finish());
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
@@ -93,6 +94,7 @@ public class CartActivity extends AppCompatActivity {
         tvrCartSubTotal = findViewById(R.id.tvrCartSubTotal);
         emptycartll = findViewById(R.id.emptycartll);
         bottom = findViewById(R.id.bottom);
+        ivBack = findViewById(R.id.ivBack);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
         rvCart.setLayoutManager(linearLayoutManager);

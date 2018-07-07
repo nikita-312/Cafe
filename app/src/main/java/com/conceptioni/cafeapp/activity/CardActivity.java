@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -28,7 +29,7 @@ import retrofit2.Response;
 public class CardActivity extends AppCompatActivity {
     LinearLayout llNext, llCash, llCard;
     String type;
-    ImageView pay_cashiv, pay_cardiv;
+    ImageView pay_cashiv, pay_cardiv,ivBack;
     TextviewRegular paybycashtvr, paybycardtvr;
 
     @Override
@@ -64,7 +65,12 @@ public class CardActivity extends AppCompatActivity {
             paybycardtvr.setTextColor(getResources().getColor(R.color.colorFont));
             type = "Cash";
         });
-
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
@@ -76,11 +82,7 @@ public class CardActivity extends AppCompatActivity {
         pay_cardiv = findViewById(R.id.pay_cardiv);
         paybycashtvr = findViewById(R.id.paybycashtvr);
         paybycardtvr = findViewById(R.id.paybycardtvr);
-
-//        if (type != null) {
-//            CallCard();
-//        } else
-//            new MakeToast("Please choose payment method");
+        ivBack = findViewById(R.id.ivBack);
     }
 
     public void CallCard() {

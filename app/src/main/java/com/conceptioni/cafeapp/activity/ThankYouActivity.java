@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.adapter.RatingAdapter;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 
 public class ThankYouActivity extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class ThankYouActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-        tvrContinueshop.setOnClickListener(v -> startActivity(new Intent(ThankYouActivity.this,ReviewActivity.class)));
+        tvrContinueshop.setOnClickListener(v -> startActivity(new Intent(ThankYouActivity.this,RatingActivity.class)));
     }
 
     private void init() {

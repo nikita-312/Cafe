@@ -59,7 +59,7 @@ public class DescriptionActivity extends AppCompatActivity {
     List<Images> imagesArrayList2 = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
-    ImageView plusiv,minusiv,backiv;
+    ImageView plusiv,minusiv,backiv,ivCart;
     String Flag = "A";
 
     @Override
@@ -83,6 +83,7 @@ public class DescriptionActivity extends AppCompatActivity {
         minusiv = findViewById(R.id.minusiv);
         backiv = findViewById(R.id.backiv);
         addtocarttvr = findViewById(R.id.addtocarttvr);
+        ivCart = findViewById(R.id.ivCart);
 
 
         if (getIntent().getExtras() != null){
@@ -188,6 +189,14 @@ public class DescriptionActivity extends AppCompatActivity {
         });
 
         backiv.setOnClickListener(v -> onBackPressed());
+
+        ivCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DescriptionActivity.this,CartActivity.class));
+                finish();
+            }
+        });
     }
 
     public ArrayList<Items> getArrayList(){

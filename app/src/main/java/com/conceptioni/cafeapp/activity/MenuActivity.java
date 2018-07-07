@@ -73,6 +73,10 @@ public class MenuActivity extends AppCompatActivity {
               new MakeToast("All");
               ShowAllData();
           }
+          viewliveorderll.setOnClickListener(v -> {
+              startActivity(new Intent(MenuActivity.this,LiveOrderActivity.class));
+              finish();
+          });
       });
 
         liveorder.setOnClickListener(new View.OnClickListener() {

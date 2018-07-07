@@ -45,7 +45,7 @@ public class LiveOrderActivity extends AppCompatActivity {
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
-
+    ImageView ivBack;
     LiveOrderAdapter liveOrderAdapter;
     RelativeLayout emptycartll;
 
@@ -62,13 +62,11 @@ public class LiveOrderActivity extends AppCompatActivity {
             startActivity(new Intent(LiveOrderActivity.this,CardActivity.class));
             finish();
         });
-        continuetvr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LiveOrderActivity.this,MenuActivity.class));
-                finish();
-            }
+        continuetvr.setOnClickListener(v -> {
+            startActivity(new Intent(LiveOrderActivity.this,MenuActivity.class));
+            finish();
         });
+        ivBack.setOnClickListener(v -> finish());
     }
 
     private void init() {
@@ -80,6 +78,7 @@ public class LiveOrderActivity extends AppCompatActivity {
         tvrCartSubTotal=findViewById(R.id.tvrCartSubTotal);
         continuetvr=findViewById(R.id.continuetvr);
         paymenttvr=findViewById(R.id.paymenttvr);
+        ivBack=findViewById(R.id.ivBack);
         emptycartll=findViewById(R.id.emptycartll);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
