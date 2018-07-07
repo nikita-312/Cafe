@@ -194,8 +194,8 @@ public class MenuActivity extends AppCompatActivity {
                                             images1.setImages(images.getString(k));
                                             imagesArrayList.add(images1);
                                         }
-                                        items.setImage(imagesArrayList);
                                         itemsArrayList.add(items);
+                                        itemsArrayList.get(j).setImage(imagesArrayList);
                                     }
                                     category.setItems(itemsArrayList);
                                     categoryList.add(category);

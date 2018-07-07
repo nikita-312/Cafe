@@ -52,8 +52,8 @@ public class DescriptionActivity extends AppCompatActivity {
     int slider[] = {R.drawable.slider, R.drawable.slider, R.drawable.slider};
     String ItemData,ItemId,ImageData,Qty;
     List<Items> itemsArrayList = new ArrayList<>();
-
     List<Images> imagesArrayList1 = new ArrayList<>();
+    List<Images> imagesArrayList2 = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
     ImageView plusiv,minusiv,backiv;
@@ -96,7 +96,8 @@ public class DescriptionActivity extends AppCompatActivity {
                     qtytvr.setText(itemsArrayList.get(i).getQty());
                     Qty = itemsArrayList.get(i).getQty();
                     imagesArrayList1 = itemsArrayList.get(i).getImage();
-                    Log.d("++++++++i","+++++"+i + "++++" + Qty + "++++"+itemsArrayList.get(i).getImage().size());
+//                    imagesArrayList1 = itemsArrayList.get(i).getImage();
+//                    Log.d("++++++++i","+++++"+i + "++++" + Qty + "++++"+imagesArrayList1.size());
                 }
             }
 
