@@ -7,11 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -42,15 +39,13 @@ import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity {
 
-    ImageView ivCart;
+    ImageView ivCart,liveorder;
     ShimmerRecyclerView rvCategory, rvCategoryitem;
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
-    List<Category> filtercategoryList = new ArrayList<>();
     List<Items> itemsArrayList = new ArrayList<>();
-    List<Items> itemsArrayList2 = new ArrayList<>();
-    List<Items> filteritemsArrayList = new ArrayList<>();
+    List<Items> vegItemsList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
     SwitchCompat veg;
@@ -66,63 +61,49 @@ public class MenuActivity extends AppCompatActivity {
     private void clicks() {
         ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
 
-      veg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-              if (isChecked){
-                  isVeg = true;
-                  new MakeToast("Veg");
-                  ShowData();
-              }else {
-                  isVeg = false;
-                  new MakeToast("All");
-              }
+      veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
+          if (isChecked){
+              isVeg = true;
+              new MakeToast("Veg");
+              ShowVegData();
+          }else {
+              isVeg = false;
+              new MakeToast("All");
+              ShowAllData();
           }
       });
+
+        liveorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this,LiveOrderActivity.class));
+
+            }
+        });
     }
 
-    private void ShowData(){
-        filteritemsArrayList.clear();
+    private void ShowVegData(){
+        vegItemsList.clear();
         if (!itemsArrayList.isEmpty()){
             for (int i = 0; i <itemsArrayList.size() ; i++) {
                 if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")){
-                    filteritemsArrayList.get(i).setItem_id(itemsArrayList.get(i).getItem_id());
-                    filteritemsArrayList.get(i).setItem_name(itemsArrayList.get(i).getItem_name());
-                    filteritemsArrayList.get(i).setPrice(itemsArrayList.get(i).getPrice());
-                    filteritemsArrayList.get(i).setDesc(itemsArrayList.get(i).getDesc());
-                    filteritemsArrayList.get(i).setQty(itemsArrayList.get(i).getQty());
-                    filteritemsArrayList.get(i).setItem_type(itemsArrayList.get(i).getItem_type());
-                    filteritemsArrayList.get(i).setImage(itemsArrayList.get(i).getImage());
-//                    Items items = new Items();
-//                    items.setItem_id();
-//                    items.setItem_name(itemdata.optString("item_name"));
-//                    items.setPrice(itemdata.optString("price"));
-//                    items.setDesc(itemdata.optString("desc"));
-//                    items.setQty(itemdata.optString("qty"));
-//                    items.setItem_type(itemdata.optString("item_type"));
-
+                    Items items = new Items();
+                    items.setImage(itemsArrayList.get(i).getImage());
+                    items.setItem_id(itemsArrayList.get(i).getItem_id());
+                    items.setItem_name(itemsArrayList.get(i).getItem_name());
+                    items.setPrice(itemsArrayList.get(i).getPrice());
+                    items.setDesc(itemsArrayList.get(i).getDesc());
+                    items.setQty(itemsArrayList.get(i).getQty());
+                    items.setItem_type(itemsArrayList.get(i).getItem_type());
+                    vegItemsList.add(items);
                 }
-                Log.d("+++++size","++++"+filteritemsArrayList.size());
+                SetAdapter(vegItemsList);
             }
         }
-//        if (!categoryList.isEmpty()){
-//            filtercategoryList.clear();
-//            itemsArrayList2.clear();
-//            for (int i = 0; i <categoryList.size() ; i++) {
-//                filteritemsArrayList = categoryList.get(i).getItems();
-//               if (!filteritemsArrayList.isEmpty()){
-//                   for (int j = 0; j <filteritemsArrayList.size() ; j++) {
-//                       if (filteritemsArrayList.get(j).getItem_type().equalsIgnoreCase("veg")){
-//                           Log.d("+++++size","+++++"+j);
-////                          itemsArrayList2 = categoryList.get(j).getItems();
-//                       }
-//                   }
-//
-////                   filtercategoryList.get(i).setItems(itemsArrayList2);
-////
-//               }
-//            }
-//        }
+    }
+
+    private void ShowAllData(){
+        SetAdapter(itemsArrayList);
     }
 
     private void initmenu() {
@@ -130,6 +111,7 @@ public class MenuActivity extends AppCompatActivity {
         rvCategory = findViewById(R.id.rvCategory);
         rvCategoryitem = findViewById(R.id.rvCategoryitem);
         veg = findViewById(R.id.veg);
+        liveorder = findViewById(R.id.liveorder);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -219,20 +201,16 @@ public class MenuActivity extends AppCompatActivity {
                                     categoryList.add(category);
                                 }
 
-                                categoryList.size();
-
-
                                 rvCategory.hideShimmerAdapter();
                                 menuAdapter = new MenuAdapter(categoryList);
                                 rvCategory.setAdapter(menuAdapter);
 
-                                SetAdapter(itemsArrayList1);
+                                itemsArrayList1 = categoryList.get(0).getItems();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(itemsArrayList1);
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
 
-                                for (int i = 0; i <categoryList.size() ; i++) {
-                                    Gson gson = new Gson();
-                                    String json = gson.toJson(imagesArrayList);
-                                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Imageata, json).apply();
-                                }
+                                SetAdapter(itemsArrayList1);
 
                             }else {
                                 new MakeToast(data.optString("msg"));
@@ -263,12 +241,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void SetAdapter(List<Items> itemsArrayList1){
-        itemsArrayList1.clear();
         for (int i = 0; i <1 ; i++) {
-            itemsArrayList1 = categoryList.get(0).getItems();
-            Gson gson = new Gson();
-            String json = gson.toJson(itemsArrayList1);
-            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
             menuItemAdapter = new MenuItemAdapter(itemsArrayList1,imagesArrayList);
             rvCategoryitem.hideShimmerAdapter();
             rvCategoryitem.setAdapter(menuItemAdapter);

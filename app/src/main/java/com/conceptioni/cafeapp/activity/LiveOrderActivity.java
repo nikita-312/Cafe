@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -39,12 +40,14 @@ import retrofit2.Response;
 
 public class LiveOrderActivity extends AppCompatActivity {
     RecyclerView rvliveOrder;
-    LinearLayout llBottom;
+    LinearLayout llBottom,bottom;
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
     LiveOrderAdapter liveOrderAdapter;
+    RelativeLayout emptycartll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +73,13 @@ public class LiveOrderActivity extends AppCompatActivity {
     private void init() {
         rvliveOrder=findViewById(R.id.rvliveOrder);
         llBottom=findViewById(R.id.llBottom);
+        bottom=findViewById(R.id.bottom);
         tvrCartTotal=findViewById(R.id.tvrCartTotal);
         tvrCartFee=findViewById(R.id.tvrCartFee);
         tvrCartSubTotal=findViewById(R.id.tvrCartSubTotal);
         continuetvr=findViewById(R.id.continuetvr);
         paymenttvr=findViewById(R.id.paymenttvr);
+        emptycartll=findViewById(R.id.emptycartll);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);
@@ -97,15 +102,19 @@ public class LiveOrderActivity extends AppCompatActivity {
                 if (response.body() != null){
                     if (response.isSuccessful()){
                         try {
+                            emptycartll.setVisibility(View.GONE);
+                            rvliveOrder.setVisibility(View.VISIBLE);
+                            bottom.setVisibility(View.VISIBLE);
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             Log.d("+++++++obiect","++++"+jsonObject1.toString());
                             if (jsonObject1.getInt("success")==1){
-
+                                cartModelsarray.clear();
+                                imagesArrayList.clear();
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
                                 total = String.valueOf(jsonObject1.optInt("total"));
 
-                                cartModelsarray.clear();
+
                                 JSONArray jsonArray = jsonObject1.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object = jsonArray.getJSONObject(i);
@@ -115,7 +124,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                     cartModel.setPrice(object.optString("price"));
                                     cartModel.setQty(object.optString("qty"));
 
-                                    imagesArrayList.clear();
+
                                     Images images1 = null;
                                     JSONArray array = object.getJSONArray("image");
                                     for (int j = 0; j < array.length(); j++) {
@@ -132,6 +141,10 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
+                            }else {
+                                rvliveOrder.setVisibility(View.GONE);
+                                bottom.setVisibility(View.GONE);
+                                emptycartll.setVisibility(View.VISIBLE);
                             }
 
                         } catch (JSONException e) {
@@ -140,15 +153,23 @@ public class LiveOrderActivity extends AppCompatActivity {
                         }
                     }else{
                         new MakeToast("Error while getting data");
+                        rvliveOrder.setVisibility(View.GONE);
+                        bottom.setVisibility(View.GONE);
+                        emptycartll.setVisibility(View.VISIBLE);
                     }
                 }else{
                     new MakeToast("Error while getting result");
+                    rvliveOrder.setVisibility(View.GONE);
+                    bottom.setVisibility(View.GONE);
+                    emptycartll.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                rvliveOrder.setVisibility(View.GONE);
+                bottom.setVisibility(View.GONE);
+                emptycartll.setVisibility(View.VISIBLE);
             }
         });
     }

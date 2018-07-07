@@ -69,13 +69,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_5"
-                   />
+                   android:src="@drawable/unfill_like"/>
                 <ImageView
                     android:id="@+id/ivDown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_5"
-                    android:layout_marginLeft="@dimen/dp_10"/>
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:src="@drawable/unfill_unlike"/>
 
             </LinearLayout>
 

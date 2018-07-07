@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorwhite"
     tools:context="com.conceptioni.cafeapp.activity.CartActivity">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -34,6 +35,21 @@
             tools:ignore="HardcodedText" />
 
     </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/emptycartll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/empty5"/>
+
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvliveOrder"
         android:layout_width="match_parent"
@@ -41,7 +57,8 @@
         android:layout_below="@+id/toolbar"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_above="@+id/bottom"/>
+        android:layout_above="@+id/bottom"
+        android:visibility="visible"/>
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
@@ -49,7 +66,8 @@
         android:orientation="vertical"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="visible">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

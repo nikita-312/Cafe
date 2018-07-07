@@ -52,7 +52,7 @@ public class DescriptionActivity extends AppCompatActivity {
     int slider[] = {R.drawable.slider, R.drawable.slider, R.drawable.slider};
     String ItemData,ItemId,ImageData,Qty;
     List<Items> itemsArrayList = new ArrayList<>();
-    List<Images> imagesArrayList = new ArrayList<>();
+
     List<Images> imagesArrayList1 = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
@@ -86,10 +86,8 @@ public class DescriptionActivity extends AppCompatActivity {
             ItemId = getIntent().getStringExtra("ItemId");
 
             itemsArrayList.clear();
-            imagesArrayList.clear();
             imagesArrayList1.clear();
             itemsArrayList = getArrayList();
-            imagesArrayList = getimageArrayList();
             for (int i = 0; i <itemsArrayList.size() ; i++) {
                 if (ItemId.equalsIgnoreCase(itemsArrayList.get(i).getItem_id())){
                     Itemnametvr.setText(itemsArrayList.get(i).getItem_name());
@@ -120,7 +118,7 @@ public class DescriptionActivity extends AppCompatActivity {
         indicator.setRadius(10);
         indicator.setStrokeColor(Color.WHITE);
 
-        NUM_PAGES = imagesArrayList.size();
+        NUM_PAGES = imagesArrayList1.size();
 
         final Handler handler = new Handler();
         final Runnable Update = () -> {
@@ -191,13 +189,6 @@ public class DescriptionActivity extends AppCompatActivity {
         ItemData = SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.ItemData, Constant.notAvailable);
         Type type = new TypeToken<ArrayList<Items>>() {}.getType();
         return gson.fromJson(ItemData, type);
-    }
-
-    public ArrayList<Images> getimageArrayList(){
-        Gson gson = new Gson();
-        ImageData = SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Imageata, Constant.notAvailable);
-        Type type = new TypeToken<ArrayList<Images>>() {}.getType();
-        return gson.fromJson(ImageData, type);
     }
 
     class SlidePageAdapter extends PagerAdapter {

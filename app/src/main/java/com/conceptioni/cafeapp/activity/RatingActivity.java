@@ -1,15 +1,13 @@
 package com.conceptioni.cafeapp.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -28,6 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,17 +69,21 @@ public class RatingActivity extends AppCompatActivity {
         jsonObject.addProperty("orderid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.orderid,Constant.notAvailable));
         jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
 
+        Log.d("++++++object","+++++"+jsonObject.toString());
+
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.reviewCurrentOrder("auth_token",jsonObject);
+        Call<JsonObject> call = service.reviewCurrentOrder("application/json",jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null){
                     if (response.isSuccessful()) {
                         try {
-                            JSONObject object = new JSONObject(response.body().toString());
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            Log.d("+++++","+++++"+object.toString());
                             if (object.optInt("success") == 1){
                                 currentOrderModelsArray.clear();
+                                imagesArrayList.clear();
                                 JSONArray jsonArray = object.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object1 = jsonArray.getJSONObject(i);
@@ -89,9 +92,8 @@ public class RatingActivity extends AppCompatActivity {
                                     currentOrderModel.setItem_name(object1.optString("item_name"));
                                     currentOrderModel.setLike(object1.optString("like"));
                                     currentOrderModel.setUnlike(object1.optString("unlike"));
-                                    currentOrderModelsArray.add(currentOrderModel);
-                                    imagesArrayList.clear();
-                                    JSONArray array = object.getJSONArray("image");
+
+                                    JSONArray array = object1.getJSONArray("image");
                                     for (int j = 0; j < array.length(); j++) {
                                         Images images1 = new Images();
                                         images1.setImages(array.getString(0));
@@ -113,7 +115,7 @@ public class RatingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast("Error while getting data");
             }
         });

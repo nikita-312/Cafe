@@ -51,13 +51,14 @@
             android:layout_weight="0.5"
             android:gravity="center">
         <ImageView
+            android:id="@+id/pay_cashiv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/pay_cash"/>
         <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:id="@+id/paybycashtvr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorCardbg"
             android:text="PAY BY CASH"
             android:textColor="@color/colorFont"
             android:layout_marginTop="@dimen/dp_10"/>
@@ -74,13 +75,14 @@
             android:gravity="center"
             android:layout_marginLeft="@dimen/dp_10">
             <ImageView
+                android:id="@+id/pay_cardiv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/pay_card"/>
             <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/paybycardtvr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorCardbg"
                 android:text="PAY BY CARD"
                 android:textColor="@color/colorFont"
                 android:layout_marginTop="@dimen/dp_10"/>

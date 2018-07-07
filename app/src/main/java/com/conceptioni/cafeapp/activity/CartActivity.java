@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
@@ -44,7 +45,8 @@ public class CartActivity extends AppCompatActivity {
     List<CartModel> cartModelsarray = new ArrayList<>();
     List<Images> imagesArrayList = new ArrayList<>();
     CartItemAdapter cartItemAdapter;
-    RelativeLayout cartll, emptycartll;
+    RelativeLayout emptycartll;
+    LinearLayout bottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +91,8 @@ public class CartActivity extends AppCompatActivity {
         tvrCartTotal = findViewById(R.id.tvrCartTotal);
         tvrCartFee = findViewById(R.id.tvrCartFee);
         tvrCartSubTotal = findViewById(R.id.tvrCartSubTotal);
-        cartll = findViewById(R.id.cartll);
         emptycartll = findViewById(R.id.emptycartll);
+        bottom = findViewById(R.id.bottom);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
         rvCart.setLayoutManager(linearLayoutManager);
@@ -115,7 +117,8 @@ public class CartActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         try {
                             emptycartll.setVisibility(View.GONE);
-                            cartll.setVisibility(View.VISIBLE);
+                            rvCart.setVisibility(View.VISIBLE);
+                            bottom.setVisibility(View.VISIBLE);
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (jsonObject1.getInt("success") == 1) {
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
@@ -147,7 +150,8 @@ public class CartActivity extends AppCompatActivity {
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
                             } else {
-                                cartll.setVisibility(View.GONE);
+                                rvCart.setVisibility(View.GONE);
+                                bottom.setVisibility(View.GONE);
                                 emptycartll.setVisibility(View.VISIBLE);
                             }
 
@@ -157,19 +161,22 @@ public class CartActivity extends AppCompatActivity {
                         }
                     } else {
                         new MakeToast("Error while getting data");
-                        cartll.setVisibility(View.GONE);
+                        rvCart.setVisibility(View.GONE);
+                        bottom.setVisibility(View.GONE);
                         emptycartll.setVisibility(View.VISIBLE);
                     }
                 } else {
                     new MakeToast("Error while getting result");
-                    cartll.setVisibility(View.GONE);
+                    rvCart.setVisibility(View.GONE);
+                    bottom.setVisibility(View.GONE);
                     emptycartll.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                cartll.setVisibility(View.GONE);
+                rvCart.setVisibility(View.GONE);
+                bottom.setVisibility(View.GONE);
                 emptycartll.setVisibility(View.VISIBLE);
             }
         });
@@ -199,7 +206,8 @@ public class CartActivity extends AppCompatActivity {
 //                                    tvrCartSubTotal.setText("00.00");
 //                                    tvrCartFee.setText("00.00");
 //                                    tvrCartTotal.setText("00.00");
-                                    cartll.setVisibility(View.GONE);
+                                    rvCart.setVisibility(View.GONE);
+                                    bottom.setVisibility(View.GONE);
                                     emptycartll.setVisibility(View.VISIBLE);
                                 }
                             } else {
@@ -245,7 +253,7 @@ public class CartActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }else {
-
+                    new MakeToast("Try after some time....");
                 }
             }
 

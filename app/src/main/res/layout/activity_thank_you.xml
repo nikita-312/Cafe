@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/thankyou"/>
         <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:id="@+id/thankyoutvr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thank You"
@@ -28,6 +29,7 @@
             android:textSize="@dimen/sp_30"
             android:includeFontPadding="false"/>
         <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:id="@+id/ordertvr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="For Order"

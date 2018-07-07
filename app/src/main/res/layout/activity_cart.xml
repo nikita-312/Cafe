@@ -34,20 +34,31 @@
             tools:ignore="HardcodedText" />
 
     </android.support.v7.widget.Toolbar>
+
     <RelativeLayout
-        android:id="@+id/cartll"
+        android:id="@+id/emptycartll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:orientation="vertical"
         android:visibility="visible">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/empty"
+            android:background="@color/colorwhite"
+            />
+
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        />
+        android:layout_above="@+id/bottom"
+        android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
@@ -55,7 +66,8 @@
         android:orientation="vertical"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -169,20 +181,5 @@
                 android:layout_marginLeft="@dimen/dp_10"/>
         </LinearLayout>
     </LinearLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/emptycartll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:visibility="gone">
 
-        <pl.droidsonroids.gif.GifImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/empty"
-            android:background="@color/colorwhite"
-            />
-
-    </RelativeLayout>
 </RelativeLayout>
