@@ -61,23 +61,53 @@
         android:paddingTop="@dimen/dp_8"
         android:paddingBottom="@dimen/dp_8"
         tools:ignore="RtlHardcoded">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:layout_gravity="center"
+            android:src="@drawable/live_order"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#24000000"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:layout_gravity="center"
+            android:src="@drawable/cart"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#24000000"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:layout_gravity="center"
+            android:src="@drawable/filter"/>
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/veg"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.33"
             android:switchMinWidth="56dp"
-            android:layout_marginRight="@dimen/dp_8"
             android:text="Veg:"
             android:checked="false"
             style="@style/CustomAppTheme"
             android:textOff="All"
+            android:layout_gravity="center"
             android:textOn="Veg"
             tools:ignore="HardcodedText"
-            android:layout_marginEnd="@dimen/dp_8"
             android:visibility="gone"/>
 
+
     </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
