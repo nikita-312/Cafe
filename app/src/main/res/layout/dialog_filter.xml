@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorwhite">
+    <RelativeLayout
+        android:id="@+id/rlClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        >
+        <ImageView
+            android:id="@+id/ivclose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_white_24dp"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/dp_5"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="2"
+        android:layout_below="@+id/rlClose"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            tools:ignore="Suspicious0dp"
+            android:gravity="center"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/filter"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:tint="@color/colorwhite"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.6"
+            android:paddingTop="@dimen/dp_20"
+            android:orientation="vertical">
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vegeterian"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_20"
+                android:textColor="@color/colorFont"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non Vegeterian"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:textColor="@color/colorFont"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:textColor="@color/colorFont"/>
+        </LinearLayout>
+        <com.conceptioni.cafeapp.utils.TextviewRegular
+            android:id="@+id/tvrApplyFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/colorwhite"
+            android:paddingLeft="@dimen/dp_50"
+            android:paddingRight="@dimen/dp_50"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:text="APPLY FILTER"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:background="@drawable/login_drawable"/>
+    </LinearLayout>
+</RelativeLayout>
