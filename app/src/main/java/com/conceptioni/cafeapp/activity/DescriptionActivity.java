@@ -118,6 +118,7 @@ public class DescriptionActivity extends AppCompatActivity {
         indicator.setStrokeWidth(13);
         indicator.setRadius(10);
         indicator.setStrokeColor(Color.WHITE);
+        indicator.setExtraSpacing(5);
 
         NUM_PAGES = imagesArrayList1.size();
 

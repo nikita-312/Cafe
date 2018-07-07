@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +9,7 @@
     tools:context=".activity.MenuActivity">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorToolbar"
@@ -35,7 +36,7 @@
             android:paddingLeft="@dimen/dp_5"
             android:paddingTop="@dimen/dp_5"
             android:src="@drawable/cart"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
 
         <ImageView
@@ -56,38 +57,14 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
+        android:id="@+id/llfilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp_8"
         android:paddingBottom="@dimen/dp_8"
-        tools:ignore="RtlHardcoded">
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:layout_gravity="center"
-            android:src="@drawable/live_order"/>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#24000000"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:layout_gravity="center"
-            android:src="@drawable/cart"/>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#24000000"/>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:layout_gravity="center"
-            android:src="@drawable/filter"/>
+        tools:ignore="RtlHardcoded"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/veg"
@@ -104,16 +81,14 @@
             tools:ignore="HardcodedText"
             android:visibility="gone"/>
 
-
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@+id/llfilter">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -152,9 +127,54 @@
                 android:layout_marginRight="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginLeft="@dimen/dp_5"/>
+        </LinearLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorwhite"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:padding="@dimen/dp_7">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/live_order"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Live Order"
+                android:textSize="@dimen/sp_12"
+                android:layout_marginLeft="@dimen/dp_10"/>
+        </LinearLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.01"
+                android:background="#24000000"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/filter"/>
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter"
+                android:textSize="@dimen/sp_12"
+                android:layout_marginLeft="@dimen/dp_10"/>
         </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

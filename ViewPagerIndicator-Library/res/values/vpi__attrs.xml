@@ -125,5 +125,7 @@
         <attr name="selectedColor" />
         <!-- View background -->
         <attr name="android:background"/>
+        <!-- Extra space between the circles. -->
+               <attr name="extraSpacing" format="dimension" />
     </declare-styleable>
 </resources>

@@ -60,6 +60,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
     private int mTouchSlop;
     private float mLastMotionX = -1;
+    private float mExtraSpacing;
     private int mActivePointerId = INVALID_POINTER;
     private boolean mIsDragging;
 
@@ -86,7 +87,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
         final float defaultRadius = res.getDimension(R.dimen.default_circle_indicator_radius);
         final boolean defaultCentered = res.getBoolean(R.bool.default_circle_indicator_centered);
         final boolean defaultSnap = res.getBoolean(R.bool.default_circle_indicator_snap);
-
+        final float defaultExtraSpacing = res.getDimension(R.dimen.default_circle_indicator_extra_spacing);
         //Retrieve styles attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CirclePageIndicator, defStyle, 0);
 
@@ -113,7 +114,9 @@ public class CirclePageIndicator extends View implements PageIndicator {
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
 
-
+    public void setExtraSpacing(float extraSpacing) {
+                mExtraSpacing = extraSpacing;
+            }
     public void setCentered(boolean centered) {
         mCentered = centered;
         invalidate();
@@ -227,7 +230,8 @@ public class CirclePageIndicator extends View implements PageIndicator {
             shortPaddingBefore = getPaddingLeft();
         }
 
-        final float threeRadius = mRadius * 3;
+       // final float threeRadius = mRadius * 3;
+        final float threeRadius = mRadius * 3 + mExtraSpacing;
         final float shortOffset = shortPaddingBefore + mRadius;
         float longOffset = longPaddingBefore + mRadius;
         if (mCentered) {
@@ -469,7 +473,8 @@ public class CirclePageIndicator extends View implements PageIndicator {
             //Calculate the width according the views count
             final int count = mViewPager.getAdapter().getCount();
             result = (int)(getPaddingLeft() + getPaddingRight()
-                    + (count * 2 * mRadius) + (count - 1) * mRadius + 1);
+                  //  + (count * 2 * mRadius) + (count - 1) * mRadius + 1);
+            + (count * 2 * mRadius) + (count - 1) * (mRadius + mExtraSpacing) + 1);
             //Respect AT_MOST value if that was what is called for by measureSpec
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
