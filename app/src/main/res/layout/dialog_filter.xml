@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/dp_8"
     android:background="@color/colorwhite">
     <RelativeLayout
         android:id="@+id/rlClose"
@@ -24,7 +25,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:weightSum="2"
         android:layout_below="@+id/rlClose"
         android:orientation="vertical">
@@ -32,7 +33,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.6"
             tools:ignore="Suspicious0dp"
             android:gravity="center"
             android:background="@color/colorPrimary">
@@ -41,18 +42,16 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/filter"
-                android:layout_marginBottom="@dimen/dp_20"
                 android:tint="@color/colorwhite"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.6"
+            android:layout_weight="1.4"
             android:paddingTop="@dimen/dp_20"
             android:orientation="vertical">
             <com.conceptioni.cafeapp.utils.TextviewRegular
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Vegeterian"
@@ -91,6 +90,7 @@
             android:paddingBottom="@dimen/dp_5"
             android:text="APPLY FILTER"
             android:layout_marginBottom="@dimen/dp_10"
-            android:background="@drawable/login_drawable"/>
+            android:background="@drawable/login_drawable"
+            android:visibility="gone"/>
     </LinearLayout>
 </RelativeLayout>

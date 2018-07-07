@@ -40,11 +40,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
     private Context context;
     private List<CartModel> cartModelsarray;
-    private List<Images> imagesarray;
+    private List<Images> imagesList;
 
-    public CartItemAdapter(List<CartModel> cartModelsarray,List<Images> imagesarray ){
-        this.cartModelsarray= cartModelsarray;
-        this.imagesarray = imagesarray;
+    public CartItemAdapter(List<CartModel> cartModelsarray) {
+        this.cartModelsarray = cartModelsarray;
     }
 
     @NonNull
@@ -53,7 +52,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
         context = parent.getContext();
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
-        View view = layoutInflater.inflate(R.layout.row_item_cart,parent,false);
+        View view = layoutInflater.inflate(R.layout.row_item_cart, parent, false);
         return new MenuViewHolder(view);
     }
 
@@ -69,27 +68,27 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-        for (int i = 0; i <imagesarray.size() ; i++) {
-            Glide.with(context).load(imagesarray.get(0).getImages()).apply(options).into(holder.imageView1);
+        imagesList = cartModelsarray.get(position).getImages();
+        if (imagesList.size() > 0)
+            Glide.with(context).load(imagesList.get(0).getImages()).apply(options).into(holder.imageView1);
 
-        }
 
         holder.plusiv.setOnClickListener(v -> {
             int count = Integer.parseInt(cartModelsarray.get(position).getQty());
             int Quantity = count + 1;
             String finalQuantity = String.valueOf(Quantity);
-            Log.d("+++++quant","++++"+finalQuantity);
-            CallQuantity(holder,finalQuantity,position,cartModelsarray.get(position).getItem_id());
+            Log.d("+++++quant", "++++" + finalQuantity);
+            CallQuantity(holder, finalQuantity, position, cartModelsarray.get(position).getItem_id());
         });
 
         holder.minusiv.setOnClickListener(v -> {
-            if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")){
+            if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")) {
                 int count = Integer.parseInt(cartModelsarray.get(position).getQty());
                 int Quantity = count - 1;
                 String finalQuantity = String.valueOf(Quantity);
-                Log.d("+++++quant","++++"+finalQuantity);
-                CallQuantity(holder,finalQuantity,position,cartModelsarray.get(position).getItem_id());
-            }else {
+                Log.d("+++++quant", "++++" + finalQuantity);
+                CallQuantity(holder, finalQuantity, position, cartModelsarray.get(position).getItem_id());
+            } else {
                 new MakeToast("Quantity can not be less than 0");
             }
 
@@ -101,25 +100,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
         return cartModelsarray.size();
     }
 
-    public class MenuViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout itemll;
-        RoundedImageView imageView1;
-        TextviewRegular tvrCartName,tvrCartQty;
-        TextviewBold tvbCartPrice;
-        ImageView plusiv,minusiv;
-
-        MenuViewHolder(View itemView) {
-            super(itemView);
-            itemll = itemView.findViewById(R.id.itemll);
-            imageView1 = itemView.findViewById(R.id.imageView1);
-            tvrCartName = itemView.findViewById(R.id.tvrCartName);
-            tvbCartPrice = itemView.findViewById(R.id.tvbCartPrice);
-            tvrCartQty = itemView.findViewById(R.id.tvrCartQty);
-            plusiv = itemView.findViewById(R.id.plusiv);
-            minusiv = itemView.findViewById(R.id.minusiv);
-        }
-    }
-    private void CallQuantity(MenuViewHolder holder, String Quantity, int Position, String ItemId){
+    private void CallQuantity(MenuViewHolder holder, String Quantity, int Position, String ItemId) {
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -128,7 +109,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
         object.addProperty("qty", Quantity);
         object.addProperty("note", "");
 
-        Log.d("+++++quant123","++++"+object.toString());
+        Log.d("+++++quant123", "++++" + object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.AddToCart("application/json", object);
@@ -136,16 +117,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     try {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-                        if (object1.optInt("success") == 1){
+                        if (object1.optInt("success") == 1) {
                             cartModelsarray.get(Position).setQty(object1.optString("qty"));
                             holder.tvrCartQty.setText(object1.optString("qty"));
-                        }else {
-                            if (Quantity.equalsIgnoreCase("0")){
+                        } else {
+                            if (Quantity.equalsIgnoreCase("0")) {
                                 new MakeToast(object1.optString("msg"));
-                            }else {
+                            } else {
                                 int Quan = Integer.parseInt(Quantity);
                                 holder.tvrCartQty.setText(Quan - 1);
                                 new MakeToast(object1.optString("msg"));
@@ -163,6 +144,25 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
             }
         });
 
+    }
+
+    public class MenuViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout itemll;
+        RoundedImageView imageView1;
+        TextviewRegular tvrCartName, tvrCartQty;
+        TextviewBold tvbCartPrice;
+        ImageView plusiv, minusiv;
+
+        MenuViewHolder(View itemView) {
+            super(itemView);
+            itemll = itemView.findViewById(R.id.itemll);
+            imageView1 = itemView.findViewById(R.id.imageView1);
+            tvrCartName = itemView.findViewById(R.id.tvrCartName);
+            tvbCartPrice = itemView.findViewById(R.id.tvbCartPrice);
+            tvrCartQty = itemView.findViewById(R.id.tvrCartQty);
+            plusiv = itemView.findViewById(R.id.plusiv);
+            minusiv = itemView.findViewById(R.id.minusiv);
+        }
     }
 
 }

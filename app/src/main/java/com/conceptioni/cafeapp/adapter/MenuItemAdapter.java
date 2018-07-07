@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.CartActivity;
@@ -46,9 +49,9 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     private List<Images> imagesList;
     private String Flag = "A";
 
-    public MenuItemAdapter(List<Items> itemsArrayList,List<Images> imagesList){
+    public MenuItemAdapter(List<Items> itemsArrayList){
         this.itemsArrayList = itemsArrayList;
-        this.imagesList = imagesList;
+
     }
 
     @NonNull
@@ -67,21 +70,16 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         holder.itemll.setOnClickListener(v -> {
             context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",itemsArrayList.get(position).getItem_id()));
         });
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.no_image)
+                .error(R.drawable.no_image)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH);
 
-        Glide.with(context).load(imagesList.get(position).getImages()).into(holder.imageView1);
-//        for (int i = 0; i <imagesList.size() ; i++) {
-//            Log.d("image","++++"+imagesList.get(0).getImages());
-////            Glide.with(context).load(imagesList.get(0).getImages()).into(holder.imageView1);
-//        }
-
-
-//        imagesList.clear();
-//        imagesList = itemsArrayList.get(position).getImage();
-//        for (int i = 0; i <imagesList.size() ; i++) {
-//
-//            Log.d("++++image","++++"+imagesList.get(i).getImages());
-//        }
-
+        imagesList = itemsArrayList.get(position).getImage();
+        if (imagesList.size() > 0)
+        Glide.with(context).load(imagesList.get(0).getImages()).apply(options).into(holder.imageView1);
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
         holder.quantytvr.setText(itemsArrayList.get(position).getQty());

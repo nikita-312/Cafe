@@ -29,10 +29,10 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
 
     Context context;
     List<CartModel> cartModelsarray;
-    List<Images> imagesarray;
-    public LiveOrderAdapter(List<CartModel> cartModelsarray, List<Images> imagesarray){
+    List<Images> imagesList;
+    public LiveOrderAdapter(List<CartModel> cartModelsarray){
         this.cartModelsarray = cartModelsarray;
-        this.imagesarray = imagesarray;
+
     }
 
     @NonNull
@@ -56,11 +56,9 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-
-        for (int i = 0; i <imagesarray.size() ; i++) {
-            Glide.with(context).load(imagesarray.get(0).getImages()).apply(options).into(holder.imageView1);
-
-        }
+        imagesList = cartModelsarray.get(position).getImages();
+        if (imagesList.size() > 0)
+            Glide.with(context).load(imagesList.get(0).getImages()).apply(options).into(holder.imageView1);
         holder.tvrQty.setText(cartModelsarray.get(position).getQty());
     }
 

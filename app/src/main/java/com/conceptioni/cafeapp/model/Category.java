@@ -42,4 +42,14 @@ public class Category{
   public String getCid(){
    return cid;
   }
+
+  public boolean isselect;
+
+    public boolean isIsselect() {
+        return isselect;
+    }
+
+    public void setIsselect(boolean isselect) {
+        this.isselect = isselect;
+    }
 }

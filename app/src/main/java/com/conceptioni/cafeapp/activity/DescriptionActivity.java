@@ -18,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.Images;
@@ -86,7 +89,6 @@ public class DescriptionActivity extends AppCompatActivity {
             ItemId = getIntent().getStringExtra("ItemId");
 
             itemsArrayList.clear();
-            imagesArrayList1.clear();
             itemsArrayList = getArrayList();
             for (int i = 0; i <itemsArrayList.size() ; i++) {
                 if (ItemId.equalsIgnoreCase(itemsArrayList.get(i).getItem_id())){
@@ -95,7 +97,9 @@ public class DescriptionActivity extends AppCompatActivity {
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
                     qtytvr.setText(itemsArrayList.get(i).getQty());
                     Qty = itemsArrayList.get(i).getQty();
+//                    imagesArrayList1.clear();
                     imagesArrayList1 = itemsArrayList.get(i).getImage();
+                    Log.d("++++size","++++"+itemsArrayList.get(i).getImage().size());
 //                    imagesArrayList1 = itemsArrayList.get(i).getImage();
 //                    Log.d("++++++++i","+++++"+i + "++++" + Qty + "++++"+imagesArrayList1.size());
                 }
@@ -213,8 +217,15 @@ public class DescriptionActivity extends AppCompatActivity {
             assert layoutInflater != null;
             View view = layoutInflater.inflate(R.layout.row_item_slider, container, false);
             ImageView banneriv = view.findViewById(R.id.banneriv);
-            Log.d("++++++size","++++"+imagesArrayList1.size());
-            Glide.with(DescriptionActivity.this).load(imagesArrayList1.get(position).getImages()).into(banneriv);
+
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.no_image)
+                    .error(R.drawable.no_image)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.HIGH);
+
+            Glide.with(DescriptionActivity.this).load(imagesArrayList1.get(position).getImages()).apply(options).into(banneriv);
 //            banneriv.setImageResource(imagesArrayList.get(position).getImages());
             container.addView(view);
             return view;

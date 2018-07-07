@@ -43,7 +43,7 @@ public class CartActivity extends AppCompatActivity {
     TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal;
     String subtotal, total, fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
-    List<Images> imagesArrayList = new ArrayList<>();
+
     CartItemAdapter cartItemAdapter;
     RelativeLayout emptycartll;
     LinearLayout bottom;
@@ -133,7 +133,8 @@ public class CartActivity extends AppCompatActivity {
                                     cartModel.setItem_id(object.getString("item_id"));
                                     cartModel.setPrice(object.getString("price"));
                                     cartModel.setQty(object.getString("qty"));
-                                    imagesArrayList.clear();
+
+                                    List<Images> imagesArrayList = new ArrayList<>();
                                     JSONArray array = object.getJSONArray("image");
                                     for (int j = 0; j < array.length(); j++) {
                                         Images images1 = new Images();
@@ -144,7 +145,7 @@ public class CartActivity extends AppCompatActivity {
                                     cartModel.setImages(imagesArrayList);
                                     cartModelsarray.add(cartModel);
                                 }
-                                cartItemAdapter = new CartItemAdapter(cartModelsarray, imagesArrayList);
+                                cartItemAdapter = new CartItemAdapter(cartModelsarray);
                                 rvCart.setAdapter(cartItemAdapter);
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);

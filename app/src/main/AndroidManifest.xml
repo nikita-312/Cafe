@@ -56,7 +56,6 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.CafeInfoActivity" />
-        <activity android:name=".activity.VisitAgainActivity" />
         <activity android:name=".activity.RatingActivity"></activity>
     </application>
 

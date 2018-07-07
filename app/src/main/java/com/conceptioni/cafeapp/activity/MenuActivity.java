@@ -9,11 +9,13 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
+import com.conceptioni.cafeapp.dialog.FilterDialog;
 import com.conceptioni.cafeapp.model.Category;
 import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
@@ -44,12 +46,12 @@ public class MenuActivity extends AppCompatActivity {
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
-    List<Items> itemsArrayList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
-    List<Images> imagesArrayList = new ArrayList<>();
     SwitchCompat veg;
     boolean isVeg = false;
+    LinearLayout viewliveorderll,filterll;
+    int pos= 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,30 +82,37 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
+
+        filterll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FilterDialog(MenuActivity.this).ShowFilterDialog();
+            }
+        });
     }
 
     private void ShowVegData(){
-        vegItemsList.clear();
-        if (!itemsArrayList.isEmpty()){
-            for (int i = 0; i <itemsArrayList.size() ; i++) {
-                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")){
-                    Items items = new Items();
-                    items.setImage(itemsArrayList.get(i).getImage());
-                    items.setItem_id(itemsArrayList.get(i).getItem_id());
-                    items.setItem_name(itemsArrayList.get(i).getItem_name());
-                    items.setPrice(itemsArrayList.get(i).getPrice());
-                    items.setDesc(itemsArrayList.get(i).getDesc());
-                    items.setQty(itemsArrayList.get(i).getQty());
-                    items.setItem_type(itemsArrayList.get(i).getItem_type());
-                    vegItemsList.add(items);
-                }
-                SetAdapter(vegItemsList);
-            }
-        }
+//        vegItemsList.clear();
+//        if (!itemsArrayList.isEmpty()){
+//            for (int i = 0; i <itemsArrayList.size() ; i++) {
+//                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")){
+//                    Items items = new Items();
+//                    items.setImage(itemsArrayList.get(i).getImage());
+//                    items.setItem_id(itemsArrayList.get(i).getItem_id());
+//                    items.setItem_name(itemsArrayList.get(i).getItem_name());
+//                    items.setPrice(itemsArrayList.get(i).getPrice());
+//                    items.setDesc(itemsArrayList.get(i).getDesc());
+//                    items.setQty(itemsArrayList.get(i).getQty());
+//                    items.setItem_type(itemsArrayList.get(i).getItem_type());
+//                    vegItemsList.add(items);
+//                }
+//                SetAdapter(vegItemsList);
+//            }
+//        }
     }
 
     private void ShowAllData(){
-        SetAdapter(itemsArrayList);
+//        SetAdapter(itemsArrayList);
     }
 
     private void initmenu() {
@@ -112,6 +121,8 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem = findViewById(R.id.rvCategoryitem);
         veg = findViewById(R.id.veg);
         liveorder = findViewById(R.id.liveorder);
+        filterll = findViewById(R.id.filterll);
+        viewliveorderll = findViewById(R.id.viewliveorderll);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -121,8 +132,17 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 view.findViewById(R.id.llMain).setOnClickListener(v -> {
-                    view.findViewById(R.id.llMain).setBackgroundResource(R.drawable.orange);
-                    view.findViewById(R.id.tvrCatName).setVisibility(View.GONE);
+                    categoryList.get(pos).setIsselect(false);
+                    categoryList.get(position).setIsselect(true);
+                    pos = position;
+
+                    itemsArrayList1 = categoryList.get(position).getItems();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(itemsArrayList1);
+                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+
+                    SetAdapter(categoryList.get(position).getItems());
+                    menuAdapter.notifyDataSetChanged();
                 });
             }
 
@@ -165,17 +185,21 @@ public class MenuActivity extends AppCompatActivity {
                         try {
                             JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (data.optString("success").equalsIgnoreCase("1")){
-                                itemsArrayList.clear();
                                 categoryList.clear();
-                                imagesArrayList.clear();
+
                                 JSONArray categoryarray = data.getJSONArray("category");
-                                Log.d("++++size","++++"+categoryarray.length());
                                 for (int i = 0; i <categoryarray.length() ; i++) {
                                     JSONObject categorydata = categoryarray.getJSONObject(i);
                                     Category category = new Category();
                                     category.setCid(categorydata.optString("cid"));
                                     category.setCname(categorydata.optString("cname"));
                                     category.setCimage(categorydata.optString("cimage"));
+                                    if (i== 0){
+                                        category.setIsselect(true);
+                                    }else {
+                                        category.setIsselect(false);
+                                    }
+                                    List<Items> itemsArrayList = new ArrayList<>();
 
                                     JSONArray itemarray = categorydata.getJSONArray("items");
                                     for (int j = 0; j <itemarray.length() ; j++) {
@@ -188,19 +212,19 @@ public class MenuActivity extends AppCompatActivity {
                                         items.setQty(itemdata.optString("qty"));
                                         items.setItem_type(itemdata.optString("item_type"));
 
+                                        List<Images> imagesArrayList = new ArrayList<>();
                                         JSONArray images = itemdata.getJSONArray("image");
                                         for (int k = 0; k <images.length() ; k++) {
                                             Images images1 = new Images();
                                             images1.setImages(images.getString(k));
                                             imagesArrayList.add(images1);
                                         }
+                                        items.setImage(imagesArrayList);
                                         itemsArrayList.add(items);
-                                        itemsArrayList.get(j).setImage(imagesArrayList);
                                     }
                                     category.setItems(itemsArrayList);
                                     categoryList.add(category);
                                 }
-
                                 rvCategory.hideShimmerAdapter();
                                 menuAdapter = new MenuAdapter(categoryList);
                                 rvCategory.setAdapter(menuAdapter);
@@ -209,8 +233,8 @@ public class MenuActivity extends AppCompatActivity {
                                 Gson gson = new Gson();
                                 String json = gson.toJson(itemsArrayList1);
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
-
-                                SetAdapter(itemsArrayList1);
+                                if (categoryList.size() > 0)
+                                SetAdapter(categoryList.get(0).getItems());
 
                             }else {
                                 new MakeToast(data.optString("msg"));
@@ -241,11 +265,10 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void SetAdapter(List<Items> itemsArrayList1){
-        for (int i = 0; i <1 ; i++) {
-            menuItemAdapter = new MenuItemAdapter(itemsArrayList1,imagesArrayList);
+            menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
             rvCategoryitem.hideShimmerAdapter();
             rvCategoryitem.setAdapter(menuItemAdapter);
-        }
+
     }
 
 }

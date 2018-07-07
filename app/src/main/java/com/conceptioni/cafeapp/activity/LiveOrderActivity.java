@@ -19,6 +19,7 @@ import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.adapter.LiveOrderAdapter;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.model.Images;
+import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
@@ -44,7 +45,7 @@ public class LiveOrderActivity extends AppCompatActivity {
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
-    List<Images> imagesArrayList = new ArrayList<>();
+
     LiveOrderAdapter liveOrderAdapter;
     RelativeLayout emptycartll;
 
@@ -109,7 +110,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                             Log.d("+++++++obiect","++++"+jsonObject1.toString());
                             if (jsonObject1.getInt("success")==1){
                                 cartModelsarray.clear();
-                                imagesArrayList.clear();
+
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
                                 total = String.valueOf(jsonObject1.optInt("total"));
@@ -125,18 +126,17 @@ public class LiveOrderActivity extends AppCompatActivity {
                                     cartModel.setQty(object.optString("qty"));
 
 
-                                    Images images1 = null;
+                                    List<Images> imagesArrayList = new ArrayList<>();
                                     JSONArray array = object.getJSONArray("image");
                                     for (int j = 0; j < array.length(); j++) {
-                                        images1 = new Images();
-                                        images1.setImages(array.getString(0));
+                                        Images images1 = new Images();
+                                        images1.setImages(array.getString(j));
                                         imagesArrayList.add(images1);
-
                                     }
                                     cartModel.setImages(imagesArrayList);
                                     cartModelsarray.add(cartModel);
                                 }
-                                liveOrderAdapter = new LiveOrderAdapter(cartModelsarray,imagesArrayList);
+                                liveOrderAdapter = new LiveOrderAdapter(cartModelsarray);
                                 rvliveOrder.setAdapter(liveOrderAdapter);
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
