@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -46,7 +47,8 @@ public class MenuActivity extends AppCompatActivity {
     List<Category> categoryList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
-    LinearLayout viewliveorderll, filterll;
+    LinearLayout viewliveorderll, filterll,retryll;
+    RelativeLayout nointernetrl,mainrl;
     int pos = 0;
 
 
@@ -69,6 +71,9 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem = findViewById(R.id.rvCategoryitem);
         filterll = findViewById(R.id.filterll);
         viewliveorderll = findViewById(R.id.viewliveorderll);
+        nointernetrl = findViewById(R.id.nointernetrl);
+        mainrl = findViewById(R.id.mainrl);
+        retryll = findViewById(R.id.retryll);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -115,6 +120,13 @@ public class MenuActivity extends AppCompatActivity {
         filterll.setOnClickListener(v -> new FilterDialog(MenuActivity.this).ShowFilterDialog());
 
         viewliveorderll.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
+
+        retryll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               GetMenu();
+            }
+        });
     }
 
     private void ShowFilterData() {
@@ -191,6 +203,8 @@ public class MenuActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
+                            nointernetrl.setVisibility(View.GONE);
+                            mainrl.setVisibility(View.VISIBLE);
                             JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (data.optString("success").equalsIgnoreCase("1")) {
                                 categoryList.clear();
@@ -260,9 +274,10 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Error while getting result");
                 rvCategory.hideShimmerAdapter();
                 rvCategoryitem.hideShimmerAdapter();
+                mainrl.setVisibility(View.GONE);
+                nointernetrl.setVisibility(View.VISIBLE);
             }
         });
     }

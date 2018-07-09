@@ -57,7 +57,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/minimise"
-                    android:layout_alignParentRight="true"/>
+                    android:clickable="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -94,6 +97,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginRight="@dimen/dp_7"
+                            android:padding="@dimen/dp_5"
                             android:src="@drawable/minus" />
 
                         <RelativeLayout
@@ -105,7 +109,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:src="@drawable/round" />
+                                android:src="@drawable/round"
+                                android:padding="@dimen/dp_5"/>
 
                             <com.conceptioni.cafeapp.utils.TextviewRegular
                                 android:id="@+id/tvrCartQty"
@@ -123,7 +128,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/dp_7"
-                            android:src="@drawable/plus" />
+                            android:src="@drawable/plus"
+                            android:padding="@dimen/dp_5"/>
 
                     </LinearLayout>
 

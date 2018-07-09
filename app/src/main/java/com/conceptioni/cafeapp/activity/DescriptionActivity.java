@@ -126,10 +126,8 @@ public class DescriptionActivity extends AppCompatActivity {
         addtocarttvr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(DescriptionActivity.this,MenuActivity.class));
-                finish();
-               // Flag = "C";
-              //  CallQuantity(Qty,ItemId);
+                Flag = "C";
+                CallQuantity(Qty,ItemId);
             }
         });
 
@@ -179,7 +177,7 @@ public class DescriptionActivity extends AppCompatActivity {
                                     Qty = object1.optString("qty");
                                     SaveArrylistinShared(itemsArrayList);
                                     if (Flag.equalsIgnoreCase("C")){
-                                        startActivity(new Intent(DescriptionActivity.this, CartActivity.class));
+                                        startActivity(new Intent(DescriptionActivity.this,MenuActivity.class));
                                         finish();
                                     }
                                 }

@@ -1,12 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,14 +14,10 @@ import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
-import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.adapter.LiveOrderAdapter;
 import com.conceptioni.cafeapp.model.CartModel;
-import com.conceptioni.cafeapp.model.Images;
-import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
-import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
@@ -39,6 +34,7 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class LiveOrderActivity extends AppCompatActivity {
     ShimmerRecyclerView rvliveOrder;
@@ -46,9 +42,10 @@ public class LiveOrderActivity extends AppCompatActivity {
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
-    ImageView ivBack;
+    ImageView ivBack,reorderiv;
     LiveOrderAdapter liveOrderAdapter;
     RelativeLayout emptycartll;
+    private static final String SHOWCASE_ID = "simple example";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +78,28 @@ public class LiveOrderActivity extends AppCompatActivity {
         paymenttvr=findViewById(R.id.paymenttvr);
         ivBack=findViewById(R.id.ivBack);
         emptycartll=findViewById(R.id.emptycartll);
+        reorderiv=findViewById(R.id.reorderiv);
+
+        presentShowcaseView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);
         rvliveOrder.showShimmerAdapter();
         viewLiveOrder();
+    }
+
+    private void presentShowcaseView() {
+        new MaterialShowcaseView.Builder(this)
+        .setMaskColour(Color.argb(150, 0, 0, 0))
+                .setTarget(reorderiv)
+                .setTitleText("Re-Order")
+                .setDismissText("GOT IT")
+                .setContentText("want to re-order?")
+                .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
+                .useFadeAnimation() // remove comment if you want to use fade animations for Lollipop & up
+                .setShapePadding(20)
+                .show();
     }
     public void viewLiveOrder(){
         JsonObject jsonObject = new JsonObject();
@@ -108,14 +122,12 @@ public class LiveOrderActivity extends AppCompatActivity {
                             rvliveOrder.setVisibility(View.VISIBLE);
                             bottom.setVisibility(View.VISIBLE);
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            Log.d("+++++++obiect","++++"+jsonObject1.toString());
+
                             if (jsonObject1.getInt("success")==1){
                                 cartModelsarray.clear();
-
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
                                 total = String.valueOf(jsonObject1.optInt("total"));
-
 
                                 JSONArray jsonArray = jsonObject1.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {

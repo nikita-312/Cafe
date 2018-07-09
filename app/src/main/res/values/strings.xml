@@ -23,5 +23,8 @@
     <string name="Feedback">Feedback</string>
     <string name="NEXT">NEXT</string>
 
+    <string name="Checkyournetwork">Please Check your network connectivity and try again</string>
+    <string name="Connection_Error">Connection Error</string>
+
 
 </resources>

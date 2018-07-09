@@ -11,9 +11,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorToolbar"
         android:elevation="@dimen/dp_5"
-        tools:ignore="UnusedAttribute"
-        android:background="@color/colorToolbar">
+        tools:ignore="UnusedAttribute">
+
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
@@ -34,6 +35,15 @@
             android:textSize="@dimen/sp_16"
             tools:ignore="HardcodedText" />
 
+        <ImageView
+            android:id="@+id/reorderiv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:padding="@dimen/dp_8"
+            android:src="@drawable/reorder"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
@@ -46,7 +56,7 @@
         <pl.droidsonroids.gif.GifImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/empty5"/>
+            android:src="@drawable/empty5" />
 
     </RelativeLayout>
 
@@ -54,99 +64,112 @@
         android:id="@+id/rvliveOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom"
         android:layout_below="@+id/toolbar"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_above="@+id/bottom"
+        android:visibility="visible"
         app:demo_layout="@layout/row_item_cart_shimmer_view"
-        app:demo_layout_manager_type="linear_vertical"
-        android:visibility="visible"/>
+        app:demo_layout_manager_type="linear_vertical" />
+
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
         android:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            tools:ignore="UnusedAttribute"
             android:layout_marginTop="@dimen/dp_10"
-            android:padding="@dimen/dp_5">
-        <com.conceptioni.cafeapp.utils.TextviewRegular
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sub total"
-            android:layout_weight="0.6"
-            android:gravity="end"
-            android:textColor="@color/colorFont"/>
-        <com.conceptioni.cafeapp.utils.TextviewRegular
-            android:id="@+id/tvrCartSubTotal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="$ 00.0"
-            android:layout_weight="0.4"
-            android:gravity="end"
-            android:textColor="@color/colorPrimary"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:elevation="@dimen/dp_5"
-            android:background="@color/colorShadow"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
             android:weightSum="1"
-            android:layout_marginTop="@dimen/dp_10"
-            android:padding="@dimen/dp_5">
+            tools:ignore="UnusedAttribute">
+
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Fee"
                 android:layout_weight="0.6"
                 android:gravity="end"
-                android:textColor="@color/colorFont"/>
+                android:text="Sub total"
+                android:textColor="@color/colorFont" />
+
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/tvrCartSubTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:gravity="end"
+                android:text="$ 00.0"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorShadow"
+            android:elevation="@dimen/dp_5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            android:weightSum="1">
+
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:gravity="end"
+                android:text="Fee"
+                android:textColor="@color/colorFont" />
+
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:id="@+id/tvrCartFee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="$ 00.00"
                 android:layout_weight="0.4"
                 android:gravity="end"
-                android:textColor="@color/colorPrimary"/>
+                android:text="$ 00.00"
+                android:textColor="@color/colorPrimary" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:elevation="@dimen/dp_5"
-           android:background="@color/colorShadow"/>
+            android:background="@color/colorShadow"
+            android:elevation="@dimen/dp_5" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
             android:layout_marginTop="@dimen/dp_10"
-            android:padding="@dimen/dp_5">
+            android:padding="@dimen/dp_5"
+            android:weightSum="1">
+
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Total"
                 android:layout_weight="0.6"
                 android:gravity="end"
-                android:textColor="@color/colorFont"/>
+                android:text="Total"
+                android:textColor="@color/colorFont" />
+
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:id="@+id/tvrCartTotal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="$ 00.00"
                 android:layout_weight="0.4"
                 android:gravity="end"
-                android:textColor="@color/colorPrimary"/>
+                android:text="$ 00.00"
+                android:textColor="@color/colorPrimary" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/llBottom"
             android:layout_width="match_parent"
@@ -155,33 +178,35 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp_10"
             android:weightSum="2">
+
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:id="@+id/continuetvr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/login_drawable"
+                android:gravity="center"
+                android:paddingBottom="7dp"
+                android:paddingTop="7dp"
                 android:text="continue order"
                 android:textAllCaps="true"
-                android:background="@drawable/login_drawable"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp"
                 android:textColor="@color/colorwhite"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"/>
+                android:textSize="@dimen/sp_14" />
+
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:id="@+id/paymenttvr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_weight="1"
+                android:background="@drawable/login_drawable"
+                android:gravity="center"
+                android:paddingBottom="7dp"
+                android:paddingTop="7dp"
                 android:text="make payment"
                 android:textAllCaps="true"
-                android:background="@drawable/login_drawable"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp"
                 android:textColor="@color/colorwhite"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:layout_marginLeft="@dimen/dp_10"/>
+                android:textSize="@dimen/sp_14" />
 
         </LinearLayout>
     </LinearLayout>

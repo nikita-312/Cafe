@@ -8,144 +8,212 @@
     android:orientation="vertical"
     tools:context=".activity.MenuActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
+        android:id="@+id/mainrl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorToolbar"
-        android:elevation="@dimen/dp_5"
-        tools:ignore="UnusedAttribute">
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorToolbar"
+            android:elevation="@dimen/dp_5"
+            tools:ignore="UnusedAttribute">
+
+            <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Menu"
+                android:textColor="@color/colorblack"
+                android:textSize="@dimen/sp_16"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/ivCart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/dp_5"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/cart"
+                android:visibility="visible"
+                tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom"
+            android:layout_below="@+id/toolbar"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:background="@color/colorToolbar"
+                android:orientation="vertical">
+
+                <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
+                    android:id="@+id/rvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layoutAnimation="@anim/layout_animation_fall_down"
+                    app:demo_layout="@layout/row_item_menu_shimmer_view"
+                    app:demo_layout_manager_type="linear_vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:background="@color/bg"
+                android:orientation="vertical">
+
+                <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
+                    android:id="@+id/rvCategoryitem"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layoutAnimation="@anim/layout_animation_fall_down"
+                    app:demo_layout="@layout/row_item_menu_category_shimmer_view"
+                    app:demo_layout_manager_type="linear_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/bg"
+            android:padding="8dp"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/viewliveorderll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="@dimen/dp_5">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/live_order" />
+
+                <com.conceptioni.cafeapp.utils.TextviewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:text="Live Order"
+                    android:textColor="@color/colorFont"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.001"
+                android:background="#24000000" />
+
+            <LinearLayout
+                android:id="@+id/filterll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="@dimen/dp_5">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/filter" />
+
+                <com.conceptioni.cafeapp.utils.TextviewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:text="Filter"
+                    android:textColor="@color/colorFont"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/nointernetrl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/internetgif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/internet"
+            android:background="@color/colorwhite"
+            android:layout_centerInParent="true"/>
+
+        <com.conceptioni.cafeapp.utils.TextviewBold
+            android:id="@+id/connectionerror"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/internetgif"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="@string/Connection_Error"
+            android:textColor="@color/colorblack"
+            android:gravity="center"
+            android:textSize="@dimen/sp_14"/>
 
         <com.conceptioni.cafeapp.utils.TextviewRegular
-            android:layout_width="wrap_content"
+            android:id="@+id/checknet"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Menu"
-            android:textColor="@color/colorblack"
-            android:textSize="@dimen/sp_16"
-            tools:ignore="HardcodedText" />
-
-        <ImageView
-            android:id="@+id/ivCart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="@dimen/dp_5"
-            android:padding="@dimen/dp_8"
-            android:src="@drawable/cart"
-            android:visibility="visible"
-            tools:ignore="ContentDescription,RtlHardcoded,RtlSymmetry" />
-
-
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom"
-        android:layout_below="@+id/toolbar"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:background="@color/colorToolbar"
-            android:orientation="vertical">
-
-            <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
-                android:id="@+id/rvCategory"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
-                android:layout_marginTop="@dimen/dp_5"
-                android:layoutAnimation="@anim/layout_animation_fall_down"
-                app:demo_layout="@layout/row_item_menu_shimmer_view"
-                app:demo_layout_manager_type="linear_vertical" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.7"
-            android:background="@color/bg"
-            android:orientation="vertical">
-
-            <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
-                android:id="@+id/rvCategoryitem"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
-                android:layout_marginTop="@dimen/dp_5"
-                android:layoutAnimation="@anim/layout_animation_fall_down"
-                app:demo_layout="@layout/row_item_menu_category_shimmer_view"
-                app:demo_layout_manager_type="linear_vertical" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bg"
-        android:padding="8dp"
-        android:weightSum="2">
-
-        <LinearLayout
-            android:id="@+id/viewliveorderll"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_below="@+id/connectionerror"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="@string/Checkyournetwork"
             android:gravity="center"
-            android:padding="@dimen/dp_5">
+            android:textSize="@dimen/sp_12"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/live_order" />
+        <LinearLayout
+            android:id="@+id/retryll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checknet"
+            android:layout_marginTop="@dimen/dp_15"
+            android:background="@drawable/retry_drawable"
+            android:layout_marginLeft="@dimen/dp_60"
+            android:layout_marginRight="@dimen/dp_60"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:gravity="center">
 
             <com.conceptioni.cafeapp.utils.TextviewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:text="Live Order"
-                android:textColor="@color/colorFont"
-                android:textSize="@dimen/sp_14" />
+                android:text="Retry"
+                android:textColor="@color/colorPrimary"
+                android:textAllCaps="true"/>
+
         </LinearLayout>
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.001"
-            android:background="#24000000" />
+    </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/filterll"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="@dimen/dp_5">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/filter" />
-
-            <com.conceptioni.cafeapp.utils.TextviewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:text="Filter"
-                android:textColor="@color/colorFont"
-                android:textSize="@dimen/sp_14" />
-        </LinearLayout>
-
-    </LinearLayout>
 </RelativeLayout>
