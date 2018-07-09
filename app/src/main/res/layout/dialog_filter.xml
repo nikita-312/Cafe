@@ -52,23 +52,26 @@
             android:paddingTop="@dimen/dp_20"
             android:orientation="vertical">
             <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/vegtvr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Vegeterian"
+                android:text="Vegetarian"
                 android:paddingTop="@dimen/dp_10"
                 android:paddingBottom="@dimen/dp_10"
                 android:paddingLeft="@dimen/dp_20"
                 android:textColor="@color/colorFont"/>
             <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/nonvegtvr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Non Vegeterian"
+                android:text="Non Vegetarian"
                 android:paddingTop="@dimen/dp_10"
                 android:paddingBottom="@dimen/dp_10"
                 android:paddingLeft="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:textColor="@color/colorFont"/>
             <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/alltvr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="All"

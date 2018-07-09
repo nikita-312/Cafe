@@ -19,5 +19,9 @@
     <string name="username">Please Enter User Name</string>
     <string name="validphoneno">Please Enter valid Phone Number</string>
 
+    <!--feedback-->
+    <string name="Feedback">Feedback</string>
+    <string name="NEXT">NEXT</string>
+
 
 </resources>

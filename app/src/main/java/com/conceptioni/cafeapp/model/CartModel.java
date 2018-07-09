@@ -7,7 +7,7 @@ public class CartModel {
     String price;
     String qty;
     String item_id;
-    List<Images> images;
+    String images;
 
     public String getItem_id() {
         return item_id;
@@ -41,11 +41,11 @@ public class CartModel {
         this.qty = qty;
     }
 
-    public List<Images> getImages() {
+    public String getImages() {
         return images;
     }
 
-    public void setImages(List<Images> images) {
+    public void setImages(String images) {
         this.images = images;
     }
 }

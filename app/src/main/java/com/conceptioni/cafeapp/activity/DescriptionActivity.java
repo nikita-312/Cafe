@@ -48,18 +48,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DescriptionActivity extends AppCompatActivity {
-    private static int currentPage = 0;
-    private static int NUM_PAGES = 0;
-    ViewPager viewPager;
-    CirclePageIndicator indicator;
-    int slider[] = {R.drawable.slider, R.drawable.slider, R.drawable.slider};
-    String ItemData,ItemId,ImageData,Qty;
+
+    String ItemData,ItemId,Qty;
     List<Items> itemsArrayList = new ArrayList<>();
-    List<Images> imagesArrayList1 = new ArrayList<>();
-    List<Images> imagesArrayList2 = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
-    ImageView plusiv,minusiv,backiv,ivCart;
+    ImageView plusiv,minusiv,backiv,ivCart,itemiv;
     String Flag = "A";
 
     @Override
@@ -72,8 +66,6 @@ public class DescriptionActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void init() {
-        viewPager = findViewById(R.id.pager);
-        indicator = findViewById(R.id.indicator);
         ItemPricetvr = findViewById(R.id.ItemPricetvr);
         Itemnametvr = findViewById(R.id.Itemnametvr);
         Itemdesctvr = findViewById(R.id.Itemdesctvr);
@@ -84,6 +76,7 @@ public class DescriptionActivity extends AppCompatActivity {
         backiv = findViewById(R.id.backiv);
         addtocarttvr = findViewById(R.id.addtocarttvr);
         ivCart = findViewById(R.id.ivCart);
+        itemiv = findViewById(R.id.itemiv);
 
 
         if (getIntent().getExtras() != null){
@@ -98,69 +91,19 @@ public class DescriptionActivity extends AppCompatActivity {
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
                     qtytvr.setText(itemsArrayList.get(i).getQty());
                     Qty = itemsArrayList.get(i).getQty();
-//                    imagesArrayList1.clear();
-                    imagesArrayList1 = itemsArrayList.get(i).getImage();
-                    Log.d("++++size","++++"+itemsArrayList.get(i).getImage().size());
-//                    imagesArrayList1 = itemsArrayList.get(i).getImage();
-//                    Log.d("++++++++i","+++++"+i + "++++" + Qty + "++++"+imagesArrayList1.size());
+
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.drawable.no_image)
+                            .error(R.drawable.no_image)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .priority(Priority.HIGH);
+
+                    Glide.with(DescriptionActivity.this).load( itemsArrayList.get(i).getImage()).apply(options).into(itemiv);
                 }
             }
 
         }
-        SlidePageAdapter slidePageAdapter = new SlidePageAdapter();
-        if (viewPager != null) {
-            viewPager.setAdapter(slidePageAdapter);
-        }
-
-        CirclePageIndicator indicator =
-                findViewById(R.id.indicator);
-
-        indicator.setViewPager(viewPager);
-
-        final float density = getResources().getDisplayMetrics().density;
-
-        indicator.setRadius(4 * density);
-        indicator.setStrokeWidth(13);
-        indicator.setRadius(10);
-        indicator.setStrokeColor(Color.WHITE);
-        indicator.setExtraSpacing(5);
-
-        NUM_PAGES = imagesArrayList1.size();
-
-        final Handler handler = new Handler();
-        final Runnable Update = () -> {
-            if (currentPage == NUM_PAGES) {
-                currentPage = 0;
-            }
-            viewPager.setCurrentItem(currentPage++, true);
-        };
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, 2000, 2000);
-
-        // Pager listener over indicator
-        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPage = position;
-
-            }
-
-            @Override
-            public void onPageScrolled(int pos, float arg1, int arg2) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int pos) {
-
-            }
-        });
     }
 
     private void allclick() {
@@ -206,47 +149,6 @@ public class DescriptionActivity extends AppCompatActivity {
         return gson.fromJson(ItemData, type);
     }
 
-    class SlidePageAdapter extends PagerAdapter {
-        private LayoutInflater layoutInflater;
-
-        @Override
-        public int getCount() {
-            return imagesArrayList1.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            assert layoutInflater != null;
-            View view = layoutInflater.inflate(R.layout.row_item_slider, container, false);
-            ImageView banneriv = view.findViewById(R.id.banneriv);
-
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.drawable.no_image)
-                    .error(R.drawable.no_image)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .priority(Priority.HIGH);
-
-            Glide.with(DescriptionActivity.this).load(imagesArrayList1.get(position).getImages()).apply(options).into(banneriv);
-//            banneriv.setImageResource(imagesArrayList.get(position).getImages());
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            View view = (View) object;
-            container.removeView(view);
-        }
-    }
-
     public void CallQuantity(String Quantity, String ItemId){
 
         JsonObject object = new JsonObject();
@@ -278,7 +180,6 @@ public class DescriptionActivity extends AppCompatActivity {
                                         startActivity(new Intent(DescriptionActivity.this, CartActivity.class));
                                         finish();
                                     }
-                                    Log.d("+++++quant12", "++++" + i + "++++++++++" + object1.optString("qty") + "++++" + itemsArrayList.get(i).getQty());
                                 }
                             }
 

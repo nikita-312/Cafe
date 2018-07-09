@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +16,6 @@ import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
 import com.conceptioni.cafeapp.dialog.FilterDialog;
 import com.conceptioni.cafeapp.model.Category;
-import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -41,96 +39,42 @@ import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity {
 
-    ImageView ivCart,liveorder;
+    ImageView ivCart;
     ShimmerRecyclerView rvCategory, rvCategoryitem;
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
-    SwitchCompat veg;
-    boolean isVeg = false;
-    LinearLayout viewliveorderll,filterll;
-    int pos= 0;
+    LinearLayout viewliveorderll, filterll;
+    int pos = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
     }
 
-    private void clicks() {
-        ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
-
-      veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
-          if (isChecked){
-              isVeg = true;
-              new MakeToast("Veg");
-              ShowVegData();
-          }else {
-              isVeg = false;
-              new MakeToast("All");
-              ShowAllData();
-          }
-          viewliveorderll.setOnClickListener(v -> {
-              startActivity(new Intent(MenuActivity.this,LiveOrderActivity.class));
-              finish();
-          });
-      });
-
-        liveorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this,LiveOrderActivity.class));
-
-            }
-        });
-
-        filterll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new FilterDialog(MenuActivity.this).ShowFilterDialog();
-            }
-        });
-    }
-
-    private void ShowVegData(){
-//        vegItemsList.clear();
-//        if (!itemsArrayList.isEmpty()){
-//            for (int i = 0; i <itemsArrayList.size() ; i++) {
-//                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")){
-//                    Items items = new Items();
-//                    items.setImage(itemsArrayList.get(i).getImage());
-//                    items.setItem_id(itemsArrayList.get(i).getItem_id());
-//                    items.setItem_name(itemsArrayList.get(i).getItem_name());
-//                    items.setPrice(itemsArrayList.get(i).getPrice());
-//                    items.setDesc(itemsArrayList.get(i).getDesc());
-//                    items.setQty(itemsArrayList.get(i).getQty());
-//                    items.setItem_type(itemsArrayList.get(i).getItem_type());
-//                    vegItemsList.add(items);
-//                }
-//                SetAdapter(vegItemsList);
-//            }
-//        }
-    }
-
-    private void ShowAllData(){
-//        SetAdapter(itemsArrayList);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initmenu();
+        clicks();
     }
 
     private void initmenu() {
         ivCart = findViewById(R.id.ivCart);
         rvCategory = findViewById(R.id.rvCategory);
         rvCategoryitem = findViewById(R.id.rvCategoryitem);
-        veg = findViewById(R.id.veg);
-        liveorder = findViewById(R.id.liveorder);
         filterll = findViewById(R.id.filterll);
         viewliveorderll = findViewById(R.id.viewliveorderll);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
         rvCategory.showShimmerAdapter();
+
+//        SharedPrefs.getSharedPref().edit().putInt(SharedPrefs.userSharedPrefData.id, pos).apply();
 
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -139,7 +83,7 @@ public class MenuActivity extends AppCompatActivity {
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
-
+                    SharedPrefs.getSharedPref().edit().putInt(SharedPrefs.userSharedPrefData.id, pos).apply();
                     itemsArrayList1 = categoryList.get(position).getItems();
                     Gson gson = new Gson();
                     String json = gson.toJson(itemsArrayList1);
@@ -161,13 +105,73 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem.showShimmerAdapter();
 
         GetMenu();
+
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initmenu();
-        clicks();
+    private void clicks() {
+        ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
+
+        filterll.setOnClickListener(v -> new FilterDialog(MenuActivity.this).ShowFilterDialog());
+
+        viewliveorderll.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
+    }
+
+    private void ShowFilterData() {
+        if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Veg"))
+            ShowVegData();
+        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Nonveg"))
+            ShowNonVegData();
+        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("All"))
+            ShowAllData();
+    }
+
+    private void ShowVegData() {
+        vegItemsList.clear();
+        List<Items> itemsArrayList;
+        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id,0)).getItems();
+        if (!itemsArrayList.isEmpty()) {
+            for (int i = 0; i < itemsArrayList.size(); i++) {
+                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")) {
+                    Items items = new Items();
+                    items.setImage(itemsArrayList.get(i).getImage());
+                    items.setItem_id(itemsArrayList.get(i).getItem_id());
+                    items.setItem_name(itemsArrayList.get(i).getItem_name());
+                    items.setPrice(itemsArrayList.get(i).getPrice());
+                    items.setDesc(itemsArrayList.get(i).getDesc());
+                    items.setQty(itemsArrayList.get(i).getQty());
+                    items.setItem_type(itemsArrayList.get(i).getItem_type());
+                    vegItemsList.add(items);
+                }
+                SetAdapter(vegItemsList);
+            }
+        }
+    }
+
+    private void ShowNonVegData() {
+        vegItemsList.clear();
+        List<Items> itemsArrayList;
+        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id,0)).getItems();
+        if (!itemsArrayList.isEmpty()) {
+            for (int i = 0; i < itemsArrayList.size(); i++) {
+                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("nonveg")) {
+                    Items items = new Items();
+                    items.setImage(itemsArrayList.get(i).getImage());
+                    items.setItem_id(itemsArrayList.get(i).getItem_id());
+                    items.setItem_name(itemsArrayList.get(i).getItem_name());
+                    items.setPrice(itemsArrayList.get(i).getPrice());
+                    items.setDesc(itemsArrayList.get(i).getDesc());
+                    items.setQty(itemsArrayList.get(i).getQty());
+                    items.setItem_type(itemsArrayList.get(i).getItem_type());
+                    vegItemsList.add(items);
+                }
+                SetAdapter(vegItemsList);
+            }
+        }
+    }
+
+    private void ShowAllData() {
+        SetAdapter(categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id,0)).getItems());
     }
 
     public void GetMenu() {
@@ -176,7 +180,7 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("+++++object","++++"+object.toString());
+        Log.d("+++++object", "++++" + object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getMenuItem("application/json", object);
@@ -188,25 +192,25 @@ public class MenuActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         try {
                             JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            if (data.optString("success").equalsIgnoreCase("1")){
+                            if (data.optString("success").equalsIgnoreCase("1")) {
                                 categoryList.clear();
 
                                 JSONArray categoryarray = data.getJSONArray("category");
-                                for (int i = 0; i <categoryarray.length() ; i++) {
+                                for (int i = 0; i < categoryarray.length(); i++) {
                                     JSONObject categorydata = categoryarray.getJSONObject(i);
                                     Category category = new Category();
                                     category.setCid(categorydata.optString("cid"));
                                     category.setCname(categorydata.optString("cname"));
                                     category.setCimage(categorydata.optString("cimage"));
-                                    if (i== 0){
+                                    if (i == 0) {
                                         category.setIsselect(true);
-                                    }else {
+                                    } else {
                                         category.setIsselect(false);
                                     }
                                     List<Items> itemsArrayList = new ArrayList<>();
 
                                     JSONArray itemarray = categorydata.getJSONArray("items");
-                                    for (int j = 0; j <itemarray.length() ; j++) {
+                                    for (int j = 0; j < itemarray.length(); j++) {
                                         JSONObject itemdata = itemarray.getJSONObject(j);
                                         Items items = new Items();
                                         items.setItem_id(itemdata.optString("item_id"));
@@ -215,15 +219,7 @@ public class MenuActivity extends AppCompatActivity {
                                         items.setDesc(itemdata.optString("desc"));
                                         items.setQty(itemdata.optString("qty"));
                                         items.setItem_type(itemdata.optString("item_type"));
-
-                                        List<Images> imagesArrayList = new ArrayList<>();
-                                        JSONArray images = itemdata.getJSONArray("image");
-                                        for (int k = 0; k <images.length() ; k++) {
-                                            Images images1 = new Images();
-                                            images1.setImages(images.getString(k));
-                                            imagesArrayList.add(images1);
-                                        }
-                                        items.setImage(imagesArrayList);
+                                        items.setImage(itemdata.optString("image"));
                                         itemsArrayList.add(items);
                                     }
                                     category.setItems(itemsArrayList);
@@ -240,14 +236,16 @@ public class MenuActivity extends AppCompatActivity {
                                 if (categoryList.size() > 0)
                                 SetAdapter(categoryList.get(0).getItems());
 
-                            }else {
+                                ShowFilterData();
+
+                            } else {
                                 new MakeToast(data.optString("msg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                    } else{
+                    } else {
                         new MakeToast("Error while getting data");
                         rvCategory.hideShimmerAdapter();
                         rvCategoryitem.hideShimmerAdapter();
@@ -259,6 +257,7 @@ public class MenuActivity extends AppCompatActivity {
                 }
 
             }
+
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast("Error while getting result");
@@ -268,10 +267,10 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    private void SetAdapter(List<Items> itemsArrayList1){
-            menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
-            rvCategoryitem.hideShimmerAdapter();
-            rvCategoryitem.setAdapter(menuItemAdapter);
+    private void SetAdapter(List<Items> itemsArrayList1) {
+        menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
+        rvCategoryitem.hideShimmerAdapter();
+        rvCategoryitem.setAdapter(menuItemAdapter);
 
     }
 

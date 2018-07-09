@@ -6,7 +6,7 @@ public class CurrentOrderModel {
     String item_name;
     String item_id;
     String image;
-    List<Images> imagesList;
+    String imagesList;
     String like;
     String unlike;
 
@@ -32,14 +32,6 @@ public class CurrentOrderModel {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public List<Images> getImagesList() {
-        return imagesList;
-    }
-
-    public void setImagesList(List<Images> imagesList) {
-        this.imagesList = imagesList;
     }
 
     public String getLike() {

@@ -10,7 +10,7 @@ import java.util.List;
 public class Items{
   @SerializedName("image")
   @Expose
-  private List<Images> image;
+  private String image;
   @SerializedName("item_id")
   @Expose
   private String item_id;
@@ -48,10 +48,10 @@ public class Items{
         this.item_type = item_type;
     }
 
-    public void setImage(List<Images> image){
+    public void setImage(String image){
    this.image=image;
   }
-  public List<Images> getImage(){
+  public String getImage(){
    return image;
   }
   public void setItem_id(String item_id){

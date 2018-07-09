@@ -123,16 +123,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                     cartModel.setItem_id(object.optString("item_id"));
                                     cartModel.setPrice(object.optString("price"));
                                     cartModel.setQty(object.optString("qty"));
-
-
-                                    List<Images> imagesArrayList = new ArrayList<>();
-                                    JSONArray array = object.getJSONArray("image");
-                                    for (int j = 0; j < array.length(); j++) {
-                                        Images images1 = new Images();
-                                        images1.setImages(array.getString(j));
-                                        imagesArrayList.add(images1);
-                                    }
-                                    cartModel.setImages(imagesArrayList);
+                                    cartModel.setImages("image");
                                     cartModelsarray.add(cartModel);
                                 }
                                 liveOrderAdapter = new LiveOrderAdapter(cartModelsarray);

@@ -39,7 +39,6 @@ public class RatingActivity extends AppCompatActivity {
     RecyclerView rvRating;
     ImageView ivSkip;
     List<CurrentOrderModel> currentOrderModelsArray=new ArrayList<>();
-    List<Images> imagesArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,6 @@ public class RatingActivity extends AppCompatActivity {
                             Log.d("+++++","+++++"+object.toString());
                             if (object.optInt("success") == 1){
                                 currentOrderModelsArray.clear();
-                                imagesArrayList.clear();
                                 JSONArray jsonArray = object.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object1 = jsonArray.getJSONObject(i);
@@ -92,18 +90,10 @@ public class RatingActivity extends AppCompatActivity {
                                     currentOrderModel.setItem_name(object1.optString("item_name"));
                                     currentOrderModel.setLike(object1.optString("like"));
                                     currentOrderModel.setUnlike(object1.optString("unlike"));
-
-                                    JSONArray array = object1.getJSONArray("image");
-                                    for (int j = 0; j < array.length(); j++) {
-                                        Images images1 = new Images();
-                                        images1.setImages(array.getString(0));
-                                        currentOrderModel.setImagesList(imagesArrayList);
-                                        imagesArrayList.add(images1);
-                                    }
-                                    currentOrderModel.setImagesList(imagesArrayList);
+                                    currentOrderModel.setImage("image");
                                     currentOrderModelsArray.add(currentOrderModel);
                                 }
-                                ratingAdapter = new RatingAdapter(imagesArrayList,currentOrderModelsArray);
+                                ratingAdapter = new RatingAdapter(currentOrderModelsArray);
                                 rvRating.setAdapter(ratingAdapter);
                             }
                         } catch (JSONException e) {

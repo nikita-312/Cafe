@@ -18,7 +18,6 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.CartModel;
-import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
@@ -40,7 +39,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
     private Context context;
     private List<CartModel> cartModelsarray;
-    private List<Images> imagesList;
 
     public CartItemAdapter(List<CartModel> cartModelsarray) {
         this.cartModelsarray = cartModelsarray;
@@ -68,16 +66,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-        imagesList = cartModelsarray.get(position).getImages();
-        if (imagesList.size() > 0)
-            Glide.with(context).load(imagesList.get(0).getImages()).apply(options).into(holder.imageView1);
 
+        Glide.with(context).load(cartModelsarray.get(position).getImages()).apply(options).into(holder.imageView1);
 
         holder.plusiv.setOnClickListener(v -> {
             int count = Integer.parseInt(cartModelsarray.get(position).getQty());
             int Quantity = count + 1;
             String finalQuantity = String.valueOf(Quantity);
-            Log.d("+++++quant", "++++" + finalQuantity);
             CallQuantity(holder, finalQuantity, position, cartModelsarray.get(position).getItem_id());
         });
 
@@ -86,7 +81,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
                 int count = Integer.parseInt(cartModelsarray.get(position).getQty());
                 int Quantity = count - 1;
                 String finalQuantity = String.valueOf(Quantity);
-                Log.d("+++++quant", "++++" + finalQuantity);
                 CallQuantity(holder, finalQuantity, position, cartModelsarray.get(position).getItem_id());
             } else {
                 new MakeToast("Quantity can not be less than 0");

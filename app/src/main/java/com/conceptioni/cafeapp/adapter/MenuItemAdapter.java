@@ -21,7 +21,6 @@ import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.CartActivity;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
-import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -35,7 +34,6 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,7 +44,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
     private Context context;
     private List<Items> itemsArrayList;
-    private List<Images> imagesList;
     private String Flag = "A";
 
     public MenuItemAdapter(List<Items> itemsArrayList){
@@ -67,9 +64,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        holder.itemll.setOnClickListener(v -> {
+
+        holder.itemll.setOnClickListener((View v) -> {
             context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId",itemsArrayList.get(position).getItem_id()));
         });
+
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.no_image)
@@ -77,9 +76,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-        imagesList = itemsArrayList.get(position).getImage();
-        if (imagesList.size() > 0)
-        Glide.with(context).load(imagesList.get(0).getImages()).apply(options).into(holder.imageView1);
+        Glide.with(context).load(itemsArrayList.get(position).getImage()).apply(options).into(holder.imageView1);
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
         holder.quantytvr.setText(itemsArrayList.get(position).getQty());
@@ -90,7 +87,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                 int count = Integer.parseInt(itemsArrayList.get(position).getQty());
                 int Quantity = count + 1;
                 String finalQuantity = String.valueOf(Quantity);
-                Log.d("+++++quant","++++"+finalQuantity);
                 holder.quantytvr.setText(finalQuantity);
                 CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
             }
@@ -102,7 +98,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                 int count = Integer.parseInt(itemsArrayList.get(position).getQty());
                 int Quantity = count - 1;
                 String finalQuantity = String.valueOf(Quantity);
-                Log.d("+++++quant","++++"+finalQuantity);
                 holder.quantytvr.setText(finalQuantity);
                 CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
             }else {
@@ -128,7 +123,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         TextviewRegular itemnametvr,quantytvr;
         TextviewBold itempricetvb;
         ImageView plusiv,minusiv,addtocartiv;
-        public MenuViewHolder(View itemView) {
+        MenuViewHolder(View itemView) {
             super(itemView);
             itemll = itemView.findViewById(R.id.itemll);
             imageView1 = itemView.findViewById(R.id.imageView1);
@@ -141,7 +136,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         }
     }
 
-    public void CallQuantity(MenuViewHolder holder,String Quantity,int Position,String ItemId){
+    private void CallQuantity(MenuViewHolder holder, String Quantity, int Position, String ItemId){
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -162,9 +157,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                 if (response.body() != null){
                     try {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-                        Log.d("+++++json","++++"+object1.toString());
                         if (object1.optInt("success") == 1){
-                            Log.d("+++++quant12","++++"+object1.getString("qty"));
                             itemsArrayList.get(Position).setQty(object1.optString("qty"));
                             holder.quantytvr.setText(object1.getString("qty"));
                             SaveArrylistinShared(itemsArrayList);
@@ -187,7 +180,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast("Please Try After Some Time");
             }
         });
@@ -195,7 +188,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     }
 
 
-    public void SaveArrylistinShared(List<Items> itemsArrayList){
+    private void SaveArrylistinShared(List<Items> itemsArrayList){
         for (int i = 0; i <1 ; i++) {
             Gson gson = new Gson();
             String json = gson.toJson(itemsArrayList);

@@ -155,6 +155,7 @@
             android:gravity="center"
             android:weightSum="2">
             <com.conceptioni.cafeapp.utils.TextviewRegular
+                android:id="@+id/continueordertvr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="continue order"

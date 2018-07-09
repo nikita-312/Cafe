@@ -25,8 +25,9 @@ public class SharedPrefs {
        String Auth_token = "Auth_token";
 
        String ItemData = "ItemData";
-       String Imageata = "Imageata";
        String orderid = "orderid";
+       String FilterName = "FilterName";
+       String id = "id";
     }
 
 }

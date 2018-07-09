@@ -40,7 +40,7 @@ import retrofit2.Response;
 
 public class CartActivity extends AppCompatActivity {
     RecyclerView rvCart;
-    TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal;
+    TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal,continueordertvr;
     String subtotal, total, fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
     ImageView ivBack;
@@ -56,8 +56,24 @@ public class CartActivity extends AppCompatActivity {
         click();
     }
 
-    private void click() {
+    private void init() {
+        rvCart = findViewById(R.id.rvCart);
+        tvrPlaceOrder = findViewById(R.id.tvrPlaceOrder);
+        tvrCartTotal = findViewById(R.id.tvrCartTotal);
+        tvrCartFee = findViewById(R.id.tvrCartFee);
+        tvrCartSubTotal = findViewById(R.id.tvrCartSubTotal);
+        emptycartll = findViewById(R.id.emptycartll);
+        bottom = findViewById(R.id.bottom);
+        ivBack = findViewById(R.id.ivBack);
+        continueordertvr = findViewById(R.id.continueordertvr);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
+        rvCart.setLayoutManager(linearLayoutManager);
+
+        ViewCart();
+    }
+
+    private void click() {
         tvrPlaceOrder.setOnClickListener(v -> {
             placeOrder();
         });
@@ -74,6 +90,11 @@ public class CartActivity extends AppCompatActivity {
             }
         }));
         ivBack.setOnClickListener(v -> finish());
+
+        continueordertvr.setOnClickListener(v -> {
+            startActivity(new Intent(CartActivity.this,MenuActivity.class));
+            finish();
+        });
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
@@ -84,22 +105,6 @@ public class CartActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
                 .setPositiveButton(android.R.string.yes, (arg0, arg1) -> removeCart(pos, ItemId))
                 .create().show();
-    }
-
-    private void init() {
-        rvCart = findViewById(R.id.rvCart);
-        tvrPlaceOrder = findViewById(R.id.tvrPlaceOrder);
-        tvrCartTotal = findViewById(R.id.tvrCartTotal);
-        tvrCartFee = findViewById(R.id.tvrCartFee);
-        tvrCartSubTotal = findViewById(R.id.tvrCartSubTotal);
-        emptycartll = findViewById(R.id.emptycartll);
-        bottom = findViewById(R.id.bottom);
-        ivBack = findViewById(R.id.ivBack);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
-        rvCart.setLayoutManager(linearLayoutManager);
-
-        ViewCart();
     }
 
     public void ViewCart() {
@@ -135,16 +140,7 @@ public class CartActivity extends AppCompatActivity {
                                     cartModel.setItem_id(object.getString("item_id"));
                                     cartModel.setPrice(object.getString("price"));
                                     cartModel.setQty(object.getString("qty"));
-
-                                    List<Images> imagesArrayList = new ArrayList<>();
-                                    JSONArray array = object.getJSONArray("image");
-                                    for (int j = 0; j < array.length(); j++) {
-                                        Images images1 = new Images();
-                                        images1.setImages(array.getString(0));
-                                        cartModel.setImages(imagesArrayList);
-                                        imagesArrayList.add(images1);
-                                    }
-                                    cartModel.setImages(imagesArrayList);
+                                    cartModel.setImages("image");
                                     cartModelsarray.add(cartModel);
                                 }
                                 cartItemAdapter = new CartItemAdapter(cartModelsarray);
@@ -206,9 +202,6 @@ public class CartActivity extends AppCompatActivity {
                                 cartModelsarray.remove(pos);
                                 cartItemAdapter.notifyDataSetChanged();
                                 if (cartModelsarray.size() == 0) {
-//                                    tvrCartSubTotal.setText("00.00");
-//                                    tvrCartFee.setText("00.00");
-//                                    tvrCartTotal.setText("00.00");
                                     rvCart.setVisibility(View.GONE);
                                     bottom.setVisibility(View.GONE);
                                     emptycartll.setVisibility(View.VISIBLE);
