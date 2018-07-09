@@ -25,6 +25,7 @@ import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
+import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CartActivity extends AppCompatActivity {
-    RecyclerView rvCart;
+    ShimmerRecyclerView rvCart;
     TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal,continueordertvr;
     String subtotal, total, fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
@@ -69,6 +70,7 @@ public class CartActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
         rvCart.setLayoutManager(linearLayoutManager);
+        rvCart.showShimmerAdapter();
 
         ViewCart();
     }
@@ -143,6 +145,7 @@ public class CartActivity extends AppCompatActivity {
                                     cartModel.setImages("image");
                                     cartModelsarray.add(cartModel);
                                 }
+                                rvCart.hideShimmerAdapter();
                                 cartItemAdapter = new CartItemAdapter(cartModelsarray);
                                 rvCart.setAdapter(cartItemAdapter);
                                 tvrCartSubTotal.setText(subtotal);

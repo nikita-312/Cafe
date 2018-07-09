@@ -51,11 +51,13 @@
             />
 
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
+    <com.tabassum.shimmerRecyclerView.ShimmerRecyclerView
         android:id="@+id/rvCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
+        app:demo_layout="@layout/row_item_menu_category_shimmer_view"
+        app:demo_layout_manager_type="linear_vertical"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
         android:layout_above="@+id/bottom"

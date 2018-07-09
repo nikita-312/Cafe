@@ -126,8 +126,10 @@ public class DescriptionActivity extends AppCompatActivity {
         addtocarttvr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Flag = "C";
-                CallQuantity(Qty,ItemId);
+                startActivity(new Intent(DescriptionActivity.this,MenuActivity.class));
+                finish();
+               // Flag = "C";
+              //  CallQuantity(Qty,ItemId);
             }
         });
 
