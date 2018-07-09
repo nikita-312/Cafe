@@ -26,6 +26,7 @@ import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
+import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LiveOrderActivity extends AppCompatActivity {
-    RecyclerView rvliveOrder;
+    ShimmerRecyclerView rvliveOrder;
     LinearLayout llBottom,bottom;
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
@@ -83,6 +84,7 @@ public class LiveOrderActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);
+        rvliveOrder.showShimmerAdapter();
         viewLiveOrder();
     }
     public void viewLiveOrder(){
@@ -126,6 +128,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                     cartModel.setImages("image");
                                     cartModelsarray.add(cartModel);
                                 }
+                                rvliveOrder.hideShimmerAdapter();
                                 liveOrderAdapter = new LiveOrderAdapter(cartModelsarray);
                                 rvliveOrder.setAdapter(liveOrderAdapter);
                                 tvrCartSubTotal.setText(subtotal);
