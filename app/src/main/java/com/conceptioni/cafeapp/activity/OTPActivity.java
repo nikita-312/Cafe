@@ -129,7 +129,7 @@ public class OTPActivity extends AppCompatActivity {
                     }
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Error While Retriving Otp Please Try After Some Time");
+                new MakeToast(R.string.Checkyournetwork);
             }
         });
     }

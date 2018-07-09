@@ -134,7 +134,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Please Try After Some Time");
+                new MakeToast(R.string.Checkyournetwork);
             }
         });
 

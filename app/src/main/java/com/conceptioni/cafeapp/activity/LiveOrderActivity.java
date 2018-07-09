@@ -38,13 +38,13 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class LiveOrderActivity extends AppCompatActivity {
     ShimmerRecyclerView rvliveOrder;
-    LinearLayout llBottom,bottom;
+    LinearLayout llBottom,bottom,retryll;
     TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
     String subtotal,total,fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
     ImageView ivBack,reorderiv;
     LiveOrderAdapter liveOrderAdapter;
-    RelativeLayout emptycartll;
+    RelativeLayout emptycartll,mainrl,nointernetrl;
     private static final String SHOWCASE_ID = "simple example";
 
     @Override
@@ -65,6 +65,12 @@ public class LiveOrderActivity extends AppCompatActivity {
             finish();
         });
         ivBack.setOnClickListener(v -> finish());
+        retryll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewLiveOrder();
+            }
+        });
     }
 
     private void init() {
@@ -79,6 +85,9 @@ public class LiveOrderActivity extends AppCompatActivity {
         ivBack=findViewById(R.id.ivBack);
         emptycartll=findViewById(R.id.emptycartll);
         reorderiv=findViewById(R.id.reorderiv);
+        mainrl=findViewById(R.id.mainrl);
+        nointernetrl=findViewById(R.id.nointernetrl);
+        retryll=findViewById(R.id.retryll);
 
         presentShowcaseView();
 
@@ -118,6 +127,8 @@ public class LiveOrderActivity extends AppCompatActivity {
                 if (response.body() != null){
                     if (response.isSuccessful()){
                         try {
+                            nointernetrl.setVisibility(View.GONE);
+                            mainrl.setVisibility(View.VISIBLE);
                             emptycartll.setVisibility(View.GONE);
                             rvliveOrder.setVisibility(View.VISIBLE);
                             bottom.setVisibility(View.VISIBLE);
@@ -172,9 +183,12 @@ public class LiveOrderActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                rvliveOrder.hideShimmerAdapter();
                 rvliveOrder.setVisibility(View.GONE);
                 bottom.setVisibility(View.GONE);
                 emptycartll.setVisibility(View.VISIBLE);
+                mainrl.setVisibility(View.GONE);
+                nointernetrl.setVisibility(View.VISIBLE);
             }
         });
     }

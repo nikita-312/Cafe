@@ -175,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 loginprogress.setVisibility(View.GONE);
+                new MakeToast(R.string.Checkyournetwork);
             }
         });
     }

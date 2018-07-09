@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -27,11 +28,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CardActivity extends AppCompatActivity {
-    LinearLayout llNext, llCash, llCard;
+    LinearLayout llNext, llCash, llCard, retryll;
     String type;
     ImageView pay_cashiv, pay_cardiv,ivBack;
     TextviewRegular paybycashtvr, paybycardtvr;
-
+    RelativeLayout mainrl,nointernetrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +66,10 @@ public class CardActivity extends AppCompatActivity {
             paybycardtvr.setTextColor(getResources().getColor(R.color.colorFont));
             type = "Cash";
         });
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        ivBack.setOnClickListener(v -> finish());
+        retryll.setOnClickListener(v -> {
+            CallCard();
         });
-
     }
 
     private void init() {
@@ -83,6 +81,9 @@ public class CardActivity extends AppCompatActivity {
         paybycashtvr = findViewById(R.id.paybycashtvr);
         paybycardtvr = findViewById(R.id.paybycardtvr);
         ivBack = findViewById(R.id.ivBack);
+        nointernetrl = findViewById(R.id.nointernetrl);
+        mainrl = findViewById(R.id.mainrl);
+        retryll = findViewById(R.id.retryll);
     }
 
     public void CallCard() {
@@ -100,6 +101,8 @@ public class CardActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
+                            nointernetrl.setVisibility(View.GONE);
+                            mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
@@ -118,7 +121,8 @@ public class CardActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Error while selecting payment method");
+                mainrl.setVisibility(View.GONE);
+                nointernetrl.setVisibility(View.VISIBLE);
             }
         });
     }

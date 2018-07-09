@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -39,7 +42,8 @@ public class RatingActivity extends AppCompatActivity {
     RecyclerView rvRating;
     ImageView ivSkip;
     List<CurrentOrderModel> currentOrderModelsArray=new ArrayList<>();
-
+    RelativeLayout mainrl,nointernetrl;
+    LinearLayout retryll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +55,16 @@ public class RatingActivity extends AppCompatActivity {
     private void clicks() {
         tvrSubmit.setOnClickListener(v -> startActivity(new Intent(RatingActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK)));
         ivSkip.setOnClickListener(v -> startActivity(new Intent(RatingActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK)));
+        retryll.setOnClickListener(v -> CallReviewCurrentOrder());
     }
 
     private void init() {
         ivSkip = findViewById(R.id.ivSkip);
         tvrSubmit = findViewById(R.id.tvrSubmit);
         rvRating = findViewById(R.id.rvRating);
+        nointernetrl = findViewById(R.id.nointernetrl);
+        mainrl = findViewById(R.id.mainrl);
+        retryll = findViewById(R.id.retryll);
         linearLayoutManager = new LinearLayoutManager(RatingActivity.this);
         rvRating.setLayoutManager(linearLayoutManager);
         CallReviewCurrentOrder();
@@ -78,6 +86,8 @@ public class RatingActivity extends AppCompatActivity {
                 if (response.body() != null){
                     if (response.isSuccessful()) {
                         try {
+                            nointernetrl.setVisibility(View.GONE);
+                            mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             Log.d("+++++","+++++"+object.toString());
                             if (object.optInt("success") == 1){
@@ -99,14 +109,14 @@ public class RatingActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Error while getting data");
+                mainrl.setVisibility(View.GONE);
+                nointernetrl.setVisibility(View.VISIBLE);
             }
         });
     }

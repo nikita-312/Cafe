@@ -154,7 +154,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Error while getting data");
+                new MakeToast(R.string.Checkyournetwork);
             }
         });
     }

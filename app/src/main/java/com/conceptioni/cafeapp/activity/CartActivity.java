@@ -46,8 +46,8 @@ public class CartActivity extends AppCompatActivity {
     List<CartModel> cartModelsarray = new ArrayList<>();
     ImageView ivBack;
     CartItemAdapter cartItemAdapter;
-    RelativeLayout emptycartll;
-    LinearLayout bottom;
+    RelativeLayout emptycartll,mainrl,nointernetrl;
+    LinearLayout bottom,retryll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,9 @@ public class CartActivity extends AppCompatActivity {
         bottom = findViewById(R.id.bottom);
         ivBack = findViewById(R.id.ivBack);
         continueordertvr = findViewById(R.id.continueordertvr);
+        mainrl = findViewById(R.id.mainrl);
+        nointernetrl = findViewById(R.id.nointernetrl);
+        retryll = findViewById(R.id.retryll);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CartActivity.this);
         rvCart.setLayoutManager(linearLayoutManager);
@@ -97,6 +100,7 @@ public class CartActivity extends AppCompatActivity {
             startActivity(new Intent(CartActivity.this,MenuActivity.class));
             finish();
         });
+        retryll.setOnClickListener(v -> ViewCart());
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
@@ -125,6 +129,8 @@ public class CartActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
+                            nointernetrl.setVisibility(View.GONE);
+                            mainrl.setVisibility(View.VISIBLE);
                             emptycartll.setVisibility(View.GONE);
                             rvCart.setVisibility(View.VISIBLE);
                             bottom.setVisibility(View.VISIBLE);
@@ -177,9 +183,13 @@ public class CartActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                rvCart.hideShimmerAdapter();
                 rvCart.setVisibility(View.GONE);
                 bottom.setVisibility(View.GONE);
                 emptycartll.setVisibility(View.VISIBLE);
+                mainrl.setVisibility(View.GONE);
+                nointernetrl.setVisibility(View.VISIBLE);
+
             }
         });
     }

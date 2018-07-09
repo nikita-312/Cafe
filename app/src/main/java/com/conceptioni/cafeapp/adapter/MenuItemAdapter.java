@@ -181,7 +181,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast("Please Try After Some Time");
+                new MakeToast(R.string.Checkyournetwork);
             }
         });
 
