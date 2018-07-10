@@ -1,9 +1,8 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;

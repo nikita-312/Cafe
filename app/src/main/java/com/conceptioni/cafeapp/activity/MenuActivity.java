@@ -188,7 +188,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void GetMenu() {
         JsonObject object = new JsonObject();
-        object.addProperty("cafeid", "1");
+        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 

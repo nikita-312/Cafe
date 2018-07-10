@@ -65,19 +65,9 @@ public class LiveOrderActivity extends AppCompatActivity {
             finish();
         });
         ivBack.setOnClickListener(v -> finish());
-        retryll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewLiveOrder();
-            }
-        });
+        retryll.setOnClickListener(v -> viewLiveOrder());
 
-        reorderiv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CallReorder();
-            }
-        });
+        reorderiv.setOnClickListener(v -> CallReorder());
     }
 
     private void init() {

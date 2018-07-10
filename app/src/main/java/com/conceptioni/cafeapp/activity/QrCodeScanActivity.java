@@ -1,9 +1,7 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +10,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
@@ -31,6 +31,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
     Barcode barcodeResult;
     public static final String BARCODE_KEY = "BARCODE";
     TextviewRegular scaninfotv;
+    String CafeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withOnlyQRCodeScanning()
                 .withResultListener(barcode -> {
                     barcodeResult = barcode;
-                    Log.d("+++++barcode","++++++"+barcode.toString());
+                    CafeId = barcode.rawValue;
+                    Log.d("+++++barcode","++++++"+CafeId);
+                    SplitString(CafeId);
                     startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class));
                     finish();
 //                    scaninfotv.setText(barcode.rawValue);
@@ -70,6 +73,17 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .build();
         materialBarcodeScanner.startScan();
     }
+
+    private void SplitString(String value){
+        String[] separated = value.split("_");
+        Log.d("+++++","++++"+separated[0]);
+        Log.d("+++++","++++"+separated[1]);
+
+        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
+//        separated[0]; // this will contain "Fruit"
+//        separated[1]; // this will contain " they taste good"
+    }
+
     @NeedsPermission(Manifest.permission.CAMERA)
     public void opencamera(){
         startScan();
@@ -117,7 +131,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         goBack();
     }
 
@@ -130,19 +143,13 @@ public class QrCodeScanActivity extends AppCompatActivity {
         alertDialog.setMessage("Are you sure you want to exit?");
 
         alertDialog.setPositiveButton("YES",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        System.exit(0);
-                    }
+                (dialog, which) -> {
+                    finish();
+                    System.exit(0);
                 });
 
         alertDialog.setNegativeButton("NO",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, which) -> dialog.cancel());
 
         alertDialog.show();
     }

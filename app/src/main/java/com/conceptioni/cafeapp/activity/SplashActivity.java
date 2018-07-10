@@ -22,8 +22,14 @@ public class SplashActivity extends AppCompatActivity {
     private void initsplash() {
         new Handler().postDelayed(() -> {
             if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
-                startActivity(new Intent(SplashActivity.this, MenuActivity.class));
-                finish();
+                if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)){
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                    finish();
+                }else {
+                    startActivity(new Intent(SplashActivity.this, MenuActivity.class));
+                    finish();
+                }
+
             } else {
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 finish();

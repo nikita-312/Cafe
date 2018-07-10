@@ -1,19 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -23,7 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
-import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -32,7 +23,6 @@ import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,8 +30,6 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -123,22 +111,16 @@ public class DescriptionActivity extends AppCompatActivity {
             CallQuantity(finalQuantity,ItemId);
         });
 
-        addtocarttvr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Flag = "C";
-                CallQuantity(Qty,ItemId);
-            }
+        addtocarttvr.setOnClickListener(v -> {
+            Flag = "C";
+            CallQuantity(Qty,ItemId);
         });
 
         backiv.setOnClickListener(v -> onBackPressed());
 
-        ivCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DescriptionActivity.this,CartActivity.class));
-                finish();
-            }
+        ivCart.setOnClickListener(v -> {
+            startActivity(new Intent(DescriptionActivity.this,CartActivity.class));
+            finish();
         });
     }
 
