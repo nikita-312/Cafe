@@ -24,6 +24,7 @@ import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewBold;
+import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
@@ -52,6 +53,7 @@ public class MenuActivity extends AppCompatActivity {
     LinearLayout viewliveorderll, filterll, retryll;
     RelativeLayout nointernetrl, mainrl, cartrl;
     TextviewBold quantitytvb, pricetvb;
+    TextviewRegular tvrNodata;
     int pos = 0;
 
 
@@ -80,6 +82,7 @@ public class MenuActivity extends AppCompatActivity {
         cartrl = findViewById(R.id.cartrl);
         quantitytvb = findViewById(R.id.quantitytvb);
         pricetvb = findViewById(R.id.pricetvb);
+        tvrNodata = findViewById(R.id.tvrNodata);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -284,6 +287,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void SetAdapter(List<Items> itemsArrayList1) {
+
         menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
         rvCategoryitem.hideShimmerAdapter();
         rvCategoryitem.setAdapter(menuItemAdapter);

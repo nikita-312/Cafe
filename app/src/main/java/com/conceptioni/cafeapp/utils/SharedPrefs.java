@@ -29,6 +29,7 @@ public class SharedPrefs {
        String FilterName = "FilterName";
        String id = "id";
        String Cafe_Id = "Cafe_Id";
+       String table_number = "table_number";
     }
 
 }

@@ -87,9 +87,18 @@
                     android:layout_marginLeft="@dimen/dp_5"
                     android:layout_marginRight="@dimen/dp_5"
                     android:layout_marginTop="@dimen/dp_5"
+                    android:visibility="visible"
                     android:layoutAnimation="@anim/layout_animation_fall_down"
                     app:demo_layout="@layout/row_item_menu_category_shimmer_view"
                     app:demo_layout_manager_type="linear_vertical" />
+                <com.conceptioni.cafeapp.utils.TextviewRegular
+                    android:id="@+id/tvrNodata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No items found!"
+                    android:visibility="gone"
+                    android:textColor="@color/colorFont"
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 

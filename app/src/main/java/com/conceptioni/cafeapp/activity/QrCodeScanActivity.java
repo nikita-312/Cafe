@@ -66,7 +66,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                     CafeId = barcode.rawValue;
                     Log.d("+++++barcode","++++++"+CafeId);
                     SplitString(CafeId);
-                    startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class));
+                    startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
                     finish();
 //                    scaninfotv.setText(barcode.rawValue);
                 })
@@ -80,6 +80,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
         Log.d("+++++","++++"+separated[1]);
 
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
+        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
 //        separated[0]; // this will contain "Fruit"
 //        separated[1]; // this will contain " they taste good"
     }
