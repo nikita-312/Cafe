@@ -16,9 +16,7 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.RatingAdapter;
 import com.conceptioni.cafeapp.model.CurrentOrderModel;
-import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.utils.Constant;
-import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
@@ -41,9 +39,10 @@ public class RatingActivity extends AppCompatActivity {
     RatingAdapter ratingAdapter;
     RecyclerView rvRating;
     ImageView ivSkip;
-    List<CurrentOrderModel> currentOrderModelsArray=new ArrayList<>();
-    RelativeLayout mainrl,nointernetrl;
+    List<CurrentOrderModel> currentOrderModelsArray = new ArrayList<>();
+    RelativeLayout mainrl, nointernetrl;
     LinearLayout retryll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +52,16 @@ public class RatingActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-        tvrSubmit.setOnClickListener(v -> startActivity(new Intent(RatingActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK)));
-        ivSkip.setOnClickListener(v -> startActivity(new Intent(RatingActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK)));
+        tvrSubmit.setOnClickListener(v -> {
+            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
+            startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+        });
+        ivSkip.setOnClickListener(v -> {
+            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
+            startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+        });
         retryll.setOnClickListener(v -> CallReviewCurrentOrder());
     }
 
@@ -70,27 +77,27 @@ public class RatingActivity extends AppCompatActivity {
         CallReviewCurrentOrder();
     }
 
-    public void CallReviewCurrentOrder(){
+    public void CallReviewCurrentOrder() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        jsonObject.addProperty("orderid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.orderid,Constant.notAvailable));
-        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
+        jsonObject.addProperty("orderid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.orderid, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("++++++object","+++++"+jsonObject.toString());
+        Log.d("++++++object", "+++++" + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.reviewCurrentOrder("application/json",jsonObject);
+        Call<JsonObject> call = service.reviewCurrentOrder("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
                             nointernetrl.setVisibility(View.GONE);
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            Log.d("+++++","+++++"+object.toString());
-                            if (object.optInt("success") == 1){
+                            Log.d("+++++", "+++++" + object.toString());
+                            if (object.optInt("success") == 1) {
                                 currentOrderModelsArray.clear();
                                 JSONArray jsonArray = object.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -105,6 +112,8 @@ public class RatingActivity extends AppCompatActivity {
                                 }
                                 ratingAdapter = new RatingAdapter(currentOrderModelsArray);
                                 rvRating.setAdapter(ratingAdapter);
+
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

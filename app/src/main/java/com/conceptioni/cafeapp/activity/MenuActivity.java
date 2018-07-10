@@ -1,5 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
+import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
@@ -47,8 +49,9 @@ public class MenuActivity extends AppCompatActivity {
     List<Category> categoryList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
-    LinearLayout viewliveorderll, filterll,retryll;
-    RelativeLayout nointernetrl,mainrl;
+    LinearLayout viewliveorderll, filterll, retryll;
+    RelativeLayout nointernetrl, mainrl, cartrl;
+    TextviewBold quantitytvb, pricetvb;
     int pos = 0;
 
 
@@ -74,6 +77,9 @@ public class MenuActivity extends AppCompatActivity {
         nointernetrl = findViewById(R.id.nointernetrl);
         mainrl = findViewById(R.id.mainrl);
         retryll = findViewById(R.id.retryll);
+        cartrl = findViewById(R.id.cartrl);
+        quantitytvb = findViewById(R.id.quantitytvb);
+        pricetvb = findViewById(R.id.pricetvb);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -111,7 +117,6 @@ public class MenuActivity extends AppCompatActivity {
 
         GetMenu();
 
-
     }
 
     private void clicks() {
@@ -121,12 +126,7 @@ public class MenuActivity extends AppCompatActivity {
 
         viewliveorderll.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
 
-        retryll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               GetMenu();
-            }
-        });
+        retryll.setOnClickListener(v -> GetMenu());
     }
 
     private void ShowFilterData() {
@@ -141,7 +141,7 @@ public class MenuActivity extends AppCompatActivity {
     private void ShowVegData() {
         vegItemsList.clear();
         List<Items> itemsArrayList;
-        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id,0)).getItems();
+        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems();
         if (!itemsArrayList.isEmpty()) {
             for (int i = 0; i < itemsArrayList.size(); i++) {
                 if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")) {
@@ -163,7 +163,7 @@ public class MenuActivity extends AppCompatActivity {
     private void ShowNonVegData() {
         vegItemsList.clear();
         List<Items> itemsArrayList;
-        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id,0)).getItems();
+        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems();
         if (!itemsArrayList.isEmpty()) {
             for (int i = 0; i < itemsArrayList.size(); i++) {
                 if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("nonveg")) {
@@ -183,7 +183,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void ShowAllData() {
-        SetAdapter(categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id,0)).getItems());
+        SetAdapter(categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems());
     }
 
     public void GetMenu() {
@@ -248,9 +248,10 @@ public class MenuActivity extends AppCompatActivity {
                                 String json = gson.toJson(itemsArrayList1);
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
                                 if (categoryList.size() > 0)
-                                SetAdapter(categoryList.get(0).getItems());
+                                    SetAdapter(categoryList.get(0).getItems());
 
                                 ShowFilterData();
+                                ShowCartLayout(itemsArrayList1);
 
                             } else {
                                 new MakeToast(data.optString("msg"));
@@ -287,6 +288,17 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem.hideShimmerAdapter();
         rvCategoryitem.setAdapter(menuItemAdapter);
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void ShowCartLayout(List<Items> itemsArrayList1) {
+        for (int i = 0; i < itemsArrayList1.size(); i++) {
+            if (!itemsArrayList1.get(i).getQty().equalsIgnoreCase("0")) {
+                cartrl.setVisibility(View.VISIBLE);
+                quantitytvb.setText("Add Item To Cart");
+
+            }
+        }
     }
 
 }

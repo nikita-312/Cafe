@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="125dp"
     android:background="@drawable/item_drawable"
@@ -9,8 +10,9 @@
         android:id="@+id/itemll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        android:baselineAligned="false">
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -32,9 +34,10 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_5"
             android:layout_weight="0.65"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/dp_5">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,9 +49,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginStart="@dimen/dp_5"
                     android:maxLines="1"
                     android:text="The Coffe Macchiato"
-                    android:textSize="@dimen/sp_14" />
+                    android:textSize="@dimen/sp_14"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -62,8 +67,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginStart="@dimen/dp_5"
                     android:maxLines="1"
-                    android:text="$5.277"
+                    android:text=""
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/sp_14" />
 
@@ -73,12 +79,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_5"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/dp_7">
 
@@ -93,9 +101,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/dp_5"
                             android:layout_marginRight="@dimen/dp_5"
                             android:padding="@dimen/dp_5"
-                            android:src="@drawable/minus" />
+                            android:src="@drawable/minus"
+                            tools:ignore="ContentDescription" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -106,8 +116,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:src="@drawable/round"
-                                android:padding="@dimen/dp_5"/>
+                                android:padding="@dimen/dp_5"
+                                android:src="@drawable/round" />
 
                             <com.conceptioni.cafeapp.utils.TextviewRegular
                                 android:id="@+id/quantytvr"
@@ -115,7 +125,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:text="0"
-                                android:textSize="10sp" />
+                                android:textSize="10sp"
+                                tools:ignore="HardcodedText,SmallSp" />
 
                         </RelativeLayout>
 
@@ -125,8 +136,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/dp_5"
+                            android:layout_marginStart="@dimen/dp_5"
                             android:padding="@dimen/dp_5"
-                            android:src="@drawable/plus" />
+                            android:src="@drawable/plus"
+                            tools:ignore="ContentDescription" />
 
                     </LinearLayout>
 
@@ -136,6 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:visibility="gone">
 
@@ -143,7 +157,8 @@
                         android:id="@+id/addtocartiv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/add_cart" />
+                        android:src="@drawable/add_cart"
+                        tools:ignore="ContentDescription" />
 
                 </RelativeLayout>
 

@@ -37,15 +37,15 @@ import retrofit2.Response;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class LiveOrderActivity extends AppCompatActivity {
-    ShimmerRecyclerView rvliveOrder;
-    LinearLayout llBottom,bottom,retryll;
-    TextviewRegular tvrCartTotal,tvrCartFee,tvrCartSubTotal,continuetvr,paymenttvr;
-    String subtotal,total,fee;
-    List<CartModel> cartModelsarray = new ArrayList<>();
-    ImageView ivBack,reorderiv;
-    LiveOrderAdapter liveOrderAdapter;
-    RelativeLayout emptycartll,mainrl,nointernetrl;
     private static final String SHOWCASE_ID = "simple example";
+    ShimmerRecyclerView rvliveOrder;
+    LinearLayout llBottom, bottom, retryll;
+    TextviewRegular tvrCartTotal, tvrCartFee, tvrCartSubTotal, continuetvr, paymenttvr;
+    String subtotal, total, fee;
+    List<CartModel> cartModelsarray = new ArrayList<>();
+    ImageView ivBack, reorderiv;
+    LiveOrderAdapter liveOrderAdapter;
+    RelativeLayout emptycartll, mainrl, nointernetrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +57,11 @@ public class LiveOrderActivity extends AppCompatActivity {
 
     private void click() {
         paymenttvr.setOnClickListener(v -> {
-            startActivity(new Intent(LiveOrderActivity.this,CardActivity.class));
+            startActivity(new Intent(LiveOrderActivity.this, CardActivity.class));
             finish();
         });
         continuetvr.setOnClickListener(v -> {
-            startActivity(new Intent(LiveOrderActivity.this,MenuActivity.class));
+            startActivity(new Intent(LiveOrderActivity.this, MenuActivity.class));
             finish();
         });
         ivBack.setOnClickListener(v -> finish());
@@ -71,23 +71,30 @@ public class LiveOrderActivity extends AppCompatActivity {
                 viewLiveOrder();
             }
         });
+
+        reorderiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CallReorder();
+            }
+        });
     }
 
     private void init() {
-        rvliveOrder=findViewById(R.id.rvliveOrder);
-        llBottom=findViewById(R.id.llBottom);
-        bottom=findViewById(R.id.bottom);
-        tvrCartTotal=findViewById(R.id.tvrCartTotal);
-        tvrCartFee=findViewById(R.id.tvrCartFee);
-        tvrCartSubTotal=findViewById(R.id.tvrCartSubTotal);
-        continuetvr=findViewById(R.id.continuetvr);
-        paymenttvr=findViewById(R.id.paymenttvr);
-        ivBack=findViewById(R.id.ivBack);
-        emptycartll=findViewById(R.id.emptycartll);
-        reorderiv=findViewById(R.id.reorderiv);
-        mainrl=findViewById(R.id.mainrl);
-        nointernetrl=findViewById(R.id.nointernetrl);
-        retryll=findViewById(R.id.retryll);
+        rvliveOrder = findViewById(R.id.rvliveOrder);
+        llBottom = findViewById(R.id.llBottom);
+        bottom = findViewById(R.id.bottom);
+        tvrCartTotal = findViewById(R.id.tvrCartTotal);
+        tvrCartFee = findViewById(R.id.tvrCartFee);
+        tvrCartSubTotal = findViewById(R.id.tvrCartSubTotal);
+        continuetvr = findViewById(R.id.continuetvr);
+        paymenttvr = findViewById(R.id.paymenttvr);
+        ivBack = findViewById(R.id.ivBack);
+        emptycartll = findViewById(R.id.emptycartll);
+        reorderiv = findViewById(R.id.reorderiv);
+        mainrl = findViewById(R.id.mainrl);
+        nointernetrl = findViewById(R.id.nointernetrl);
+        retryll = findViewById(R.id.retryll);
 
         presentShowcaseView();
 
@@ -99,7 +106,7 @@ public class LiveOrderActivity extends AppCompatActivity {
 
     private void presentShowcaseView() {
         new MaterialShowcaseView.Builder(this)
-        .setMaskColour(Color.argb(150, 0, 0, 0))
+                .setMaskColour(Color.argb(150, 0, 0, 0))
                 .setTarget(reorderiv)
                 .setTitleText("Re-Order")
                 .setDismissText("GOT IT")
@@ -110,22 +117,23 @@ public class LiveOrderActivity extends AppCompatActivity {
                 .setShapePadding(20)
                 .show();
     }
-    public void viewLiveOrder(){
+
+    public void viewLiveOrder() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        jsonObject.addProperty("auth_token",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("+++++++obiect","++++"+jsonObject.toString());
+        Log.d("+++++++obiect", "++++" + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.ViewLiveOrder("application/json",jsonObject);
+        Call<JsonObject> call = service.ViewLiveOrder("application/json", jsonObject);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
 
-                if (response.body() != null){
-                    if (response.isSuccessful()){
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
                         try {
                             nointernetrl.setVisibility(View.GONE);
                             mainrl.setVisibility(View.VISIBLE);
@@ -134,7 +142,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                             bottom.setVisibility(View.VISIBLE);
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
 
-                            if (jsonObject1.getInt("success")==1){
+                            if (jsonObject1.getInt("success") == 1) {
                                 cartModelsarray.clear();
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
@@ -157,7 +165,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
-                            }else {
+                            } else {
                                 rvliveOrder.setVisibility(View.GONE);
                                 bottom.setVisibility(View.GONE);
                                 emptycartll.setVisibility(View.VISIBLE);
@@ -167,13 +175,13 @@ public class LiveOrderActivity extends AppCompatActivity {
                             e.printStackTrace();
 
                         }
-                    }else{
+                    } else {
                         new MakeToast("Error while getting data");
                         rvliveOrder.setVisibility(View.GONE);
                         bottom.setVisibility(View.GONE);
                         emptycartll.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     new MakeToast("Error while getting result");
                     rvliveOrder.setVisibility(View.GONE);
                     bottom.setVisibility(View.GONE);
@@ -189,6 +197,42 @@ public class LiveOrderActivity extends AppCompatActivity {
                 emptycartll.setVisibility(View.VISIBLE);
                 mainrl.setVisibility(View.GONE);
                 nointernetrl.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void CallReorder() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+
+        Log.d("+++++++object", "++++" + jsonObject.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.reorder("application/json", jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            if (object.optInt("success") == 1) {
+                                new MakeToast(object.optString("msg"));
+                                viewLiveOrder();
+                            } else {
+                                new MakeToast(object.optString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
             }
         });
     }

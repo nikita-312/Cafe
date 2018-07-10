@@ -1,12 +1,15 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -56,8 +59,10 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withBleepEnabled(true)
                 .withBackfacingCamera()
                 .withText("Scanning...")
+                .withOnlyQRCodeScanning()
                 .withResultListener(barcode -> {
                     barcodeResult = barcode;
+                    Log.d("+++++barcode","++++++"+barcode.toString());
                     startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class));
                     finish();
 //                    scaninfotv.setText(barcode.rawValue);
@@ -102,8 +107,43 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent objEvent) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyUp(keyCode, objEvent);
+    }
+
+    @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+
+        goBack();
+    }
+
+    public void goBack() {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                QrCodeScanActivity.this);
+
+        alertDialog.setTitle("");
+        alertDialog.setMessage("Are you sure you want to exit?");
+
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        System.exit(0);
+                    }
+                });
+
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
     }
 }

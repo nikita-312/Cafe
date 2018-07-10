@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +17,6 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.model.CartModel;
-import com.conceptioni.cafeapp.model.Images;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
@@ -79,14 +77,32 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void click() {
-        tvrPlaceOrder.setOnClickListener(v -> {
-            placeOrder();
-        });
+        tvrPlaceOrder.setOnClickListener(v -> placeOrder());
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 ImageView ivRemove = view.findViewById(R.id.ivRemove);
                 ivRemove.setOnClickListener(v -> showDeleteAlert(position, cartModelsarray.get(position).getItem_id()));
+                ImageView plusiv = view.findViewById(R.id.plusiv);
+                ImageView minusiv = view.findViewById(R.id.minusiv);
+                TextviewRegular tvrCartQty = view.findViewById(R.id.tvrCartQty);
+                plusiv.setOnClickListener(v -> {
+                    int count = Integer.parseInt(cartModelsarray.get(position).getQty());
+                    int Quantity = count + 1;
+                    String finalQuantity = String.valueOf(Quantity);
+                    CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id());
+                });
+                minusiv.setOnClickListener(v -> {
+                    if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")) {
+                        int count = Integer.parseInt(cartModelsarray.get(position).getQty());
+                        int Quantity = count - 1;
+                        String finalQuantity = String.valueOf(Quantity);
+                        CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id());
+                    } else {
+                        new MakeToast("Quantity can not be less than 0");
+                    }
+
+                });
             }
 
             @Override
@@ -250,7 +266,7 @@ public class CartActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null){
                     try {
-                        JSONObject object = new JSONObject(response.body().toString());
+                        JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                         if (object.optInt("success") == 1){
                             new MakeToast(object.optString("msg"));
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -271,6 +287,59 @@ public class CartActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId) {
+
+        JsonObject object = new JsonObject();
+        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        object.addProperty("itemid", ItemId);
+        object.addProperty("qty", Quantity);
+        object.addProperty("note", "");
+
+        Log.d("+++++quant123", "++++" + object.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.AddToCart("application/json", object);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
+                        if (object1.optInt("success") == 1) {
+                            cartModelsarray.get(Position).setQty(object1.optString("qty"));
+                            tvrCartQty.setText(object1.optString("qty"));
+                            subtotal = object1.optString("subtotal");
+                            fee = object1.optString("fee");
+                            total = object1.optString("total");
+
+                            tvrCartSubTotal.setText(subtotal);
+                            tvrCartFee.setText(fee);
+                            tvrCartTotal.setText(total);
+                        } else {
+                            if (Quantity.equalsIgnoreCase("0")) {
+                                new MakeToast(object1.optString("msg"));
+                            } else {
+                                int Quan = Integer.parseInt(Quantity);
+                                tvrCartQty.setText(Quan - 1);
+                                new MakeToast(object1.optString("msg"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
+            }
+        });
+
     }
 
 }

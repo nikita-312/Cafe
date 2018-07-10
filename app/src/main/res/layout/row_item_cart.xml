@@ -98,6 +98,7 @@
                             android:layout_gravity="center"
                             android:layout_marginRight="@dimen/dp_7"
                             android:padding="@dimen/dp_5"
+                            android:clickable="true"
                             android:src="@drawable/minus" />
 
                         <RelativeLayout
@@ -129,6 +130,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/dp_7"
                             android:src="@drawable/plus"
+                            android:clickable="true"
                             android:padding="@dimen/dp_5"/>
 
                     </LinearLayout>

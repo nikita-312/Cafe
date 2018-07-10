@@ -33,4 +33,6 @@ public interface Service {
     Call<JsonObject> reviewCurrentOrder(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/review_like_unlike")
     Call<JsonObject> reviewLikeUnlike(@Header("Content-Type") String content,@Body JsonObject object);
+    @POST("userapi/re_order")
+    Call<JsonObject> reorder(@Header("Content-Type") String content,@Body JsonObject object);
 }
