@@ -164,7 +164,7 @@ public class CartActivity extends AppCompatActivity {
                                     cartModel.setItem_id(object.getString("item_id"));
                                     cartModel.setPrice(object.getString("price"));
                                     cartModel.setQty(object.getString("qty"));
-                                    cartModel.setImages("image");
+                                    cartModel.setImages(object.optString("image"));
                                     cartModelsarray.add(cartModel);
                                 }
                                 rvCart.hideShimmerAdapter();
@@ -228,6 +228,9 @@ public class CartActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
+                                subtotal = String.valueOf(object.optInt("subtotal"));
+                                total = String.valueOf(object.optInt("total"));
+                                fee = String.valueOf(object.optInt("fee"));
                                 cartModelsarray.remove(pos);
                                 cartItemAdapter.notifyDataSetChanged();
                                 if (cartModelsarray.size() == 0) {
@@ -235,6 +238,9 @@ public class CartActivity extends AppCompatActivity {
                                     bottom.setVisibility(View.GONE);
                                     emptycartll.setVisibility(View.VISIBLE);
                                 }
+                                tvrCartSubTotal.setText(subtotal);
+                                tvrCartFee.setText(fee);
+                                tvrCartTotal.setText(total);
                             } else {
                                 new MakeToast(object.optString("msg"));
                             }

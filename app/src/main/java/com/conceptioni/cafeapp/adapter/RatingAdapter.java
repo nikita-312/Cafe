@@ -174,3 +174,4 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
     }
 
 }
+

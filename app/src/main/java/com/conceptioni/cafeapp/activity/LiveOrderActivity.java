@@ -156,7 +156,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                     cartModel.setItem_id(object.optString("item_id"));
                                     cartModel.setPrice(object.optString("price"));
                                     cartModel.setQty(object.optString("qty"));
-                                    cartModel.setImages("image");
+                                    cartModel.setImages(object.optString("image"));
                                     cartModelsarray.add(cartModel);
                                 }
                                 rvliveOrder.hideShimmerAdapter();

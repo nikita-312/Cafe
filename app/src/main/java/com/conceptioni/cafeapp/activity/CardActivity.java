@@ -43,7 +43,10 @@ public class CardActivity extends AppCompatActivity {
 
     private void clicks() {
         llNext.setOnClickListener(v -> {
-            CallCard();
+            if (type!= null) {
+                CallCard();
+            }            else new MakeToast("Please choose payment method");
+
 
         });
         llCard.setOnClickListener(v -> {
@@ -68,7 +71,10 @@ public class CardActivity extends AppCompatActivity {
         });
         ivBack.setOnClickListener(v -> finish());
         retryll.setOnClickListener(v -> {
-            CallCard();
+            if (type != null) {
+                CallCard();
+            }
+            else new MakeToast("Please choose payment method");
         });
     }
 
@@ -106,6 +112,7 @@ public class CardActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
+
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.orderid,object.getString("orderid")).apply();
                                 startActivity(new Intent(CardActivity.this, RatingActivity.class));
                                 finish();
