@@ -21,8 +21,6 @@ public interface Service {
     Call<JsonObject> AddToCart(@Header("Content-Type") String content,@Body JsonObject object);
     @POST("userapi/remove_from_cart")
     Call<JsonObject> removeCart(@Header("Content-Type") String content, @Body JsonObject object);
-    @POST("userapi/give_cafe_review")
-    Call<JsonObject> getReview(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/place_order")
     Call<JsonObject> placeOrder(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/live_order_list")

@@ -27,32 +27,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.QrCodeScanActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.MenuActivity" />
+        <activity android:name=".activity.QrCodeScanActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".activity.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".activity.MenuActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.DescriptionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.CartActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.CardActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.LiveOrderActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.ThankYouActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.OTPActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.CafeInfoActivity" />
-        <activity android:name=".activity.RatingActivity"></activity>
+        <activity android:name=".activity.HomeActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".activity.CafeInfoActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".activity.RatingActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

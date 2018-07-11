@@ -43,14 +43,14 @@ import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity {
 
-    ImageView ivCart;
+    ImageView ivCart,cafeiv;
     ShimmerRecyclerView rvCategory, rvCategoryitem;
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
     List<Items> itemsArrayList1 = new ArrayList<>();
-    LinearLayout viewliveorderll, filterll, retryll;
+    LinearLayout viewliveorderll, retryll,scancafell;
     RelativeLayout nointernetrl, mainrl, cartrl;
     TextviewBold quantitytvb, pricetvb;
     TextviewRegular tvrNodata;
@@ -74,7 +74,7 @@ public class MenuActivity extends AppCompatActivity {
         ivCart = findViewById(R.id.ivCart);
         rvCategory = findViewById(R.id.rvCategory);
         rvCategoryitem = findViewById(R.id.rvCategoryitem);
-        filterll = findViewById(R.id.filterll);
+        scancafell = findViewById(R.id.scancafell);
         viewliveorderll = findViewById(R.id.viewliveorderll);
         nointernetrl = findViewById(R.id.nointernetrl);
         mainrl = findViewById(R.id.mainrl);
@@ -83,6 +83,7 @@ public class MenuActivity extends AppCompatActivity {
         quantitytvb = findViewById(R.id.quantitytvb);
         pricetvb = findViewById(R.id.pricetvb);
         tvrNodata = findViewById(R.id.tvrNodata);
+        cafeiv = findViewById(R.id.cafeiv);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -97,12 +98,13 @@ public class MenuActivity extends AppCompatActivity {
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
-                    SharedPrefs.getSharedPref().edit().putInt(SharedPrefs.userSharedPrefData.id, pos).apply();
+//                    SharedPrefs.getSharedPref().edit().putInt(SharedPrefs.userSharedPrefData.id, pos).apply();
+
                     itemsArrayList1 = categoryList.get(position).getItems();
                     Gson gson = new Gson();
+
                     String json = gson.toJson(itemsArrayList1);
                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
-
                     SetAdapter(categoryList.get(position).getItems());
                     menuAdapter.notifyDataSetChanged();
                 });
@@ -122,23 +124,37 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        ShowFilterData();
+    }
+
     private void clicks() {
         ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
 
-        filterll.setOnClickListener(v -> new FilterDialog(MenuActivity.this).ShowFilterDialog());
+        scancafell.setOnClickListener(v -> {
+            startActivity(new Intent(MenuActivity.this,HomeActivity.class));
+            finish();
+            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
+        });
 
         viewliveorderll.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
 
         retryll.setOnClickListener(v -> GetMenu());
+
+        cafeiv.setOnClickListener(v -> {
+
+        });
     }
 
     private void ShowFilterData() {
-        if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Veg"))
-            ShowVegData();
-        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Nonveg"))
-            ShowNonVegData();
-        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("All"))
-            ShowAllData();
+//        if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Veg"))
+//            ShowVegData();
+//        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Nonveg"))
+//            ShowNonVegData();
+//        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("All"))
+//            ShowAllData();
     }
 
     private void ShowVegData() {
@@ -158,7 +174,13 @@ public class MenuActivity extends AppCompatActivity {
                     items.setItem_type(itemsArrayList.get(i).getItem_type());
                     vegItemsList.add(items);
                 }
-                SetAdapter(vegItemsList);
+                if (vegItemsList.isEmpty()){
+                    new MakeToast("No veg item found");
+                    SetAdapter(itemsArrayList);
+                }else {
+                    SetAdapter(vegItemsList);
+                }
+
             }
         }
     }
@@ -180,7 +202,12 @@ public class MenuActivity extends AppCompatActivity {
                     items.setItem_type(itemsArrayList.get(i).getItem_type());
                     vegItemsList.add(items);
                 }
-                SetAdapter(vegItemsList);
+                if (vegItemsList.isEmpty()){
+                    new MakeToast("No non-veg item found");
+                    SetAdapter(itemsArrayList);
+                }else {
+                    SetAdapter(vegItemsList);
+                }
             }
         }
     }
@@ -253,7 +280,7 @@ public class MenuActivity extends AppCompatActivity {
                                 if (categoryList.size() > 0)
                                     SetAdapter(categoryList.get(0).getItems());
 
-                                ShowFilterData();
+
                                 ShowCartLayout(itemsArrayList1);
 
                             } else {
@@ -287,10 +314,17 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void SetAdapter(List<Items> itemsArrayList1) {
+        if (!itemsArrayList1.isEmpty()){
+            tvrNodata.setVisibility(View.GONE);
+            rvCategoryitem.setVisibility(View.VISIBLE);
+            menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
+            rvCategoryitem.hideShimmerAdapter();
+            rvCategoryitem.setAdapter(menuItemAdapter);
+        }else {
+            rvCategoryitem.setVisibility(View.GONE);
+            tvrNodata.setVisibility(View.VISIBLE);
+        }
 
-        menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
-        rvCategoryitem.hideShimmerAdapter();
-        rvCategoryitem.setAdapter(menuItemAdapter);
 
     }
 
@@ -301,8 +335,14 @@ public class MenuActivity extends AppCompatActivity {
                 cartrl.setVisibility(View.VISIBLE);
                 quantitytvb.setText("Add Item To Cart");
 
+            }else {
+                cartrl.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void ScanCafe(){
+
     }
 
 }

@@ -13,8 +13,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/login_bg"
             android:scaleType="centerCrop"
+            android:src="@drawable/login_bg"
             tools:ignore="ContentDescription" />
 
         <android.support.v7.widget.Toolbar
@@ -32,107 +32,114 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_80"
-            android:layout_marginLeft="@dimen/dp_50"
-            android:layout_marginRight="@dimen/dp_50"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginStart="@dimen/dp_5"
-                android:background="@drawable/sign_up_drawable"
-                android:gravity="center"
-                android:elevation="2dp"
-                android:paddingBottom="@dimen/dp_10"
-                android:paddingTop="@dimen/dp_10"
-                android:layout_marginBottom="@dimen/dp_5"
-                tools:ignore="UnusedAttribute"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/dp_80"
+                android:layout_marginLeft="@dimen/dp_50"
+                android:layout_marginRight="@dimen/dp_50"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/nameet"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:text=""
-                    android:hint="User Name"
-                    android:inputType="text"
-                    android:textColorHint="@color/colorFont"
-                    android:textColor="@color/colorFont"
-                    android:textSize="@dimen/sp_14"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:background="@drawable/sign_up_drawable"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    tools:ignore="UnusedAttribute">
+
+                    <EditText
+                        android:id="@+id/nameet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:hint="User Name"
+                        android:inputType="text"
+                        android:text=""
+                        android:textColor="@color/colorFont"
+                        android:textColorHint="@color/colorFont"
+                        android:textSize="@dimen/sp_14"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/loginll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@drawable/sign_up_drawable"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    tools:ignore="UnusedAttribute">
+
+                    <EditText
+                        android:id="@+id/phonenoet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:hint="Phone Number"
+                        android:inputType="phone"
+                        android:text=""
+                        android:textColor="@color/colorFont"
+                        android:textColorHint="@color/colorFont"
+                        android:textSize="@dimen/sp_14"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sendotpll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:background="@drawable/login_drawable"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10">
+
+                    <com.conceptioni.cafeapp.utils.TextviewRegular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Send Otp"
+                        android:textColor="@color/colorwhite"
+                        android:textSize="@dimen/sp_14"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/loginll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginStart="@dimen/dp_5"
-                android:background="@drawable/sign_up_drawable"
-                android:gravity="center"
-                android:elevation="2dp"
-                android:paddingBottom="@dimen/dp_10"
-                android:paddingTop="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_5"
-                tools:ignore="UnusedAttribute"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/phonenoet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:text=""
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:textColorHint="@color/colorFont"
-                    android:textColor="@color/colorFont"
-                    android:textSize="@dimen/sp_14"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/sendotpll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginStart="@dimen/dp_5"
-                android:layout_marginTop="@dimen/dp_20"
-                android:background="@drawable/login_drawable"
-                android:gravity="center"
-                android:paddingBottom="@dimen/dp_10"
-                android:paddingTop="@dimen/dp_10">
-
-                <com.conceptioni.cafeapp.utils.TextviewRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Send Otp"
-                    android:textColor="@color/colorwhite"
-                    android:textSize="@dimen/sp_14"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </ScrollView>
 
         <ProgressBar
             android:id="@+id/loginprogress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 

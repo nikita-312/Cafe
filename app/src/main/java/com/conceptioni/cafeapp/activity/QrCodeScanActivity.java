@@ -8,8 +8,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
@@ -17,6 +19,12 @@ import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Objects;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -24,6 +32,9 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @RuntimePermissions
 public class QrCodeScanActivity extends AppCompatActivity {
@@ -64,10 +75,8 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withResultListener(barcode -> {
                     barcodeResult = barcode;
                     CafeId = barcode.rawValue;
-                    Log.d("+++++barcode","++++++"+CafeId);
                     SplitString(CafeId);
-                    startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
-                    finish();
+
 //                    scaninfotv.setText(barcode.rawValue);
                 })
                 .build();
@@ -81,6 +90,8 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
+
+        CheckTabelApi(separated[0],separated[1]);
 //        separated[0]; // this will contain "Fruit"
 //        separated[1]; // this will contain " they taste good"
     }
@@ -153,5 +164,48 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 (dialog, which) -> dialog.cancel());
 
         alertDialog.show();
+    }
+
+    private void CheckTabelApi(String CafeId,String TableNo){
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        jsonObject.addProperty("cafeid", CafeId);
+        jsonObject.addProperty("tableid", TableNo);
+
+        Log.d("+++++type", "+++ " + jsonObject.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.makePayment("application/json", jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            if (object.optInt("success") == 1) {
+                                new MakeToast(object.optString("msg"));
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
+                                startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
+                                finish();
+                            } else
+                                new MakeToast(object.optString("msg"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
+            }
+        });
+
     }
 }

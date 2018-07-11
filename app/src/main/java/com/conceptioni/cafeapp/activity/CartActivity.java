@@ -133,6 +133,7 @@ public class CartActivity extends AppCompatActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
 
         Log.d("++++json", "+++++" + jsonObject.toString());
 
@@ -263,7 +264,7 @@ public class CartActivity extends AppCompatActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-
+        jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.placeOrder("application/json", jsonObject);
 
@@ -303,6 +304,7 @@ public class CartActivity extends AppCompatActivity {
         object.addProperty("itemid", ItemId);
         object.addProperty("qty", Quantity);
         object.addProperty("note", "");
+        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
 
         Log.d("+++++quant123", "++++" + object.toString());
 

@@ -144,6 +144,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         object.addProperty("itemid", ItemId);
         object.addProperty("qty", Quantity);
         object.addProperty("note", "");
+        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
 
         Log.d("+++++quant123","++++"+object.toString());
 
