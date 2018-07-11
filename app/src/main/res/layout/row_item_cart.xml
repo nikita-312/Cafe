@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/download"
+                android:src="@drawable/no_image"
                 app:riv_corner_radius="15dip"
                 app:riv_mutate_background="true"
                 app:riv_oval="false" />

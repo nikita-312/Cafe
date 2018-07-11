@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,7 +17,6 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.MenuAdapter;
 import com.conceptioni.cafeapp.adapter.MenuItemAdapter;
-import com.conceptioni.cafeapp.dialog.FilterDialog;
 import com.conceptioni.cafeapp.model.Category;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
@@ -43,18 +43,19 @@ import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity {
 
-    ImageView ivCart,cafeiv;
+    ImageView ivCart, cafeiv;
     ShimmerRecyclerView rvCategory, rvCategoryitem;
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
-    List<Items> itemsArrayList1 = new ArrayList<>();
-    LinearLayout viewliveorderll, retryll,scancafell;
+//    List<Items> itemsArrayList1 = new ArrayList<>();
+    LinearLayout viewliveorderll, retryll, scancafell;
     RelativeLayout nointernetrl, mainrl, cartrl;
     TextviewBold quantitytvb, pricetvb;
     TextviewRegular tvrNodata;
     int pos = 0;
+    SwitchCompat vegswitch;
 
 
     @Override
@@ -68,6 +69,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onResume();
         initmenu();
         clicks();
+        if (categoryList.size()>0)
+        categoryList.get(pos).setIsselect(false);
     }
 
     private void initmenu() {
@@ -84,12 +87,13 @@ public class MenuActivity extends AppCompatActivity {
         pricetvb = findViewById(R.id.pricetvb);
         tvrNodata = findViewById(R.id.tvrNodata);
         cafeiv = findViewById(R.id.cafeiv);
+        vegswitch = findViewById(R.id.vegswitch);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
         rvCategory.showShimmerAdapter();
 
-//        SharedPrefs.getSharedPref().edit().putInt(SharedPrefs.userSharedPrefData.id, pos).apply();
+//        Log.d("++++++")
 
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -98,15 +102,13 @@ public class MenuActivity extends AppCompatActivity {
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
-//                    SharedPrefs.getSharedPref().edit().putInt(SharedPrefs.userSharedPrefData.id, pos).apply();
-
-                    itemsArrayList1 = categoryList.get(position).getItems();
-                    Gson gson = new Gson();
-
-                    String json = gson.toJson(itemsArrayList1);
-                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
                     SetAdapter(categoryList.get(position).getItems());
                     menuAdapter.notifyDataSetChanged();
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(categoryList.get(position).getItems());
+                    SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+
                 });
             }
 
@@ -133,34 +135,27 @@ public class MenuActivity extends AppCompatActivity {
     private void clicks() {
         ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
 
-        scancafell.setOnClickListener(v -> {
-            startActivity(new Intent(MenuActivity.this,HomeActivity.class));
-            finish();
-            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
-        });
+        scancafell.setOnClickListener(v ->
+                ScanCafe()
+        );
 
         viewliveorderll.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
 
         retryll.setOnClickListener(v -> GetMenu());
 
-        cafeiv.setOnClickListener(v -> {
+//        vegswitch.setChecked(false);
 
+        vegswitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+                ShowVegData(categoryList.get(pos).getItems());
+            else
+                ShowAllData(categoryList.get(pos).getItems());
         });
+
     }
 
-    private void ShowFilterData() {
-//        if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Veg"))
-//            ShowVegData();
-//        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("Nonveg"))
-//            ShowNonVegData();
-//        else if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.FilterName, Constant.notAvailable).equalsIgnoreCase("All"))
-//            ShowAllData();
-    }
-
-    private void ShowVegData() {
+    private void ShowVegData(List<Items> itemsArrayList) {
         vegItemsList.clear();
-        List<Items> itemsArrayList;
-        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems();
         if (!itemsArrayList.isEmpty()) {
             for (int i = 0; i < itemsArrayList.size(); i++) {
                 if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")) {
@@ -174,10 +169,10 @@ public class MenuActivity extends AppCompatActivity {
                     items.setItem_type(itemsArrayList.get(i).getItem_type());
                     vegItemsList.add(items);
                 }
-                if (vegItemsList.isEmpty()){
+                if (vegItemsList.isEmpty()) {
                     new MakeToast("No veg item found");
                     SetAdapter(itemsArrayList);
-                }else {
+                } else {
                     SetAdapter(vegItemsList);
                 }
 
@@ -185,35 +180,34 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    private void ShowNonVegData() {
-        vegItemsList.clear();
-        List<Items> itemsArrayList;
-        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems();
-        if (!itemsArrayList.isEmpty()) {
-            for (int i = 0; i < itemsArrayList.size(); i++) {
-                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("nonveg")) {
-                    Items items = new Items();
-                    items.setImage(itemsArrayList.get(i).getImage());
-                    items.setItem_id(itemsArrayList.get(i).getItem_id());
-                    items.setItem_name(itemsArrayList.get(i).getItem_name());
-                    items.setPrice(itemsArrayList.get(i).getPrice());
-                    items.setDesc(itemsArrayList.get(i).getDesc());
-                    items.setQty(itemsArrayList.get(i).getQty());
-                    items.setItem_type(itemsArrayList.get(i).getItem_type());
-                    vegItemsList.add(items);
-                }
-                if (vegItemsList.isEmpty()){
-                    new MakeToast("No non-veg item found");
-                    SetAdapter(itemsArrayList);
-                }else {
-                    SetAdapter(vegItemsList);
-                }
-            }
-        }
-    }
+//    private void ShowNonVegData(List<Items> itemsArrayList) {
+//        vegItemsList.clear();
+////        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems();
+//        if (!itemsArrayList.isEmpty()) {
+//            for (int i = 0; i < itemsArrayList.size(); i++) {
+//                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("nonveg")) {
+//                    Items items = new Items();
+//                    items.setImage(itemsArrayList.get(i).getImage());
+//                    items.setItem_id(itemsArrayList.get(i).getItem_id());
+//                    items.setItem_name(itemsArrayList.get(i).getItem_name());
+//                    items.setPrice(itemsArrayList.get(i).getPrice());
+//                    items.setDesc(itemsArrayList.get(i).getDesc());
+//                    items.setQty(itemsArrayList.get(i).getQty());
+//                    items.setItem_type(itemsArrayList.get(i).getItem_type());
+//                    vegItemsList.add(items);
+//                }
+//                if (vegItemsList.isEmpty()) {
+//                    new MakeToast("No non-veg item found");
+//                    SetAdapter(itemsArrayList);
+//                } else {
+//                    SetAdapter(vegItemsList);
+//                }
+//            }
+//        }
+//    }
 
-    private void ShowAllData() {
-        SetAdapter(categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems());
+    private void ShowAllData(List<Items> itemsArrayList) {
+        SetAdapter(itemsArrayList);
     }
 
     public void GetMenu() {
@@ -273,15 +267,14 @@ public class MenuActivity extends AppCompatActivity {
                                 menuAdapter = new MenuAdapter(categoryList);
                                 rvCategory.setAdapter(menuAdapter);
 
+                                List<Items> itemsArrayList1;
                                 itemsArrayList1 = categoryList.get(0).getItems();
                                 Gson gson = new Gson();
                                 String json = gson.toJson(itemsArrayList1);
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
                                 if (categoryList.size() > 0)
                                     SetAdapter(categoryList.get(0).getItems());
-
-
-                                ShowCartLayout(itemsArrayList1);
+                                ShowCartLayout(categoryList);
 
                             } else {
                                 new MakeToast(data.optString("msg"));
@@ -314,13 +307,13 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void SetAdapter(List<Items> itemsArrayList1) {
-        if (!itemsArrayList1.isEmpty()){
+        if (!itemsArrayList1.isEmpty()) {
             tvrNodata.setVisibility(View.GONE);
             rvCategoryitem.setVisibility(View.VISIBLE);
             menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
             rvCategoryitem.hideShimmerAdapter();
             rvCategoryitem.setAdapter(menuItemAdapter);
-        }else {
+        } else {
             rvCategoryitem.setVisibility(View.GONE);
             tvrNodata.setVisibility(View.VISIBLE);
         }
@@ -329,20 +322,59 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void ShowCartLayout(List<Items> itemsArrayList1) {
-        for (int i = 0; i < itemsArrayList1.size(); i++) {
+    private void ShowCartLayout(List<Category> categoryList) {
+        List<Items> itemsArrayList1 = new ArrayList<>();
+        itemsArrayList1.clear();
+        for (int i = 0; i < categoryList.size(); i++) {
+            itemsArrayList1 = categoryList.get(i).getItems();
             if (!itemsArrayList1.get(i).getQty().equalsIgnoreCase("0")) {
                 cartrl.setVisibility(View.VISIBLE);
                 quantitytvb.setText("Add Item To Cart");
 
-            }else {
+            } else {
                 cartrl.setVisibility(View.GONE);
             }
         }
     }
 
-    private void ScanCafe(){
+    private void ScanCafe() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
+        Log.d("+++++type", "+++ " + jsonObject.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            if (object.optInt("success") == 1) {
+                                new MakeToast(object.optString("msg"));
+                                startActivity(new Intent(MenuActivity.this, HomeActivity.class));
+                                finish();
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
+
+                            } else
+                                new MakeToast(object.optString("msg"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
+            }
+        });
     }
 
 }

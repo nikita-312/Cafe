@@ -11,11 +11,8 @@ import com.conceptioni.cafeapp.CafeApp;
  */
 public class SharedPrefs {
 
-    SharedPreferences sharedPreferences;
-    private Context mContext;
-    private static String sharedPrefenceName = "CafeApp";
-
     public static SharedPreferences getSharedPref() {
+        String sharedPrefenceName = "CafeApp";
         return CafeApp.getContext().getSharedPreferences(sharedPrefenceName, Context.MODE_PRIVATE);
     }
 
@@ -27,9 +24,10 @@ public class SharedPrefs {
        String ItemData = "ItemData";
        String orderid = "orderid";
        String FilterName = "FilterName";
-       String id = "id";
        String Cafe_Id = "Cafe_Id";
        String table_number = "table_number";
+       String Name = "Name";
+       String Table_status = "Table_status";
     }
 
 }

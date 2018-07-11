@@ -57,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void clicklogin() {
         sendotpll.setOnClickListener(v -> {
-            if (!validations.isEmpty(nameet)){
                 if (!validations.isEmpty(phonenoet)){
                     if (validations.isValidPhoneNumber(phonenoet)){
                         loginprogress.setVisibility(View.VISIBLE);
@@ -68,9 +67,6 @@ public class LoginActivity extends AppCompatActivity {
                 }else {
                     phonenoet.setError(getString(R.string.phoneno));
                 }
-            }else {
-                nameet.setError(getString(R.string.username));
-            }
         });
     }
 
@@ -148,7 +144,6 @@ public class LoginActivity extends AppCompatActivity {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_phoneno", "+91"+phonenoet.getText().toString());
-        jsonObject.addProperty("user_name", nameet.getText().toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.sendotp(  "application/json", jsonObject);

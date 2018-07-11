@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -177,7 +176,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
         Log.d("+++++type", "+++ " + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.makePayment("application/json", jsonObject);
+        Call<JsonObject> call = service.checktable("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -189,10 +188,12 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 new MakeToast(object.optString("msg"));
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Table_status, "Free").apply();
                                 startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
                                 finish();
                             } else
                                 new MakeToast(object.optString("msg"));
+                                finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

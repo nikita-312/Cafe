@@ -21,8 +21,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void initsplash() {
         new Handler().postDelayed(() -> {
-            if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
-                if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)){
+            if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable) && !SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Name, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable) ) {
+                if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable) && !SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Table_status,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable) ){
                     startActivity(new Intent(SplashActivity.this, MenuActivity.class));
                     finish();
                 }else {
@@ -31,7 +31,8 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
             } else {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+//                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                startActivity(new Intent(SplashActivity.this, MenuActivity.class));
                 finish();
             }
 

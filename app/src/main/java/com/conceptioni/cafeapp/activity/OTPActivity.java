@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
+import com.conceptioni.cafeapp.dialog.EnterNameDialogue;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
@@ -114,9 +116,14 @@ public class OTPActivity extends AppCompatActivity {
                                 if (object.optString("success").equalsIgnoreCase("1")){
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Auth_token,object.optString("auth_token")).apply();
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.User_id,object.optString("id")).apply();
-                                    new MakeToast(object.optString("msg"));
-                                    startActivity(new Intent(OTPActivity.this,HomeActivity.class));
-                                    finish();
+                                    Log.d("++++++status","++++"+object.optString("user_status"));
+                                    if (object.optString("user_status").equalsIgnoreCase("old")){
+                                        startActivity(new Intent(OTPActivity.this,HomeActivity.class));
+                                        finish();
+                                    }else if (object.optString("user_status").equalsIgnoreCase("firsttime")){
+                                       new EnterNameDialogue(OTPActivity.this).ShowNameDialog();
+                                    }
+
                                 }else {
                                     new MakeToast("Please Enter Correct Otp");
                                 }

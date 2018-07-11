@@ -35,4 +35,10 @@ public interface Service {
     Call<JsonObject> reorder(@Header("Content-Type") String content,@Body JsonObject object);
     @POST("userapi/get_cafe_info")
     Call<JsonObject> cafeInfo(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/check_table")
+    Call<JsonObject> checktable(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/session_expire")
+    Call<JsonObject> sessionexpire(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/store_username")
+    Call<JsonObject> storeusername(@Header("Content-Type") String content, @Body JsonObject object);
 }

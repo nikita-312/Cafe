@@ -58,7 +58,8 @@
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
-                    tools:ignore="UnusedAttribute">
+                    tools:ignore="UnusedAttribute"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/nameet"

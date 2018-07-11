@@ -43,7 +43,7 @@
                     app:pinHeight="50dp"
                     app:pinLength="4"
                     app:pinWidth="50dp"
-                    />
+                    android:inputType="number"/>
 
             </LinearLayout>
 
@@ -65,8 +65,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-
 
     <LinearLayout
         android:id="@+id/verifyll"
