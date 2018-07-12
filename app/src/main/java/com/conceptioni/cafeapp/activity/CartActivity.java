@@ -180,6 +180,8 @@ public class CartActivity extends AppCompatActivity {
                                 emptycartll.setVisibility(View.VISIBLE);
                             }
 
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
 
@@ -276,6 +278,7 @@ public class CartActivity extends AppCompatActivity {
                         JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                         if (object.optInt("success") == 1){
                             new MakeToast(object.optString("msg"));
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         }else {

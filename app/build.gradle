@@ -50,7 +50,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     implementation 'com.github.deano2390:MaterialShowcaseView:1.2.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
     implementation project(':shimmer')
     implementation project(':pinview')
 
 }
+apply plugin: 'com.google.gms.google-services'

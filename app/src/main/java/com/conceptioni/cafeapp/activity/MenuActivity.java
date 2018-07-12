@@ -43,19 +43,19 @@ import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity {
 
-    ImageView ivCart, cafeiv;
+    ImageView ivCart;
     ShimmerRecyclerView rvCategory, rvCategoryitem;
     MenuAdapter menuAdapter;
     MenuItemAdapter menuItemAdapter;
     List<Category> categoryList = new ArrayList<>();
     List<Items> vegItemsList = new ArrayList<>();
-//    List<Items> itemsArrayList1 = new ArrayList<>();
     LinearLayout viewliveorderll, retryll, scancafell;
     RelativeLayout nointernetrl, mainrl, cartrl;
-    TextviewBold quantitytvb, pricetvb;
+    TextviewBold quantitytvb,viewtvb;
     TextviewRegular tvrNodata;
     int pos = 0;
     SwitchCompat vegswitch;
+    String TotalQty = "",Flag = "";
 
 
     @Override
@@ -69,8 +69,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onResume();
         initmenu();
         clicks();
-        if (categoryList.size()>0){
-            Log.d("++++pos","+++++"+pos);
+        if (categoryList.size() > 0) {
+            Log.d("++++pos", "+++++" + pos);
             categoryList.get(pos).setIsselect(false);
         }
 
@@ -87,10 +87,9 @@ public class MenuActivity extends AppCompatActivity {
         retryll = findViewById(R.id.retryll);
         cartrl = findViewById(R.id.cartrl);
         quantitytvb = findViewById(R.id.quantitytvb);
-        pricetvb = findViewById(R.id.pricetvb);
         tvrNodata = findViewById(R.id.tvrNodata);
-        cafeiv = findViewById(R.id.cafeiv);
         vegswitch = findViewById(R.id.vegswitch);
+        viewtvb = findViewById(R.id.viewtvb);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -102,12 +101,12 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 view.findViewById(R.id.llMain).setOnClickListener(v -> {
-                    for (int i = 0; i <categoryList.size() ; i++) {
-                        if (categoryList.get(i).isselect){
+                    for (int i = 0; i < categoryList.size(); i++) {
+                        if (categoryList.get(i).isselect) {
                             categoryList.get(i).setIsselect(false);
                         }
                     }
-                    Log.d("++++pos","+++++"+pos);
+                    Log.d("++++pos", "+++++" + pos);
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
@@ -138,22 +137,24 @@ public class MenuActivity extends AppCompatActivity {
                 ImageView minusiv = view.findViewById(R.id.minusiv);
                 TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
                 List<Items> itemsList;
-                itemsList = categoryList.get(position).getItems();
+                itemsList = categoryList.get(pos).getItems();
                 List<Items> finalItemsList = itemsList;
                 plusiv.setOnClickListener(v -> {
+                    Flag = "A";
                     int count = Integer.parseInt(finalItemsList.get(position).getQty());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
                     tvrCartQty.setText(finalQuantity);
-                    CallQuantity(tvrCartQty,finalQuantity,position, finalItemsList.get(position).getItem_id(),finalItemsList);
+                    CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                 });
                 minusiv.setOnClickListener(v -> {
                     if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0")) {
+                        Flag = "M";
                         int count = Integer.parseInt(finalItemsList.get(position).getQty());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
                         tvrCartQty.setText(finalQuantity);
-                        CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(),finalItemsList);
+                        CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
@@ -166,6 +167,8 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         }));
+
+
 
         GetMenu();
 
@@ -188,8 +191,6 @@ public class MenuActivity extends AppCompatActivity {
 
         retryll.setOnClickListener(v -> GetMenu());
 
-//        vegswitch.setChecked(false);
-
         vegswitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
                 ShowVegData(categoryList.get(pos).getItems());
@@ -197,6 +198,7 @@ public class MenuActivity extends AppCompatActivity {
                 ShowAllData(categoryList.get(pos).getItems());
         });
 
+        cartrl.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this,CartActivity.class)));
     }
 
     private void ShowVegData(List<Items> itemsArrayList) {
@@ -224,32 +226,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-//    private void ShowNonVegData(List<Items> itemsArrayList) {
-//        vegItemsList.clear();
-////        itemsArrayList = categoryList.get(SharedPrefs.getSharedPref().getInt(SharedPrefs.userSharedPrefData.id, 0)).getItems();
-//        if (!itemsArrayList.isEmpty()) {
-//            for (int i = 0; i < itemsArrayList.size(); i++) {
-//                if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("nonveg")) {
-//                    Items items = new Items();
-//                    items.setImage(itemsArrayList.get(i).getImage());
-//                    items.setItem_id(itemsArrayList.get(i).getItem_id());
-//                    items.setItem_name(itemsArrayList.get(i).getItem_name());
-//                    items.setPrice(itemsArrayList.get(i).getPrice());
-//                    items.setDesc(itemsArrayList.get(i).getDesc());
-//                    items.setQty(itemsArrayList.get(i).getQty());
-//                    items.setItem_type(itemsArrayList.get(i).getItem_type());
-//                    vegItemsList.add(items);
-//                }
-//                if (vegItemsList.isEmpty()) {
-//                    new MakeToast("No non-veg item found");
-//                    SetAdapter(itemsArrayList);
-//                } else {
-//                    SetAdapter(vegItemsList);
-//                }
-//            }
-//        }
-//    }
-
     private void ShowAllData(List<Items> itemsArrayList) {
         SetAdapter(itemsArrayList);
     }
@@ -266,6 +242,7 @@ public class MenuActivity extends AppCompatActivity {
         Call<JsonObject> call = service.getMenuItem("application/json", object);
 
         call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
@@ -275,8 +252,8 @@ public class MenuActivity extends AppCompatActivity {
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (data.optString("success").equalsIgnoreCase("1")) {
+                                TotalQty = data.optString("totalQty");
                                 categoryList.clear();
-
                                 JSONArray categoryarray = data.getJSONArray("category");
                                 for (int i = 0; i < categoryarray.length(); i++) {
                                     JSONObject categorydata = categoryarray.getJSONObject(i);
@@ -316,9 +293,39 @@ public class MenuActivity extends AppCompatActivity {
                                 Gson gson = new Gson();
                                 String json = gson.toJson(itemsArrayList1);
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
-                                if (categoryList.size() > 0)
+                                if (categoryList.size() > 0){
                                     SetAdapter(categoryList.get(0).getItems());
-                                ShowCartLayout(categoryList);
+                                }
+
+                                Log.d("+++++","+++++"+TotalQty);
+                                if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)){
+                                    if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag,Constant.notAvailable).equalsIgnoreCase("0")){
+                                        if (!TotalQty.equalsIgnoreCase("0")){
+                                            cartrl.setVisibility(View.VISIBLE);
+                                            quantitytvb.setText(TotalQty + " items in cart");
+                                            viewtvb.setText("View Cart");
+                                        }else {
+                                            cartrl.setVisibility(View.GONE);
+                                        }
+                                    }else {
+                                        if (!TotalQty.equalsIgnoreCase("0")){
+                                            cartrl.setVisibility(View.VISIBLE);
+                                            quantitytvb.setText(TotalQty + " items in cart");
+                                            viewtvb.setText("View Live Order");
+                                        }else {
+                                            cartrl.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }else {
+                                    if (!TotalQty.equalsIgnoreCase("0")){
+                                        cartrl.setVisibility(View.VISIBLE);
+                                        quantitytvb.setText(TotalQty + " items in cart");
+                                    }else {
+                                        cartrl.setVisibility(View.GONE);
+                                    }
+                                }
+
+
 
                             } else {
                                 new MakeToast(data.optString("msg"));
@@ -365,22 +372,6 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
-    private void ShowCartLayout(List<Category> categoryList) {
-        List<Items> itemsArrayList1 = new ArrayList<>();
-        itemsArrayList1.clear();
-        for (int i = 0; i < categoryList.size(); i++) {
-            itemsArrayList1 = categoryList.get(i).getItems();
-            if (!itemsArrayList1.get(i).getQty().equalsIgnoreCase("0")) {
-                cartrl.setVisibility(View.VISIBLE);
-                quantitytvb.setText("Add Item To Cart");
-
-            } else {
-                cartrl.setVisibility(View.GONE);
-            }
-        }
-    }
-
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -421,7 +412,7 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId,List<Items> itemsList){
+    private void CallQuantity(TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -431,27 +422,49 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("note", "");
         object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
 
-        Log.d("+++++quant123","++++"+object.toString());
+        Log.d("+++++quant123", "++++" + object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.AddToCart("application/json", object);
 
 
         call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     try {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-                        if (object1.optInt("success") == 1){
+                        if (object1.optInt("success") == 1) {
                             itemsList.get(Position).setQty(object1.optString("qty"));
                             tvrCartQty.setText(object1.getString("qty"));
                             SaveArrylistinShared(itemsList);
 
-                        }else {
-                            if (Quantity.equalsIgnoreCase("0")){
+                            String FinalValue = "";
+                            if (Flag.equalsIgnoreCase("A")){
+                                int count = Integer.parseInt(TotalQty);
+                                int Totalcount = count + 1;
+                                FinalValue = String.valueOf(Totalcount);
+
+                            }else if (Flag.equalsIgnoreCase("M")){
+                                int count = Integer.parseInt(TotalQty);
+                                int Totalcount = count - 1;
+                                FinalValue = String.valueOf(Totalcount);
+                            }
+
+                            TotalQty = FinalValue;
+
+                            Log.d("++++value","++++" + TotalQty);
+
+                            if (!TotalQty.equalsIgnoreCase("0")){
+                                cartrl.setVisibility(View.VISIBLE);
+                                quantitytvb.setText(TotalQty + " items in cart");
+                            }
+
+                        } else {
+                            if (Quantity.equalsIgnoreCase("0")) {
                                 new MakeToast(object1.optString("msg"));
-                            }else {
+                            } else {
                                 int Quan = Integer.parseInt(Quantity);
                                 tvrCartQty.setText(Quan - 1);
                                 new MakeToast(object1.optString("msg"));
@@ -471,13 +484,12 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    private void SaveArrylistinShared(List<Items> itemsArrayList){
-        for (int i = 0; i <1 ; i++) {
+    private void SaveArrylistinShared(List<Items> itemsArrayList) {
+        for (int i = 0; i < 1; i++) {
             Gson gson = new Gson();
             String json = gson.toJson(itemsArrayList);
             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
         }
     }
-
 
 }

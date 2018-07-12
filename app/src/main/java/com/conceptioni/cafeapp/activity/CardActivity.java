@@ -112,7 +112,7 @@ public class CardActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
-
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.orderid,object.getString("orderid")).apply();
                                 startActivity(new Intent(CardActivity.this, RatingActivity.class));
                                 finish();

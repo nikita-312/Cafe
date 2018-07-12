@@ -27,6 +27,11 @@ public class SharedPrefs {
        String table_number = "table_number";
        String Name = "Name";
        String Table_status = "Table_status";
+       String Flag = "Flag";
+    }
+
+    public interface tokendetail {
+        String refreshtoken = "refreshtoken";
     }
 
 }

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -40,7 +39,8 @@
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
                 android:layout_centerInParent="true"
-                android:src="@drawable/un_category_first" />
+                android:src="@drawable/un_category_first"
+                tools:ignore="ContentDescription" />
 
             </RelativeLayout>
 
@@ -51,8 +51,11 @@
                 android:maxLines="1"
                 android:text="Burger"
                 android:visibility="visible"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_12"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </RelativeLayout>
