@@ -1,13 +1,11 @@
 package com.conceptioni.cafeapp.model;
 
-import java.util.List;
-
 public class CartModel {
-    String item_name;
-    String price;
-    String qty;
-    String item_id;
-    String images;
+    private String item_name;
+    private String price;
+    private String qty;
+    private String item_id;
+    private String images;
 
     public String getItem_id() {
         return item_id;

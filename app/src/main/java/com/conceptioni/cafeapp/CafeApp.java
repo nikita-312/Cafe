@@ -15,12 +15,7 @@ public class CafeApp extends Application {
         mInstance = this;
     }
 
-
     public static Context getContext() {
-        return mInstance;
-    }
-
-    public static synchronized CafeApp getInstance() {
         return mInstance;
     }
 

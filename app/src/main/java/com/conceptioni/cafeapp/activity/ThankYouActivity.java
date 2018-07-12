@@ -1,13 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 
 import com.conceptioni.cafeapp.R;
-import com.conceptioni.cafeapp.adapter.RatingAdapter;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 
 public class ThankYouActivity extends AppCompatActivity {

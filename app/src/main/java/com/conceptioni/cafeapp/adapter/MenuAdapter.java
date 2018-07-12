@@ -13,17 +13,14 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.model.Category;
-import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
 
     private Context context;
     private List<Category> categories;
-    private List<Items> itemsList = new ArrayList<>();
 
     public MenuAdapter(List<Category> categories) {
         this.categories = categories;
@@ -61,12 +58,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         return categories.size();
     }
 
-    public class MenuViewHolder extends RecyclerView.ViewHolder {
+    class MenuViewHolder extends RecyclerView.ViewHolder {
         TextviewRegular tvrCatName;
         ImageView civ;
         RelativeLayout llMain;
 
-        public MenuViewHolder(View itemView) {
+        MenuViewHolder(View itemView) {
             super(itemView);
             tvrCatName = itemView.findViewById(R.id.tvrCatName);
             civ = itemView.findViewById(R.id.civ);

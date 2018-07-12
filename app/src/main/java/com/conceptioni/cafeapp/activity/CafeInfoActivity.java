@@ -1,7 +1,9 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -65,8 +67,9 @@ public class CafeInfoActivity extends AppCompatActivity {
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.cafeInfo("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
                         try {
@@ -100,7 +103,7 @@ public class CafeInfoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast(R.string.Checkyournetwork);
             }
 

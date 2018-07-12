@@ -1,14 +1,11 @@
 package com.conceptioni.cafeapp.model;
 
-import java.util.List;
-
 public class CurrentOrderModel {
-    String item_name;
-    String item_id;
-    String image;
-    String imagesList;
-    String like;
-    String unlike;
+    private String item_name;
+    private String item_id;
+    private String image;
+    private String like;
+    private String unlike;
 
     public String getItem_name() {
         return item_name;

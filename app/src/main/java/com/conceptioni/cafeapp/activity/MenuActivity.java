@@ -69,8 +69,11 @@ public class MenuActivity extends AppCompatActivity {
         super.onResume();
         initmenu();
         clicks();
-        if (categoryList.size()>0)
-        categoryList.get(pos).setIsselect(false);
+        if (categoryList.size()>0){
+            Log.d("++++pos","+++++"+pos);
+            categoryList.get(pos).setIsselect(false);
+        }
+
     }
 
     private void initmenu() {
@@ -99,6 +102,12 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 view.findViewById(R.id.llMain).setOnClickListener(v -> {
+                    for (int i = 0; i <categoryList.size() ; i++) {
+                        if (categoryList.get(i).isselect){
+                            categoryList.get(i).setIsselect(false);
+                        }
+                    }
+                    Log.d("++++pos","+++++"+pos);
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
@@ -121,6 +130,42 @@ public class MenuActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MenuActivity.this);
         rvCategoryitem.setLayoutManager(linearLayoutManager1);
         rvCategoryitem.showShimmerAdapter();
+
+        rvCategoryitem.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategoryitem, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                ImageView plusiv = view.findViewById(R.id.plusiv);
+                ImageView minusiv = view.findViewById(R.id.minusiv);
+                TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
+                List<Items> itemsList;
+                itemsList = categoryList.get(position).getItems();
+                List<Items> finalItemsList = itemsList;
+                plusiv.setOnClickListener(v -> {
+                    int count = Integer.parseInt(finalItemsList.get(position).getQty());
+                    int Quantity = count + 1;
+                    String finalQuantity = String.valueOf(Quantity);
+                    tvrCartQty.setText(finalQuantity);
+                    CallQuantity(tvrCartQty,finalQuantity,position, finalItemsList.get(position).getItem_id(),finalItemsList);
+                });
+                minusiv.setOnClickListener(v -> {
+                    if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0")) {
+                        int count = Integer.parseInt(finalItemsList.get(position).getQty());
+                        int Quantity = count - 1;
+                        String finalQuantity = String.valueOf(Quantity);
+                        tvrCartQty.setText(finalQuantity);
+                        CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(),finalItemsList);
+                    } else {
+                        new MakeToast("Quantity can not be less than 0");
+                    }
+
+                });
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         GetMenu();
 
@@ -170,7 +215,6 @@ public class MenuActivity extends AppCompatActivity {
                     vegItemsList.add(items);
                 }
                 if (vegItemsList.isEmpty()) {
-                    new MakeToast("No veg item found");
                     SetAdapter(itemsArrayList);
                 } else {
                     SetAdapter(vegItemsList);
@@ -376,5 +420,64 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId,List<Items> itemsList){
+
+        JsonObject object = new JsonObject();
+        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+        object.addProperty("itemid", ItemId);
+        object.addProperty("qty", Quantity);
+        object.addProperty("note", "");
+        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+
+        Log.d("+++++quant123","++++"+object.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.AddToCart("application/json", object);
+
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null){
+                    try {
+                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
+                        if (object1.optInt("success") == 1){
+                            itemsList.get(Position).setQty(object1.optString("qty"));
+                            tvrCartQty.setText(object1.getString("qty"));
+                            SaveArrylistinShared(itemsList);
+
+                        }else {
+                            if (Quantity.equalsIgnoreCase("0")){
+                                new MakeToast(object1.optString("msg"));
+                            }else {
+                                int Quan = Integer.parseInt(Quantity);
+                                tvrCartQty.setText(Quan - 1);
+                                new MakeToast(object1.optString("msg"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
+            }
+        });
+
+    }
+
+    private void SaveArrylistinShared(List<Items> itemsArrayList){
+        for (int i = 0; i <1 ; i++) {
+            Gson gson = new Gson();
+            String json = gson.toJson(itemsArrayList);
+            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+        }
+    }
+
 
 }
