@@ -67,8 +67,10 @@ public class DescriptionActivity extends AppCompatActivity {
         itemiv = findViewById(R.id.itemiv);
 
 
-        if (getIntent().getExtras() != null){
+        if (getIntent().getExtras() != null) {
             ItemId = getIntent().getStringExtra("ItemId");
+            Log.d("++++itemid","+++des "+ItemId);
+
 
             itemsArrayList.clear();
             itemsArrayList = getArrayList();
@@ -107,11 +109,13 @@ public class DescriptionActivity extends AppCompatActivity {
         });
 
         minusiv.setOnClickListener(v -> {
-            Flag = "A";
-            int count = Integer.parseInt(Qty);
-            int Quantity = count - 1;
-            String finalQuantity = String.valueOf(Quantity);
-            CallQuantity(finalQuantity,ItemId);
+            if (!Qty.equalsIgnoreCase("0") && !Qty.equalsIgnoreCase("1")) {
+                Flag = "A";
+                int count = Integer.parseInt(Qty);
+                int Quantity = count - 1;
+                String finalQuantity = String.valueOf(Quantity);
+                CallQuantity(finalQuantity, ItemId);
+            }
         });
 
         addtocarttvr.setOnClickListener(v -> {
@@ -134,7 +138,7 @@ public class DescriptionActivity extends AppCompatActivity {
         return gson.fromJson(ItemData, type);
     }
 
-    public void CallQuantity(String Quantity, String ItemId){
+    public void CallQuantity(String Quantity, String ItemId) {
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -169,8 +173,6 @@ public class DescriptionActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-
-
                         }else {
                             if (Quantity.equalsIgnoreCase("0")){
                                 new MakeToast(object1.optString("msg"));

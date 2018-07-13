@@ -86,7 +86,7 @@ public class LiveOrderActivity extends AppCompatActivity {
         nointernetrl = findViewById(R.id.nointernetrl);
         retryll = findViewById(R.id.retryll);
 
-        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
+
 
         presentShowcaseView();
 
@@ -135,6 +135,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
 
                             if (jsonObject1.getInt("success") == 1) {
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
                                 cartModelsarray.clear();
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
@@ -158,6 +159,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
                             } else {
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 rvliveOrder.setVisibility(View.GONE);
                                 bottom.setVisibility(View.GONE);
                                 emptycartll.setVisibility(View.VISIBLE);

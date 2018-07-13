@@ -17,6 +17,7 @@ import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.RatingAdapter;
 import com.conceptioni.cafeapp.model.CurrentOrderModel;
 import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
@@ -53,16 +54,10 @@ public class RatingActivity extends AppCompatActivity {
 
     private void clicks() {
         tvrSubmit.setOnClickListener(v -> {
-            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
-            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
-            startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
+            ScanCafe();
         });
         ivSkip.setOnClickListener(v -> {
-            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
-            SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
-            startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
+            ScanCafe();
         });
         retryll.setOnClickListener(v -> CallReviewCurrentOrder());
     }
@@ -114,8 +109,6 @@ public class RatingActivity extends AppCompatActivity {
                                 }
                                 ratingAdapter = new RatingAdapter(currentOrderModelsArray);
                                 rvRating.setAdapter(ratingAdapter);
-
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -131,11 +124,62 @@ public class RatingActivity extends AppCompatActivity {
             }
         });
     }
+    private void ScanCafe() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+
+        Log.d("+++++type", "+++ " + jsonObject.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            if (object.optInt("success") == 1) {
+                                new MakeToast(object.optString("msg"));
+
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
+                                startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                                finish();
+
+                            } else
+                                new MakeToast(object.optString("msg"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
         SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        ScanCafe();
+//        SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
+//        SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
+//        startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+//        finish();
     }
 }

@@ -44,6 +44,7 @@ public class CafeInfoActivity extends AppCompatActivity {
 
     private void clicks() {
         tvrContinue.setOnClickListener(v -> startActivity(new Intent(CafeInfoActivity.this, MenuActivity.class)));
+
     }
 
     private void init() {

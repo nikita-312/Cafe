@@ -63,7 +63,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MyFirebaseMessagingService.this);
         builder.setContentTitle(getString(R.string.app_name));
-        builder.setContentText("You r logging with other device");
+        builder.setContentText("You are login with other device");
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.drawable.ic_launcher);
         builder.setSound(uri);
@@ -99,7 +99,6 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                new MakeToast(object.optString("msg"));
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
@@ -119,7 +118,4 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             }
         });
     }
-
-
-
 }

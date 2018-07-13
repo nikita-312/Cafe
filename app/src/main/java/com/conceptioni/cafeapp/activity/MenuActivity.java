@@ -56,7 +56,7 @@ public class MenuActivity extends AppCompatActivity {
     int pos = 0;
     SwitchCompat vegswitch;
     String TotalQty = "", Flag = "";
-
+    boolean isVeg = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,6 @@ public class MenuActivity extends AppCompatActivity {
             Log.d("++++pos", "+++++" + pos);
             categoryList.get(pos).setIsselect(false);
         }
-
     }
 
     private void initmenu() {
@@ -95,8 +94,6 @@ public class MenuActivity extends AppCompatActivity {
         rvCategory.setLayoutManager(linearLayoutManager);
         rvCategory.showShimmerAdapter();
 
-//        Log.d("++++++")
-
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -110,7 +107,14 @@ public class MenuActivity extends AppCompatActivity {
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
-                    SetAdapter(categoryList.get(position).getItems());
+
+                    if (isVeg) {
+                        ShowVegData(categoryList.get(position).getItems());
+                    } else {
+                        ShowAllData(categoryList.get(position).getItems());
+                    }
+
+//                    SetAdapter(categoryList.get(position).getItems());
                     menuAdapter.notifyDataSetChanged();
 
                     Gson gson = new Gson();
@@ -148,7 +152,7 @@ public class MenuActivity extends AppCompatActivity {
                     CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                 });
                 minusiv.setOnClickListener(v -> {
-                    if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0")) {
+                    if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0") && !finalItemsList.get(position).getQty().equalsIgnoreCase("1")) {
                         Flag = "M";
                         int count = Integer.parseInt(finalItemsList.get(position).getQty());
                         int Quantity = count - 1;
@@ -167,10 +171,7 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         }));
-
-
         GetMenu();
-
     }
 
     @Override
@@ -186,25 +187,33 @@ public class MenuActivity extends AppCompatActivity {
                 ScanCafe()
         );
 
-        viewliveorderll.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
+        viewliveorderll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class));
+
+                }
+                });
 
         retryll.setOnClickListener(v -> GetMenu());
 
         vegswitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
+            if (isChecked) {
+                isVeg = true;
                 ShowVegData(categoryList.get(pos).getItems());
-            else
+            } else {
+                isVeg = false;
                 ShowAllData(categoryList.get(pos).getItems());
+            }
+
         });
 
         cartrl.setOnClickListener(v -> {
-//            Log.d("+++++++value","++++")
-            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag,Constant.notAvailable).equalsIgnoreCase("0")){
+            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
                 startActivity(new Intent(MenuActivity.this, CartActivity.class));
-            }else {
+            } else {
                 startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class));
             }
-
         });
     }
 
@@ -228,7 +237,6 @@ public class MenuActivity extends AppCompatActivity {
                 } else {
                     SetAdapter(vegItemsList);
                 }
-
             }
         }
     }
@@ -331,8 +339,6 @@ public class MenuActivity extends AppCompatActivity {
                                         cartrl.setVisibility(View.GONE);
                                     }
                                 }
-
-
                             } else {
                                 new MakeToast(data.optString("msg"));
                             }
@@ -374,8 +380,6 @@ public class MenuActivity extends AppCompatActivity {
             rvCategoryitem.setVisibility(View.GONE);
             tvrNodata.setVisibility(View.VISIBLE);
         }
-
-
     }
 
     private void ScanCafe() {
@@ -397,7 +401,7 @@ public class MenuActivity extends AppCompatActivity {
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
 
-                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
                                 startActivity(new Intent(MenuActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -444,6 +448,7 @@ public class MenuActivity extends AppCompatActivity {
                     try {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
                         if (object1.optInt("success") == 1) {
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
                             itemsList.get(Position).setQty(object1.optString("qty"));
                             tvrCartQty.setText(object1.getString("qty"));
                             SaveArrylistinShared(itemsList);
@@ -463,11 +468,36 @@ public class MenuActivity extends AppCompatActivity {
                             TotalQty = FinalValue;
 
                             Log.d("++++value", "++++" + TotalQty);
+                            if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
+                                if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
+                                    if (!TotalQty.equalsIgnoreCase("0")) {
+                                        cartrl.setVisibility(View.VISIBLE);
+                                        quantitytvb.setVisibility(View.VISIBLE);
+                                        quantitytvb.setText(TotalQty + " items in cart");
+                                        viewtvb.setText("View Cart");
+                                    } else {
+                                        cartrl.setVisibility(View.GONE);
+                                    }
+                                } else {
+                                    cartrl.setVisibility(View.VISIBLE);
+                                    quantitytvb.setText(TotalQty + " items in cart");
+                                    quantitytvb.setVisibility(View.GONE);
+                                    viewtvb.setText("View Live Order");
 
-                            if (!TotalQty.equalsIgnoreCase("0")) {
-                                cartrl.setVisibility(View.VISIBLE);
-                                quantitytvb.setText(TotalQty + " items in cart");
+                                }
+                            } else {
+                                if (!TotalQty.equalsIgnoreCase("0")) {
+                                    cartrl.setVisibility(View.VISIBLE);
+                                    quantitytvb.setVisibility(View.VISIBLE);
+                                    quantitytvb.setText(TotalQty + " items in cart");
+                                } else {
+                                    cartrl.setVisibility(View.GONE);
+                                }
                             }
+//                            if (!TotalQty.equalsIgnoreCase("0")) {
+//                                cartrl.setVisibility(View.VISIBLE);
+//                                quantitytvb.setText(TotalQty + " items in cart");
+//                            }
 
                         } else {
                             if (Quantity.equalsIgnoreCase("0")) {
