@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
 
+
 public class HomeActivity extends AppCompatActivity {
 
     LinearLayout scanqrll;
@@ -21,10 +22,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void allclick() {
-        scanqrll.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this,QrCodeScanActivity.class)));
+        scanqrll.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, QrCodeScanActivity.class)));
     }
 
     private void init() {
         scanqrll = findViewById(R.id.scanqrll);
     }
+
+
 }

@@ -51,11 +51,11 @@ public class MenuActivity extends AppCompatActivity {
     List<Items> vegItemsList = new ArrayList<>();
     LinearLayout viewliveorderll, retryll, scancafell;
     RelativeLayout nointernetrl, mainrl, cartrl;
-    TextviewBold quantitytvb,viewtvb;
+    TextviewBold quantitytvb, viewtvb;
     TextviewRegular tvrNodata;
     int pos = 0;
     SwitchCompat vegswitch;
-    String TotalQty = "",Flag = "";
+    String TotalQty = "", Flag = "";
 
 
     @Override
@@ -169,7 +169,6 @@ public class MenuActivity extends AppCompatActivity {
         }));
 
 
-
         GetMenu();
 
     }
@@ -198,7 +197,15 @@ public class MenuActivity extends AppCompatActivity {
                 ShowAllData(categoryList.get(pos).getItems());
         });
 
-        cartrl.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this,CartActivity.class)));
+        cartrl.setOnClickListener(v -> {
+//            Log.d("+++++++value","++++")
+            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag,Constant.notAvailable).equalsIgnoreCase("0")){
+                startActivity(new Intent(MenuActivity.this, CartActivity.class));
+            }else {
+                startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class));
+            }
+
+        });
     }
 
     private void ShowVegData(List<Items> itemsArrayList) {
@@ -293,38 +300,37 @@ public class MenuActivity extends AppCompatActivity {
                                 Gson gson = new Gson();
                                 String json = gson.toJson(itemsArrayList1);
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
-                                if (categoryList.size() > 0){
+                                if (categoryList.size() > 0) {
                                     SetAdapter(categoryList.get(0).getItems());
                                 }
 
-                                Log.d("+++++","+++++"+TotalQty);
-                                if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)){
-                                    if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag,Constant.notAvailable).equalsIgnoreCase("0")){
-                                        if (!TotalQty.equalsIgnoreCase("0")){
+                                Log.d("+++++", "+++++" + TotalQty);
+                                if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
+                                    if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
+                                        if (!TotalQty.equalsIgnoreCase("0")) {
                                             cartrl.setVisibility(View.VISIBLE);
+                                            quantitytvb.setVisibility(View.VISIBLE);
                                             quantitytvb.setText(TotalQty + " items in cart");
                                             viewtvb.setText("View Cart");
-                                        }else {
+                                        } else {
                                             cartrl.setVisibility(View.GONE);
                                         }
-                                    }else {
-                                        if (!TotalQty.equalsIgnoreCase("0")){
-                                            cartrl.setVisibility(View.VISIBLE);
-                                            quantitytvb.setText(TotalQty + " items in cart");
-                                            viewtvb.setText("View Live Order");
-                                        }else {
-                                            cartrl.setVisibility(View.GONE);
-                                        }
-                                    }
-                                }else {
-                                    if (!TotalQty.equalsIgnoreCase("0")){
+                                    } else {
                                         cartrl.setVisibility(View.VISIBLE);
                                         quantitytvb.setText(TotalQty + " items in cart");
-                                    }else {
+                                        quantitytvb.setVisibility(View.GONE);
+                                        viewtvb.setText("View Live Order");
+
+                                    }
+                                } else {
+                                    if (!TotalQty.equalsIgnoreCase("0")) {
+                                        cartrl.setVisibility(View.VISIBLE);
+                                        quantitytvb.setVisibility(View.VISIBLE);
+                                        quantitytvb.setText(TotalQty + " items in cart");
+                                    } else {
                                         cartrl.setVisibility(View.GONE);
                                     }
                                 }
-
 
 
                             } else {
@@ -390,10 +396,12 @@ public class MenuActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
-                                startActivity(new Intent(MenuActivity.this, HomeActivity.class));
-                                finish();
+
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
+                                startActivity(new Intent(MenuActivity.this, HomeActivity.class));
+                                finish();
 
                             } else
                                 new MakeToast(object.optString("msg"));
@@ -441,12 +449,12 @@ public class MenuActivity extends AppCompatActivity {
                             SaveArrylistinShared(itemsList);
 
                             String FinalValue = "";
-                            if (Flag.equalsIgnoreCase("A")){
+                            if (Flag.equalsIgnoreCase("A")) {
                                 int count = Integer.parseInt(TotalQty);
                                 int Totalcount = count + 1;
                                 FinalValue = String.valueOf(Totalcount);
 
-                            }else if (Flag.equalsIgnoreCase("M")){
+                            } else if (Flag.equalsIgnoreCase("M")) {
                                 int count = Integer.parseInt(TotalQty);
                                 int Totalcount = count - 1;
                                 FinalValue = String.valueOf(Totalcount);
@@ -454,9 +462,9 @@ public class MenuActivity extends AppCompatActivity {
 
                             TotalQty = FinalValue;
 
-                            Log.d("++++value","++++" + TotalQty);
+                            Log.d("++++value", "++++" + TotalQty);
 
-                            if (!TotalQty.equalsIgnoreCase("0")){
+                            if (!TotalQty.equalsIgnoreCase("0")) {
                                 cartrl.setVisibility(View.VISIBLE);
                                 quantitytvb.setText(TotalQty + " items in cart");
                             }

@@ -71,6 +71,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withBackfacingCamera()
                 .withText("Scanning...")
                 .withOnlyQRCodeScanning()
+                .withCenterTracker(R.drawable.material_barcode_square_512,R.drawable.material_barcode_square_512_green)
                 .withResultListener(barcode -> {
                     barcodeResult = barcode;
                     CafeId = barcode.rawValue;
@@ -189,11 +190,12 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Table_status, "Free").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
                                 startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
                                 finish();
                             } else
                                 new MakeToast(object.optString("msg"));
-                                finish();
+                            finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

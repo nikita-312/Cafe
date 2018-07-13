@@ -102,7 +102,9 @@ public class OTPActivity extends AppCompatActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_phoneno", "+91"+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Phone_No, Constant.notAvailable));
         jsonObject.addProperty("OTP", pinview1.getValue());
-        jsonObject.addProperty("deviceid", "");
+        jsonObject.addProperty("deviceid", SharedPrefs.getSharedPref().getString(SharedPrefs.tokendetail.refreshtoken,Constant.notAvailable));
+
+        Log.d("+++++object","++++++"+jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.verifyotp(  "application/json", jsonObject);

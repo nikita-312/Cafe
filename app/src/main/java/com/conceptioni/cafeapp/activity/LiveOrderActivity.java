@@ -86,6 +86,8 @@ public class LiveOrderActivity extends AppCompatActivity {
         nointernetrl = findViewById(R.id.nointernetrl);
         retryll = findViewById(R.id.retryll);
 
+        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
+
         presentShowcaseView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);

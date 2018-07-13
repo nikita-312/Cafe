@@ -7,11 +7,31 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.activity.ApiCall;
+import com.conceptioni.cafeapp.activity.HomeActivity;
+import com.conceptioni.cafeapp.activity.LoginActivity;
+import com.conceptioni.cafeapp.activity.MenuActivity;
+import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
+import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MyFirebaseMessagingService  extends FirebaseMessagingService {
@@ -19,6 +39,19 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        if (remoteMessage.getData() != null){
+
+            try {
+                JSONObject object = new JSONObject(remoteMessage.getData());
+                String auth = object.getString("auth_token");
+                ScanCafe(auth);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
 
         simpelsendnotification();
     }
@@ -30,7 +63,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MyFirebaseMessagingService.this);
         builder.setContentTitle(getString(R.string.app_name));
-        builder.setContentText("Hidden Push");
+        builder.setContentText("You r logging with other device");
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.drawable.ic_launcher);
         builder.setSound(uri);
@@ -48,5 +81,45 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
         assert notificationManager != null;
         notificationManager.notify(Integer.parseInt("0"), builder.build());
     }
+
+    private void ScanCafe(String authtoken) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        jsonObject.addProperty("auth_token", authtoken);
+
+        Log.d("+++++type", "+++ " + jsonObject.toString());
+
+        Service service = ApiCall.getRetrofit().create(Service.class);
+        Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            if (object.optInt("success") == 1) {
+                                new MakeToast(object.optString("msg"));
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                new MakeToast(R.string.Checkyournetwork);
+            }
+        });
+    }
+
+
 
 }
