@@ -41,14 +41,7 @@
                 android:textSize="@dimen/sp_16"
                 tools:ignore="HardcodedText" />
 
-            <ImageView
-                android:id="@+id/reorderiv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:padding="@dimen/dp_8"
-                android:src="@drawable/reorder"
-                tools:ignore="ContentDescription,RtlSymmetry" />
+
 
         </android.support.v7.widget.Toolbar>
 

@@ -262,7 +262,7 @@ public class CartActivity extends AppCompatActivity {
 
     }
 
-    public void placeOrder(){
+    public void placeOrder() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));

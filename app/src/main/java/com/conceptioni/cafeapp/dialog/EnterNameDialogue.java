@@ -56,7 +56,7 @@ public class EnterNameDialogue {
         dialog.show();
     }
 
-    private void AddName(String Name){
+    private void AddName(String Name) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("username", Name);
@@ -71,7 +71,7 @@ public class EnterNameDialogue {
                 try {
                     if (response.body() != null) {
                         JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                        if (object.optString("success").equalsIgnoreCase("1")){
+                        if (object.optString("success").equalsIgnoreCase("1")) {
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Name,Name).apply();
                             context.startActivity(new Intent(context,HomeActivity.class));
                             ((Activity)context).finish();

@@ -18,6 +18,7 @@ import com.conceptioni.cafeapp.adapter.LiveOrderAdapter;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
+import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
@@ -43,10 +44,9 @@ public class LiveOrderActivity extends AppCompatActivity {
     TextviewRegular tvrCartTotal, tvrCartFee, tvrCartSubTotal, continuetvr, paymenttvr;
     String subtotal, total, fee;
     List<CartModel> cartModelsarray = new ArrayList<>();
-    ImageView ivBack, reorderiv;
+    ImageView ivBack;
     LiveOrderAdapter liveOrderAdapter;
     RelativeLayout emptycartll, mainrl, nointernetrl;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +67,7 @@ public class LiveOrderActivity extends AppCompatActivity {
         ivBack.setOnClickListener(v -> finish());
         retryll.setOnClickListener(v -> viewLiveOrder());
 
-        reorderiv.setOnClickListener(v -> CallReorder());
+
     }
 
     private void init() {
@@ -81,34 +81,45 @@ public class LiveOrderActivity extends AppCompatActivity {
         paymenttvr = findViewById(R.id.paymenttvr);
         ivBack = findViewById(R.id.ivBack);
         emptycartll = findViewById(R.id.emptycartll);
-        reorderiv = findViewById(R.id.reorderiv);
+
         mainrl = findViewById(R.id.mainrl);
         nointernetrl = findViewById(R.id.nointernetrl);
         retryll = findViewById(R.id.retryll);
 
-
-
-        presentShowcaseView();
+        //presentShowcaseView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);
         rvliveOrder.showShimmerAdapter();
         viewLiveOrder();
+
+        rvliveOrder.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvliveOrder, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+             ImageView  reorderiv = view.findViewById(R.id.reorderiv);
+             reorderiv.setOnClickListener(v -> CallReorder(cartModelsarray.get(position).getItem_id()));
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
-    private void presentShowcaseView() {
-        new MaterialShowcaseView.Builder(this)
-                .setMaskColour(Color.argb(150, 0, 0, 0))
-                .setTarget(reorderiv)
-                .setTitleText("Re-Order")
-                .setDismissText("GOT IT")
-                .setContentText("want to re-order?")
-                .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
-                .useFadeAnimation() // remove comment if you want to use fade animations for Lollipop & up
-                .setShapePadding(20)
-                .show();
-    }
+//    private void presentShowcaseView() {
+//        new MaterialShowcaseView.Builder(this)
+//                .setMaskColour(Color.argb(150, 0, 0, 0))
+//                .setTarget(reorderiv)
+//                .setTitleText("Re-Order")
+//                .setDismissText("GOT IT")
+//                .setContentText("want to re-order?")
+//                .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
+//                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
+//                .useFadeAnimation() // remove comment if you want to use fade animations for Lollipop & up
+//                .setShapePadding(20)
+//                .show();
+//    }
 
     public void viewLiveOrder() {
         JsonObject jsonObject = new JsonObject();
@@ -135,6 +146,8 @@ public class LiveOrderActivity extends AppCompatActivity {
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
 
                             if (jsonObject1.getInt("success") == 1) {
+                                Log.d("+++++++obiect", "++++json " + jsonObject.toString());
+
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
                                 cartModelsarray.clear();
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
@@ -195,11 +208,13 @@ public class LiveOrderActivity extends AppCompatActivity {
         });
     }
 
-    private void CallReorder() {
+    private void CallReorder(String itemId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+        jsonObject.addProperty("itemid", itemId);
+
         Log.d("+++++++object", "++++" + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
@@ -212,6 +227,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
+                                Log.d("+++++++object", "++++json" + jsonObject.toString());
                                 new MakeToast(object.optString("msg"));
                                 viewLiveOrder();
                             } else {

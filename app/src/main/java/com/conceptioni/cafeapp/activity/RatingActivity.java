@@ -141,6 +141,8 @@ public class RatingActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
+                                Log.d("+++++type", "+++json " + jsonObject.toString());
+
                                 new MakeToast(object.optString("msg"));
 
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
