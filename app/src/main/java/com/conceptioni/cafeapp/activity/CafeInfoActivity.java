@@ -43,6 +43,8 @@ public class CafeInfoActivity extends AppCompatActivity {
     }
 
     private void clicks() {
+        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
+
         tvrContinue.setOnClickListener(v -> startActivity(new Intent(CafeInfoActivity.this, MenuActivity.class)));
 
     }
