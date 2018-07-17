@@ -88,17 +88,19 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     private void SplitString(String value){
-        String[] separated = value.split("_");
-        Log.d("+++++","++++"+separated[0]);
-        Log.d("+++++","++++"+separated[1]);
+       if (value.contains("_")){
+           String[] separated = value.split("_");
+           Log.d("+++++","++++"+separated[0]);
 
-        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
-        SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
+           SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
+           SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
 
-        progress.setVisibility(View.VISIBLE);
-        CheckTabelApi(separated[0],separated[1]);
-//        separated[0]; // this will contain "Fruit"
-//        separated[1]; // this will contain " they taste good"
+           progress.setVisibility(View.VISIBLE);
+           CheckTabelApi(separated[0],separated[1]);
+       }else {
+           new MakeToast("Please scan valid qr code");
+           finish();
+       }
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
@@ -172,6 +174,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     private void CheckTabelApi(String CafeId,String TableNo){
+
+
+        Log.d("+++++CheckTabelApi","++++"+TableNo);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));

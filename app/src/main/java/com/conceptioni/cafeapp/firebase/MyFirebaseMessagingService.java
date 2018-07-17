@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.conceptioni.cafeapp.CafeApp;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.LoginActivity;
@@ -97,11 +98,13 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                             if (object.optInt("success") == 1) {
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
-
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
-                                startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                if (CafeApp.isAppIsInBackground(getApplicationContext())){
 
+                                }else {
+                                    startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                }
                             }else {
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.User_id).apply();
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
