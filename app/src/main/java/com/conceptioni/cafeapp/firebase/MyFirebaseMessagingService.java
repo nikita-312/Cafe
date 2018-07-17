@@ -101,8 +101,9 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 if (CafeApp.isAppIsInBackground(getApplicationContext())){
-
+                                    Log.d("+++++notbackground","++++++");
                                 }else {
+                                    Log.d("+++++background","++++++");
                                     startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                                 }
                             }else {

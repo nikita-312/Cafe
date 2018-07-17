@@ -71,7 +71,6 @@ public class MenuActivity extends AppCompatActivity {
         initmenu();
         clicks();
         if (categoryList.size() > 0) {
-            Log.d("++++pos", "+++++" + pos);
             categoryList.get(pos).setIsselect(false);
         }
     }
