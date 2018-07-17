@@ -185,6 +185,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            Log.d("+++++object","++++"+object.toString());
                             if (object.optInt("success") == 1) {
                                 new MakeToast(object.optString("msg"));
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
@@ -195,7 +196,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 finish();
                             } else
                                 new MakeToast(object.optString("msg"));
-                            finish();
+                                finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

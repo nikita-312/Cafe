@@ -45,10 +45,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
         if (categories.get(position).isselect){
             holder.llMain.setBackgroundResource(R.drawable.select_category_drawable);
-            holder.tvrCatName.setVisibility(View.GONE);
+            holder.tvrCatName.setVisibility(View.VISIBLE);
+            holder.tvrCatName.setTextColor(context.getResources().getColor(R.color.colorwhite));
         }else {
             holder.llMain.setBackgroundResource(R.drawable.category_drawable);
             holder.tvrCatName.setVisibility(View.VISIBLE);
+            holder.tvrCatName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         }
     }
 

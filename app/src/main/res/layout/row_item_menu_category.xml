@@ -118,7 +118,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:padding="@dimen/dp_5"
-                                android:src="@drawable/round" />
+                                android:src="@drawable/round"
+                                tools:ignore="ContentDescription" />
 
                             <com.conceptioni.cafeapp.utils.TextviewRegular
                                 android:id="@+id/quantytvr"

@@ -1,7 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -35,10 +34,9 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class LiveOrderActivity extends AppCompatActivity {
-    private static final String SHOWCASE_ID = "simple example";
+//    private static final String SHOWCASE_ID = "simple example";
     ShimmerRecyclerView rvliveOrder;
     LinearLayout llBottom, bottom, retryll;
     TextviewRegular tvrCartTotal, tvrCartFee, tvrCartSubTotal, continuetvr, paymenttvr;

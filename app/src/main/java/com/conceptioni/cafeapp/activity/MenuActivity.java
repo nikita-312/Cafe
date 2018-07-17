@@ -1,11 +1,9 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SwitchCompat;
@@ -105,7 +103,6 @@ public class MenuActivity extends AppCompatActivity {
                             categoryList.get(i).setIsselect(false);
                         }
                     }
-                    Log.d("++++pos", "+++++" + pos);
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
@@ -150,7 +147,7 @@ public class MenuActivity extends AppCompatActivity {
                     int count = Integer.parseInt(finalItemsList.get(position).getQty());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
-                    tvrCartQty.setText(finalQuantity);
+//                    tvrCartQty.setText(finalQuantity);
                     CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
 
                 });
@@ -160,7 +157,7 @@ public class MenuActivity extends AppCompatActivity {
                         int count = Integer.parseInt(finalItemsList.get(position).getQty());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
-                        tvrCartQty.setText(finalQuantity);
+//                        tvrCartQty.setText(finalQuantity);
                         CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                     } else {
                         new MakeToast("Quantity can not be less than 0");
@@ -180,46 +177,27 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        ShowFilterData();
     }
 
     private void clicks() {
         ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
 
-            scancafell.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View view) {
-                                                  if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("1")) {
-                                                     new MakeToast("You still have live order!");
-                                                  }else  ScanCafe();
-                                              }
-                                          });
-
-        viewliveorderll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class));
-
-            }
+        scancafell.setOnClickListener(view -> {
+            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("1")) {
+                new MakeToast("You still have live order!");
+            } else ScanCafe();
         });
+
+        viewliveorderll.setOnClickListener(view -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
 
         retryll.setOnClickListener(v -> GetMenu());
 
         vegswitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Log.d("++++switch", "+++ " + isVeg);
-             //   if (vegItemsList.get(pos).getItem_type().equalsIgnoreCase("veg")) {
-                    isVeg = true;
-                    ShowVegData(categoryList.get(pos).getItems());
-//                    Log.d("++++switch", "+++1 " + isVeg);
-//                } else {
-//                    isVeg = false;
-//                    Log.d("++++switch", "+++2 " + isVeg);
-//                    ShowAllData(categoryList.get(pos).getItems());
-//                }
+                isVeg = true;
+                ShowVegData(categoryList.get(pos).getItems());
             } else {
                 isVeg = false;
-                Log.d("++++switch", "+++3 " + isVeg);
                 ShowAllData(categoryList.get(pos).getItems());
             }
 
@@ -238,9 +216,7 @@ public class MenuActivity extends AppCompatActivity {
         vegItemsList.clear();
         if (!itemsArrayList.isEmpty()) {
             for (int i = 0; i < itemsArrayList.size(); i++) {
-                Log.d("++++switch","+++showveg ");
                 if (itemsArrayList.get(i).getItem_type().equalsIgnoreCase("veg")) {
-                    Log.d("++++switch","+++showvegIf ");
                     Items items = new Items();
                     items.setImage(itemsArrayList.get(i).getImage());
                     items.setItem_id(itemsArrayList.get(i).getItem_id());
@@ -257,14 +233,12 @@ public class MenuActivity extends AppCompatActivity {
                         SetAdapter(vegItemsList);
                     }
 
-                }else{
-                    Log.d("++++switch","+++showvegElse ");
-                 //   new MakeToast("No veg items found");
+                } else {
                     tvrNodata.setVisibility(View.VISIBLE);
                     rvCategoryitem.setVisibility(View.GONE);
-                  //  menuItemAdapter = new MenuItemAdapter(itemsArrayList);
-                  //  rvCategoryitem.hideShimmerAdapter();
-                 //   rvCategoryitem.setAdapter(menuItemAdapter);
+                    //  menuItemAdapter = new MenuItemAdapter(itemsArrayList);
+                    //  rvCategoryitem.hideShimmerAdapter();
+                    //   rvCategoryitem.setAdapter(menuItemAdapter);
                 }
 
             }
@@ -451,46 +425,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-    private void ScanCafe1() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-
-        Log.d("+++++type", "+++scancafe1 " + jsonObject.toString());
-
-        Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null) {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            if (object.optInt("success") == 1) {
-                                Log.d("+++++type", "+++scancafe1 " + jsonObject.toString());
-                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
-                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
-                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
-                                startActivity(new Intent(MenuActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                                finish();
-
-                            } else
-                                new MakeToast(object.optString("msg"));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast(R.string.Checkyournetwork);
-            }
-        });
-    }
 
     private void CallQuantity(TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
 
@@ -588,36 +522,12 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
+
     private void SaveArrylistinShared(List<Items> itemsArrayList) {
         for (int i = 0; i < 1; i++) {
             Gson gson = new Gson();
             String json = gson.toJson(itemsArrayList);
             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
         }
-    }
-
-//    @Override
-//    public void onBackPressed() {
-//        //showLogoutAlert();
-//    }
-
-    private void showLogoutAlert() {
-        new AlertDialog.Builder(MenuActivity.this)
-                .setTitle("Logout?")
-                .setMessage("Are you sure want to terminate session?")
-                .setCancelable(true)
-
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        ScanCafe1();
-                    }
-                })
-                .create().show();
     }
 }
