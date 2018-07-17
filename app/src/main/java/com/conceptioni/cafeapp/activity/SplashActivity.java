@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.utils.Constant;
@@ -25,6 +26,7 @@ public class SplashActivity extends AppCompatActivity {
 
 //            && !SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Name,
 //                    Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)
+            Log.d("+++++id","+++++"+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
             if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,
                     Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
                 if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)

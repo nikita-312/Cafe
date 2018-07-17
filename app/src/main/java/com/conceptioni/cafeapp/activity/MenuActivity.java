@@ -151,7 +151,7 @@ public class MenuActivity extends AppCompatActivity {
                     String finalQuantity = String.valueOf(Quantity);
 //                    tvrCartQty.setText(finalQuantity);
                     progressBar.setVisibility(View.VISIBLE);
-                    CallQuantity(progressBar,tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
+                    CallQuantity(progressBar, tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
 
                 });
                 minusiv.setOnClickListener(v -> {
@@ -162,7 +162,7 @@ public class MenuActivity extends AppCompatActivity {
                         String finalQuantity = String.valueOf(Quantity);
                         progressBar.setVisibility(View.VISIBLE);
 //                        tvrCartQty.setText(finalQuantity);
-                        CallQuantity(progressBar,tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
+                        CallQuantity(progressBar, tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
@@ -188,9 +188,9 @@ public class MenuActivity extends AppCompatActivity {
 
         scancafell.setOnClickListener(view -> {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
-                new MakeToast("You still have live order!");
-            } else {
                 ScanCafe();
+            } else {
+                new MakeToast("You still have live order!");
             }
         });
 
@@ -429,7 +429,7 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    private void CallQuantity(ProgressBar progressBar,TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
+    private void CallQuantity(ProgressBar progressBar, TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -453,7 +453,7 @@ public class MenuActivity extends AppCompatActivity {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
                         if (object1.optInt("success") == 1) {
                             progressBar.setVisibility(View.GONE);
-                            Log.d("+++++success","+++++"+object1.toString());
+                            Log.d("+++++success", "+++++" + object1.toString());
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
 
                             itemsList.get(Position).setQty(object1.optString("qty"));

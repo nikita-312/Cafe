@@ -8,6 +8,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
@@ -42,6 +44,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
     public static final String BARCODE_KEY = "BARCODE";
     TextviewRegular scaninfotv;
     String CafeId;
+    ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     private void init() {
         scaninfotv = findViewById(R.id.scaninfotv);
+        progress = findViewById(R.id.progress);
     }
 
     private void startScan() {
@@ -91,6 +95,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
 
+        progress.setVisibility(View.VISIBLE);
         CheckTabelApi(separated[0],separated[1]);
 //        separated[0]; // this will contain "Fruit"
 //        separated[1]; // this will contain " they taste good"
@@ -187,6 +192,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             Log.d("+++++object","++++"+object.toString());
                             if (object.optInt("success") == 1) {
+                                progress.setVisibility(View.GONE);
                                 new MakeToast(object.optString("msg"));
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
@@ -195,12 +201,14 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan, "yes").apply();
                                 startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
                                 finish();
-                            } else
+                            } else{
                                 new MakeToast(object.optString("msg"));
+                                progress.setVisibility(View.GONE);
                                 finish();
-
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progress.setVisibility(View.GONE);
                         }
                     }
                 }

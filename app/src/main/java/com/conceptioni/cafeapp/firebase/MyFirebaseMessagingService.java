@@ -43,6 +43,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             try {
                 JSONObject object = new JSONObject(remoteMessage.getData());
                 String auth = object.getString("auth_token");
+                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.User_id).apply();
                 ScanCafe(auth);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -55,13 +56,10 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     }
 
     private void simpelsendnotification() {
-//        Random random = new Random();
-//        int rand = random.nextInt(1000);
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MyFirebaseMessagingService.this);
         builder.setContentTitle(getString(R.string.app_name));
-        builder.setContentText("You are login with other device");
+        builder.setContentText("You are login with other device. And you can access app only in one device");
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.drawable.ic_launcher);
         builder.setSound(uri);
@@ -99,11 +97,14 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                             if (object.optInt("success") == 1) {
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
-                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.User_id).apply();
+
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
+                            }else {
+                                SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.User_id).apply();
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
