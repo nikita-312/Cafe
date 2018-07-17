@@ -192,6 +192,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Table_status, "Free").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan, "yes").apply();
                                 startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.table_number,Constant.notAvailable)));
                                 finish();
                             } else

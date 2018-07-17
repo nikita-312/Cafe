@@ -141,11 +141,11 @@ public class RatingActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                Log.d("+++++type", "+++json " + jsonObject.toString());
+                                Log.d("+++++type", "+++json " + object.toString());
 
-                                new MakeToast(object.optString("msg"));
 
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
                                 startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));

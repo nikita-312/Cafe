@@ -181,6 +181,7 @@ public class CartActivity extends AppCompatActivity {
                             }
 
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -279,6 +280,7 @@ public class CartActivity extends AppCompatActivity {
                         if (object.optInt("success") == 1){
                             new MakeToast(object.optString("msg"));
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"no").apply();
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         }else {

@@ -28,6 +28,7 @@ public class SharedPrefs {
        String Name = "Name";
        String Table_status = "Table_status";
        String Flag = "Flag";
+       String canScan = "canScan";
     }
 
     public interface tokendetail {

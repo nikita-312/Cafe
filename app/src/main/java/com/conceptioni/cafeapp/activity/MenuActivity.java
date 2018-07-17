@@ -183,7 +183,7 @@ public class MenuActivity extends AppCompatActivity {
         ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
 
         scancafell.setOnClickListener(view -> {
-            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("1")) {
+            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
                 new MakeToast("You still have live order!");
             } else ScanCafe();
         });
@@ -404,6 +404,7 @@ public class MenuActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan, "yes").apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
                                 startActivity(new Intent(MenuActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -450,6 +451,7 @@ public class MenuActivity extends AppCompatActivity {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
                         if (object1.optInt("success") == 1) {
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
+
                             itemsList.get(Position).setQty(object1.optString("qty"));
                             tvrCartQty.setText(object1.getString("qty"));
                             SaveArrylistinShared(itemsList);

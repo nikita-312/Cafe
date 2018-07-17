@@ -147,6 +147,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 Log.d("+++++++obiect", "++++json " + jsonObject.toString());
 
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"no").apply();
                                 cartModelsarray.clear();
                                 subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
                                 fee = String.valueOf(jsonObject1.optInt("fee"));
@@ -171,6 +172,7 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 tvrCartTotal.setText(total);
                             } else {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 rvliveOrder.setVisibility(View.GONE);
                                 bottom.setVisibility(View.GONE);
                                 emptycartll.setVisibility(View.VISIBLE);
