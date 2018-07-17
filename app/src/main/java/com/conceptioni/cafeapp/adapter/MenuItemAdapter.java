@@ -11,33 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
-import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
-import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.Items;
-import com.conceptioni.cafeapp.utils.Constant;
-import com.conceptioni.cafeapp.utils.MakeToast;
-import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuViewHolder> {
 
@@ -78,7 +65,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
         holder.quantytvr.setText(itemsArrayList.get(position).getQty());
-        Log.d("++++++","++++++"+position + "++++"+itemsArrayList.get(position).getQty());
+        Log.d("++++++", "++++++" + position + "++++" + itemsArrayList.get(position).getQty());
 //        holder.plusiv.setOnClickListener(v -> {
 ////            Flag = "A";
 //            if (!itemsArrayList.get(position).getQty().equalsIgnoreCase("")){
@@ -121,6 +108,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         TextviewRegular itemnametvr, quantytvr;
         TextviewBold itempricetvb;
         ImageView plusiv, minusiv, addtocartiv;
+        ProgressBar progress;
 
         MenuViewHolder(View itemView) {
             super(itemView);
@@ -132,66 +120,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
             plusiv = itemView.findViewById(R.id.plusiv);
             minusiv = itemView.findViewById(R.id.minusiv);
             addtocartiv = itemView.findViewById(R.id.addtocartiv);
-        }
-    }
-
-    private void CallQuantity(MenuViewHolder holder, String Quantity, int Position, String ItemId) {
-
-        JsonObject object = new JsonObject();
-        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-        object.addProperty("itemid", ItemId);
-        object.addProperty("qty", Quantity);
-        object.addProperty("note", "");
-        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
-
-        Log.d("+++++quant123", "++++" + object.toString());
-
-        Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.AddToCart("application/json", object);
-
-
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null) {
-                    try {
-                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-                        if (object1.optInt("success") == 1) {
-                            itemsArrayList.get(Position).setQty(object1.optString("qty"));
-                            holder.quantytvr.setText(object1.getString("qty"));
-                            SaveArrylistinShared(itemsArrayList);
-
-//                            ShowCartLayout(itemsList,Position,categoryList);
-
-                        } else {
-                            if (Quantity.equalsIgnoreCase("0")) {
-                                new MakeToast(object1.optString("msg"));
-                            } else {
-                                int Quan = Integer.parseInt(Quantity);
-                                holder.quantytvr.setText(Quan - 1);
-                                new MakeToast(object1.optString("msg"));
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast(R.string.Checkyournetwork);
-            }
-        });
-
-    }
-
-    private void SaveArrylistinShared(List<Items> itemsArrayList) {
-        for (int i = 0; i < 1; i++) {
-            Gson gson = new Gson();
-            String json = gson.toJson(itemsArrayList);
-            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+            progress = itemView.findViewById(R.id.progress);
         }
     }
 }

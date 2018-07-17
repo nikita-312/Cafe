@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
@@ -139,6 +140,7 @@ public class MenuActivity extends AppCompatActivity {
                 ImageView plusiv = view.findViewById(R.id.plusiv);
                 ImageView minusiv = view.findViewById(R.id.minusiv);
                 TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
+                ProgressBar progressBar = view.findViewById(R.id.progress);
                 List<Items> itemsList;
                 itemsList = categoryList.get(pos).getItems();
                 List<Items> finalItemsList = itemsList;
@@ -148,7 +150,8 @@ public class MenuActivity extends AppCompatActivity {
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
 //                    tvrCartQty.setText(finalQuantity);
-                    CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
+                    progressBar.setVisibility(View.VISIBLE);
+                    CallQuantity(progressBar,tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
 
                 });
                 minusiv.setOnClickListener(v -> {
@@ -157,8 +160,9 @@ public class MenuActivity extends AppCompatActivity {
                         int count = Integer.parseInt(finalItemsList.get(position).getQty());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
+                        progressBar.setVisibility(View.VISIBLE);
 //                        tvrCartQty.setText(finalQuantity);
-                        CallQuantity(tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
+                        CallQuantity(progressBar,tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
@@ -185,7 +189,9 @@ public class MenuActivity extends AppCompatActivity {
         scancafell.setOnClickListener(view -> {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
                 new MakeToast("You still have live order!");
-            } else ScanCafe();
+            } else {
+                ScanCafe();
+            }
         });
 
         viewliveorderll.setOnClickListener(view -> startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class)));
@@ -236,9 +242,6 @@ public class MenuActivity extends AppCompatActivity {
                 } else {
                     tvrNodata.setVisibility(View.VISIBLE);
                     rvCategoryitem.setVisibility(View.GONE);
-                    //  menuItemAdapter = new MenuItemAdapter(itemsArrayList);
-                    //  rvCategoryitem.hideShimmerAdapter();
-                    //   rvCategoryitem.setAdapter(menuItemAdapter);
                 }
 
             }
@@ -246,7 +249,6 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void ShowAllData(List<Items> itemsArrayList) {
-        Log.d("++++switch", "++++adapter " + itemsArrayList.size());
         SetAdapter(itemsArrayList);
     }
 
@@ -427,7 +429,7 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    private void CallQuantity(TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
+    private void CallQuantity(ProgressBar progressBar,TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -450,27 +452,31 @@ public class MenuActivity extends AppCompatActivity {
                     try {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
                         if (object1.optInt("success") == 1) {
+                            progressBar.setVisibility(View.GONE);
+                            Log.d("+++++success","+++++"+object1.toString());
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
 
                             itemsList.get(Position).setQty(object1.optString("qty"));
                             tvrCartQty.setText(object1.getString("qty"));
                             SaveArrylistinShared(itemsList);
+                            TotalQty = object1.optString("totalqty");
+//                            int quant = Integer.parseInt(object1.getString("qty"));
+//                            String FinalValue = "";
+//                            if (Flag.equalsIgnoreCase("A")) {
+//                                int count = Integer.parseInt(TotalQty);
+//                                int Totalcount = count + quant;
+//                                FinalValue = String.valueOf(Totalcount);
+//
+//                            } else if (Flag.equalsIgnoreCase("M")) {
+//                                int count = Integer.parseInt(TotalQty);
+//                                int Totalcount = count - 1;
+//                                FinalValue = String.valueOf(Totalcount);
+//                            }
+//
+//                            Log.d("+++++final","++++"+FinalValue);
+//
+//                            TotalQty = FinalValue;
 
-                            String FinalValue = "";
-                            if (Flag.equalsIgnoreCase("A")) {
-                                int count = Integer.parseInt(TotalQty);
-                                int Totalcount = count + 1;
-                                FinalValue = String.valueOf(Totalcount);
-
-                            } else if (Flag.equalsIgnoreCase("M")) {
-                                int count = Integer.parseInt(TotalQty);
-                                int Totalcount = count - 1;
-                                FinalValue = String.valueOf(Totalcount);
-                            }
-
-                            TotalQty = FinalValue;
-
-                            Log.d("++++value", "++++" + TotalQty);
                             if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
                                 if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
                                     if (!TotalQty.equalsIgnoreCase("0")) {
@@ -496,12 +502,9 @@ public class MenuActivity extends AppCompatActivity {
                                     cartrl.setVisibility(View.GONE);
                                 }
                             }
-//                            if (!TotalQty.equalsIgnoreCase("0")) {
-//                                cartrl.setVisibility(View.VISIBLE);
-//                                quantitytvb.setText(TotalQty + " items in cart");
-//                            }
 
                         } else {
+                            progressBar.setVisibility(View.GONE);
                             if (Quantity.equalsIgnoreCase("0")) {
                                 new MakeToast(object1.optString("msg"));
                             } else {
@@ -512,6 +515,7 @@ public class MenuActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -519,6 +523,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast(R.string.Checkyournetwork);
+                progressBar.setVisibility(View.GONE);
             }
         });
 

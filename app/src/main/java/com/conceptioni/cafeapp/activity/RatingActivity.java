@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
@@ -43,6 +44,7 @@ public class RatingActivity extends AppCompatActivity {
     List<CurrentOrderModel> currentOrderModelsArray = new ArrayList<>();
     RelativeLayout mainrl, nointernetrl;
     LinearLayout retryll;
+    ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +56,11 @@ public class RatingActivity extends AppCompatActivity {
 
     private void clicks() {
         tvrSubmit.setOnClickListener(v -> {
+            progress.setVisibility(View.VISIBLE);
             ScanCafe();
         });
         ivSkip.setOnClickListener(v -> {
+            progress.setVisibility(View.VISIBLE);
             ScanCafe();
         });
         retryll.setOnClickListener(v -> CallReviewCurrentOrder());
@@ -69,6 +73,8 @@ public class RatingActivity extends AppCompatActivity {
         nointernetrl = findViewById(R.id.nointernetrl);
         mainrl = findViewById(R.id.mainrl);
         retryll = findViewById(R.id.retryll);
+        progress = findViewById(R.id.progress);
+
         linearLayoutManager = new LinearLayoutManager(RatingActivity.this);
         rvRating.setLayoutManager(linearLayoutManager);
         CallReviewCurrentOrder();
@@ -81,6 +87,7 @@ public class RatingActivity extends AppCompatActivity {
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
         Log.d("++++++object", "+++++" + jsonObject.toString());
+        progress.setVisibility(View.VISIBLE);
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.reviewCurrentOrder("application/json", jsonObject);
@@ -95,6 +102,7 @@ public class RatingActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             Log.d("+++++", "+++++" + object.toString());
                             if (object.optInt("success") == 1) {
+                                progress.setVisibility(View.GONE);
                                 currentOrderModelsArray.clear();
                                 JSONArray jsonArray = object.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -124,6 +132,7 @@ public class RatingActivity extends AppCompatActivity {
             }
         });
     }
+
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -141,16 +150,13 @@ public class RatingActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                Log.d("+++++type", "+++json " + object.toString());
-
-
-                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+                                progress.setVisibility(View.GONE);
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.table_number).apply();
                                 startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
-
                             } else
                                 new MakeToast(object.optString("msg"));
 
@@ -177,11 +183,6 @@ public class RatingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         ScanCafe();
-//        SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.orderid).apply();
-//        SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();
-//        startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-//        finish();
     }
 }
