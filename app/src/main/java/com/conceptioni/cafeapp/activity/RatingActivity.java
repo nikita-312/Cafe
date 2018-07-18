@@ -1,6 +1,7 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.RatingAdapter;
+import com.conceptioni.cafeapp.database.DBOpenHelper;
 import com.conceptioni.cafeapp.model.CurrentOrderModel;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -44,11 +46,15 @@ public class RatingActivity extends AppCompatActivity {
     RelativeLayout mainrl, nointernetrl;
     LinearLayout retryll;
     ProgressBar progress;
+    DBOpenHelper dbOpenHelper;
+    SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
+        dbOpenHelper = new DBOpenHelper(RatingActivity.this);
+        sqLiteDatabase = dbOpenHelper.getWritableDatabase();
         init();
         clicks();
     }
@@ -147,6 +153,7 @@ public class RatingActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 progress.setVisibility(View.GONE);
+                                dbOpenHelper.deletetable();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 SharedPrefs.getSharedPref().edit().remove(SharedPrefs.userSharedPrefData.Cafe_Id).apply();

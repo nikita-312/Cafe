@@ -2,6 +2,7 @@ package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
+import com.conceptioni.cafeapp.database.DBOpenHelper;
+import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.model.Items;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -37,17 +40,22 @@ import retrofit2.Response;
 
 public class DescriptionActivity extends AppCompatActivity {
 
-    String ItemData,ItemId,Qty;
+    String ItemData,ItemId,Qty,ItemName,Price;
     List<Items> itemsArrayList = new ArrayList<>();
     TextviewRegular ItemPricetvr,Itemnametvr,Itemdesctvr,qtytvr,addtocarttvr;
     EditText noteset;
     ImageView plusiv,minusiv,backiv,ivCart,itemiv;
     String Flag = "A";
+    List<CartData> cartDataArrayList = new ArrayList<>();
+    DBOpenHelper dbOpenHelper;
+    SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+        dbOpenHelper=new DBOpenHelper(DescriptionActivity.this);
+        sqLiteDatabase=dbOpenHelper.getWritableDatabase();
         init();
         allclick();
     }
@@ -79,7 +87,7 @@ public class DescriptionActivity extends AppCompatActivity {
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
                     qtytvr.setText(itemsArrayList.get(i).getQty());
                     Qty = itemsArrayList.get(i).getQty();
-
+                    ItemName = itemsArrayList.get(i).getItem_name();
                     RequestOptions options = new RequestOptions()
                             .centerCrop()
                             .placeholder(R.drawable.no_image)
@@ -100,6 +108,16 @@ public class DescriptionActivity extends AppCompatActivity {
             int count = Integer.parseInt(Qty);
             int Quantity = count + 1;
             String finalQuantity = String.valueOf(Quantity);
+
+            cartDataArrayList.clear();
+            cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),ItemId);
+
+            if (cartDataArrayList.isEmpty()){
+                dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId, ItemName,noteset.getText().toString(),finalQuantity,"",Price,"","");
+            }else {
+                dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId, ItemName,noteset.getText().toString(),finalQuantity,"",Price,"","");
+            }
+
             CallQuantity(finalQuantity,ItemId);
         });
 
@@ -109,6 +127,13 @@ public class DescriptionActivity extends AppCompatActivity {
                 int count = Integer.parseInt(Qty);
                 int Quantity = count - 1;
                 String finalQuantity = String.valueOf(Quantity);
+
+                if (cartDataArrayList.isEmpty()){
+                    dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId, ItemName,noteset.getText().toString(),finalQuantity,"",Price,"","");
+                }else {
+                    dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId, ItemName,noteset.getText().toString(),finalQuantity,"",Price,"","");
+                }
+
                 CallQuantity(finalQuantity, ItemId);
             }
         });

@@ -214,6 +214,5 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 new MakeToast(R.string.Checkyournetwork);
             }
         });
-
     }
 }
