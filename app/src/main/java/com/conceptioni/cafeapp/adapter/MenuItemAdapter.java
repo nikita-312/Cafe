@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,36 +64,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
         holder.quantytvr.setText(itemsArrayList.get(position).getQty());
-        Log.d("++++++", "++++++" + position + "++++" + itemsArrayList.get(position).getQty());
-//        holder.plusiv.setOnClickListener(v -> {
-////            Flag = "A";
-//            if (!itemsArrayList.get(position).getQty().equalsIgnoreCase("")){
-//                int count = Integer.parseInt(itemsArrayList.get(position).getQty());
-//                int Quantity = count + 1;
-//                String finalQuantity = String.valueOf(Quantity);
-//                holder.quantytvr.setText(finalQuantity);
-//                CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
-//            }
-//        });
-//
-//        holder.minusiv.setOnClickListener(v -> {
-////            Flag = "A";
-//            if (!itemsArrayList.get(position).getQty().equalsIgnoreCase("0") && !itemsArrayList.get(position).getQty().equalsIgnoreCase("1")){
-//                int count = Integer.parseInt(itemsArrayList.get(position).getQty());
-//                int Quantity = count - 1;
-//                String finalQuantity = String.valueOf(Quantity);
-//                holder.quantytvr.setText(finalQuantity);
-//                CallQuantity(holder,finalQuantity,position,itemsArrayList.get(position).getItem_id());
-//            }else {
-//                new MakeToast("Quantity can not be less than 0");
-//            }
-//
-//        });
-//
-//        holder.addtocartiv.setOnClickListener(v -> {
-////            Flag = "C";
-////            CallQuantity(holder,itemsArrayList.get(position).getQty(),position,itemsArrayList.get(position).getItem_id());
-//        });
+
     }
 
     @Override

@@ -99,8 +99,6 @@ public class CardActivity extends AppCompatActivity {
         jsonObject.addProperty("payment", type);
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
 
-        Log.d("+++++type", "+++ " + type + jsonObject.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.makePayment("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {

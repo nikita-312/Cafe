@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.conceptioni.cafeapp.R;
@@ -65,20 +64,12 @@ public class OTPActivity extends AppCompatActivity {
                 new MakeToast("Please Enter OTP");
             }
         });
-//        pinview1.setPinViewEventListener(new Pinview.PinViewEventListener() {
-//            @Override
-//            public void onDataEntered(Pinview pinview, boolean fromUser) {
-//
-//            }
-//        });
     }
 
     private void init() {
         tvrVerify = findViewById(R.id.tvrVerify);
         pinview1 = findViewById(R.id.pinview1);
         verifyll = findViewById(R.id.verifyll);
-
-
 
         smsVerifyCatcher = new SmsVerifyCatcher(this, message -> {
             String code = parseCode(message);//Parse verification code
@@ -104,8 +95,6 @@ public class OTPActivity extends AppCompatActivity {
         jsonObject.addProperty("OTP", pinview1.getValue());
         jsonObject.addProperty("deviceid", SharedPrefs.getSharedPref().getString(SharedPrefs.tokendetail.refreshtoken,Constant.notAvailable));
 
-        Log.d("+++++object","++++++"+jsonObject.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.verifyotp(  "application/json", jsonObject);
 
@@ -118,7 +107,7 @@ public class OTPActivity extends AppCompatActivity {
                                 if (object.optString("success").equalsIgnoreCase("1")){
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Auth_token,object.optString("auth_token")).apply();
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.User_id,object.optString("id")).apply();
-                                    Log.d("++++++status","++++"+object.optString("user_status"));
+
                                     if (object.optString("user_status").equalsIgnoreCase("old")){
                                         startActivity(new Intent(OTPActivity.this,HomeActivity.class));
                                         finish();

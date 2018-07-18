@@ -54,78 +54,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
 
         Glide.with(context).load(cartModelsarray.get(position).getImages()).apply(options).into(holder.imageView1);
-
-//        holder.plusiv.setOnClickListener(v -> {
-//            int count = Integer.parseInt(cartModelsarray.get(position).getQty());
-//            int Quantity = count + 1;
-//            String finalQuantity = String.valueOf(Quantity);
-//            CallQuantity(holder, finalQuantity, position, cartModelsarray.get(position).getItem_id());
-//        });
-
-//        holder.minusiv.setOnClickListener(v -> {
-//            if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")) {
-//                int count = Integer.parseInt(cartModelsarray.get(position).getQty());
-//                int Quantity = count - 1;
-//                String finalQuantity = String.valueOf(Quantity);
-//                CallQuantity(holder, finalQuantity, position, cartModelsarray.get(position).getItem_id());
-//            } else {
-//                new MakeToast("Quantity can not be less than 0");
-//            }
-//
-//        });
-
     }
 
     @Override
     public int getItemCount() {
         return cartModelsarray.size();
     }
-
-//    private void CallQuantity(MenuViewHolder holder, String Quantity, int Position, String ItemId) {
-//
-//        JsonObject object = new JsonObject();
-//        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-//        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-//        object.addProperty("itemid", ItemId);
-//        object.addProperty("qty", Quantity);
-//        object.addProperty("note", "");
-//
-//        Log.d("+++++quant123", "++++" + object.toString());
-//
-//        Service service = ApiCall.getRetrofit().create(Service.class);
-//        Call<JsonObject> call = service.AddToCart("application/json", object);
-//
-//        call.enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-//                if (response.body() != null) {
-//                    try {
-//                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-//                        if (object1.optInt("success") == 1) {
-//                            cartModelsarray.get(Position).setQty(object1.optString("qty"));
-//                            holder.tvrCartQty.setText(object1.optString("qty"));
-//                        } else {
-//                            if (Quantity.equalsIgnoreCase("0")) {
-//                                new MakeToast(object1.optString("msg"));
-//                            } else {
-//                                int Quan = Integer.parseInt(Quantity);
-//                                holder.tvrCartQty.setText(Quan - 1);
-//                                new MakeToast(object1.optString("msg"));
-//                            }
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-//                new MakeToast(R.string.Checkyournetwork);
-//            }
-//        });
-//
-//    }
 
     class MenuViewHolder extends RecyclerView.ViewHolder {
         LinearLayout itemll;

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +59,7 @@ public class CafeApp extends Application {
                 isInBackground = false;
             }
         }
-
+        Log.d("+++++++background","++++++"+isInBackground);
         return isInBackground;
     }
 

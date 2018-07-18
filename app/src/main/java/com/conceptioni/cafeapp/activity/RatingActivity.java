@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -86,7 +85,6 @@ public class RatingActivity extends AppCompatActivity {
         jsonObject.addProperty("orderid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.orderid, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("++++++object", "+++++" + jsonObject.toString());
         progress.setVisibility(View.VISIBLE);
 
         Service service = ApiCall.getRetrofit().create(Service.class);
@@ -100,7 +98,7 @@ public class RatingActivity extends AppCompatActivity {
                             nointernetrl.setVisibility(View.GONE);
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            Log.d("+++++", "+++++" + object.toString());
+
                             if (object.optInt("success") == 1) {
                                 progress.setVisibility(View.GONE);
                                 currentOrderModelsArray.clear();
@@ -137,8 +135,6 @@ public class RatingActivity extends AppCompatActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-
-        Log.d("+++++type", "+++ " + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);

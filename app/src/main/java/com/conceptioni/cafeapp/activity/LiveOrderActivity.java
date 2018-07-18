@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +44,7 @@ public class LiveOrderActivity extends AppCompatActivity {
     ImageView ivBack;
     LiveOrderAdapter liveOrderAdapter;
     RelativeLayout emptycartll, mainrl, nointernetrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +124,6 @@ public class LiveOrderActivity extends AppCompatActivity {
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
-        Log.d("+++++++obiect", "++++" + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.ViewLiveOrder("application/json", jsonObject);
@@ -144,8 +143,6 @@ public class LiveOrderActivity extends AppCompatActivity {
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
 
                             if (jsonObject1.getInt("success") == 1) {
-                                Log.d("+++++++obiect", "++++json " + jsonObject.toString());
-
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"no").apply();
                                 cartModelsarray.clear();
@@ -215,8 +212,6 @@ public class LiveOrderActivity extends AppCompatActivity {
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
         jsonObject.addProperty("itemid", itemId);
 
-        Log.d("+++++++object", "++++" + jsonObject.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.reorder("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
@@ -227,7 +222,6 @@ public class LiveOrderActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                Log.d("+++++++object", "++++json" + jsonObject.toString());
                                 new MakeToast(object.optString("msg"));
                                 viewLiveOrder();
                             } else {

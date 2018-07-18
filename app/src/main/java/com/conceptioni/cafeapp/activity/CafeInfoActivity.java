@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -66,7 +65,7 @@ public class CafeInfoActivity extends AppCompatActivity {
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-        Log.d("+++++cafeinfo","++data "+jsonObject.toString());
+
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.cafeInfo("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
@@ -78,8 +77,6 @@ public class CafeInfoActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                Log.d("+++++cafeinfo","++json "+object.toString());
-
                                 JSONObject object1 = object.getJSONObject("data");
                                 cafename = object1.getString("name");
                                 image = object1.getString("image");

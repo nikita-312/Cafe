@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -113,7 +112,6 @@ public class MenuActivity extends AppCompatActivity {
                         ShowAllData(categoryList.get(position).getItems());
                     }
 
-//                    SetAdapter(categoryList.get(position).getItems());
                     menuAdapter.notifyDataSetChanged();
 
                     Gson gson = new Gson();
@@ -148,7 +146,6 @@ public class MenuActivity extends AppCompatActivity {
                     int count = Integer.parseInt(finalItemsList.get(position).getQty());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
-//                    tvrCartQty.setText(finalQuantity);
                     progressBar.setVisibility(View.VISIBLE);
                     CallQuantity(progressBar, tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
 
@@ -160,7 +157,6 @@ public class MenuActivity extends AppCompatActivity {
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
                         progressBar.setVisibility(View.VISIBLE);
-//                        tvrCartQty.setText(finalQuantity);
                         CallQuantity(progressBar, tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                     } else {
                         new MakeToast("Quantity can not be less than 0");
@@ -257,8 +253,6 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("+++++object", "++++" + object.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getMenuItem("application/json", object);
 
@@ -318,7 +312,6 @@ public class MenuActivity extends AppCompatActivity {
                                     SetAdapter(categoryList.get(0).getItems());
                                 }
 
-                                Log.d("+++++", "+++++" + TotalQty);
                                 if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
                                     if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
                                         if (!TotalQty.equalsIgnoreCase("0")) {
@@ -392,8 +385,6 @@ public class MenuActivity extends AppCompatActivity {
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
 
-        Log.d("+++++type", "+++ " + jsonObject.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
@@ -438,8 +429,6 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("note", "");
         object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
 
-        Log.d("+++++quant123", "++++" + object.toString());
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.AddToCart("application/json", object);
 
@@ -452,29 +441,11 @@ public class MenuActivity extends AppCompatActivity {
                         JSONObject object1 = new JSONObject(String.valueOf(response.body()));
                         if (object1.optInt("success") == 1) {
                             progressBar.setVisibility(View.GONE);
-                            Log.d("+++++success", "+++++" + object1.toString());
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
-
                             itemsList.get(Position).setQty(object1.optString("qty"));
                             tvrCartQty.setText(object1.getString("qty"));
                             SaveArrylistinShared(itemsList);
                             TotalQty = object1.optString("totalqty");
-//                            int quant = Integer.parseInt(object1.getString("qty"));
-//                            String FinalValue = "";
-//                            if (Flag.equalsIgnoreCase("A")) {
-//                                int count = Integer.parseInt(TotalQty);
-//                                int Totalcount = count + quant;
-//                                FinalValue = String.valueOf(Totalcount);
-//
-//                            } else if (Flag.equalsIgnoreCase("M")) {
-//                                int count = Integer.parseInt(TotalQty);
-//                                int Totalcount = count - 1;
-//                                FinalValue = String.valueOf(Totalcount);
-//                            }
-//
-//                            Log.d("+++++final","++++"+FinalValue);
-//
-//                            TotalQty = FinalValue;
 
                             if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
                                 if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {

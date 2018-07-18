@@ -69,8 +69,6 @@ public class DescriptionActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             ItemId = getIntent().getStringExtra("ItemId");
-            Log.d("++++itemid","+++des "+ItemId);
-
 
             itemsArrayList.clear();
             itemsArrayList = getArrayList();
@@ -88,9 +86,6 @@ public class DescriptionActivity extends AppCompatActivity {
                             .error(R.drawable.no_image)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .priority(Priority.HIGH);
-
-                    Log.d("++++size","++++++"+itemsArrayList.size());
-
 
                     Glide.with(DescriptionActivity.this).load( itemsArrayList.get(i).getImage()).apply(options).into(itemiv);
                 }
@@ -147,9 +142,6 @@ public class DescriptionActivity extends AppCompatActivity {
         object.addProperty("qty", Quantity);
         object.addProperty("note", noteset.getText().toString());
         object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
-
-
-        Log.d("+++++quant123","++++"+object.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.AddToCart("application/json", object);

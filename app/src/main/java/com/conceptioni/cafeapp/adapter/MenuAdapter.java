@@ -41,8 +41,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         holder.tvrCatName.setText(categories.get(position).getCname());
         Glide.with(context).load(categories.get(position).getCimage()).into(holder.civ);
 
-        Log.d("++++++isselect","+++++"+categories.get(position).isselect + "+++++"+position);
-
         if (categories.get(position).isselect){
             holder.llMain.setBackgroundResource(R.drawable.select_category_drawable);
             holder.tvrCatName.setVisibility(View.VISIBLE);
@@ -54,7 +52,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         }
     }
 
-    //
     @Override
     public int getItemCount() {
         return categories.size();

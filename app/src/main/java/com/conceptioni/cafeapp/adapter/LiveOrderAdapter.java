@@ -3,7 +3,6 @@ package com.conceptioni.cafeapp.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,6 @@ public class LiveOrderAdapter extends RecyclerView.Adapter<LiveOrderAdapter.Menu
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-        Log.d("++++img","+++ "+cartModelsarray.get(position).getImages());
         Glide.with(context).load(cartModelsarray.get(position).getImages()).apply(options).into(holder.imageView1);
         holder.tvrQty.setText(cartModelsarray.get(position).getQty());
     }

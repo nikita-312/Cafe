@@ -3,7 +3,6 @@ package com.conceptioni.cafeapp.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,8 +117,6 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
         jsonObject.addProperty("itemid", currentOrderModelsArray.get(pos).getItem_id());
         jsonObject.addProperty("like", currentOrderModelsArray.get(pos).getLike());
         jsonObject.addProperty("unlike", currentOrderModelsArray.get(pos).getUnlike());
-
-        Log.d("+++++++object", "++++" + jsonObject.toString());
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.reviewLikeUnlike("application/json", jsonObject);
