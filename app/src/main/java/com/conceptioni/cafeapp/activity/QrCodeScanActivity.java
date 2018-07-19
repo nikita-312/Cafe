@@ -199,6 +199,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                             } else{
                                 new MakeToast(object.optString("msg"));
                                 progress.setVisibility(View.GONE);
+                                startActivity(new Intent(QrCodeScanActivity.this,HomeActivity.class));
                                 finish();
                             }
                         } catch (JSONException e) {

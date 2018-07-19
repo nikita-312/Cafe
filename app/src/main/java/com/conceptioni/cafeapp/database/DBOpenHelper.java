@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.conceptioni.cafeapp.model.CartData;
 
@@ -134,9 +135,25 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
     }
 
+    public void updatecolumcartdata(String userid,String itemid,String totalquant,String extraprice,String totalprice){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ITEM_TOTAL_QUANTITY, totalquant);
+        contentValues.put(COLUMN_EXTRA_PRICE, extraprice);
+        contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
+        database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
+    }
+
     public void deletetable(){
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_NAME,null,null);
+        Log.d("++++success","+++");
+    }
+
+    public void deleterow(String userid,String itemid){
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.delete(TABLE_NAME, COLUMN_USER_ID + " = ? AND " + COLUMN_ITEM_ID + " = ?",new String[] {userid,itemid});
+        Log.d("++++successdelete","+++");
     }
 
 }

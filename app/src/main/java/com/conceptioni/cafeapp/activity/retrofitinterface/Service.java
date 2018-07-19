@@ -41,4 +41,6 @@ public interface Service {
     Call<JsonObject> sessionexpire(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/store_username")
     Call<JsonObject> storeusername(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/add_to_cart_all")
+    Call<JsonObject> addtocartall(@Header("Content-Type") String content, @Body JsonObject object);
 }

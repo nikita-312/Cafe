@@ -30,6 +30,7 @@ import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
@@ -64,6 +65,7 @@ public class MenuActivity extends AppCompatActivity {
     boolean isVeg = false;
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
+    ProgressBar addtocartprogress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class MenuActivity extends AppCompatActivity {
         tvrNodata = findViewById(R.id.tvrNodata);
         vegswitch = findViewById(R.id.vegswitch);
         viewtvb = findViewById(R.id.viewtvb);
+        addtocartprogress = findViewById(R.id.addtocartprogress);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
@@ -171,10 +174,6 @@ public class MenuActivity extends AppCompatActivity {
                         dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
                     }
 
-
-//                    Log.d("++++++data","++++++"+data);
-
-//                    CallQuantity(progressBar, tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                 });
                 minusiv.setOnClickListener(v -> {
                     if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0") && !finalItemsList.get(position).getQty().equalsIgnoreCase("1")) {
@@ -198,8 +197,6 @@ public class MenuActivity extends AppCompatActivity {
                         } else {
                             dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
                         }
-
-//                        CallQuantity(progressBar, tvrCartQty, finalQuantity, position, finalItemsList.get(position).getItem_id(), finalItemsList);
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
@@ -219,31 +216,30 @@ public class MenuActivity extends AppCompatActivity {
 
         List<CartData> cartDataArrayList;
         cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-        JSONObject data = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
+        JsonObject data = new JsonObject();
+        JsonArray jsonArray = new JsonArray();
 
         if (!cartDataArrayList.isEmpty()) {
-            try {
-                for (int i = 0; i < cartDataArrayList.size(); i++) {
-                    JSONObject cartdataoject = new JSONObject();
-                    cartdataoject.put("itemid", cartDataArrayList.get(i).getCOLUMN_ITEM_ID());
-                    cartdataoject.put("qty", cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
-                    cartdataoject.put("price", cartDataArrayList.get(i).getCOLUMN_ORIGINAL_PRICE());
-                    cartdataoject.put("note", cartDataArrayList.get(i).getCOLUMN_NOTE());
-                    jsonArray.put(cartdataoject);
-                }
-
-                data.put("userid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-                data.put("cafeid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable));
-                data.put("authid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
-                data.put("items",jsonArray);
-
-                String jsonFormattedString = data.toString().replaceAll("\\\\", "");
-                Log.d("+++++data","++++"+data.toString() + jsonFormattedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+            for (int i = 0; i < cartDataArrayList.size(); i++) {
+                JsonObject cartdataoject = new JsonObject();
+                cartdataoject.addProperty("itemid", cartDataArrayList.get(i).getCOLUMN_ITEM_ID());
+                cartdataoject.addProperty("qty", cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+                cartdataoject.addProperty("price", cartDataArrayList.get(i).getCOLUMN_ORIGINAL_PRICE());
+                cartdataoject.addProperty("note", cartDataArrayList.get(i).getCOLUMN_NOTE());
+                jsonArray.add(cartdataoject);
             }
+
+            data.addProperty("userid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+            data.addProperty("cafeid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable));
+            data.addProperty("authid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
+            data.add("items",jsonArray);
+
+            String jsonFormattedString = data.toString().replaceAll("\\\\", "");
+            Log.d("+++++data","++++"+data.toString() + jsonFormattedString + "++++" + data);
+            Addtocart(data);
+
+        }else {
+            Log.d("+++++data","++++else");
         }
 
     }
@@ -289,9 +285,6 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-//        ivCart.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, CartActivity.class)));
-//        ivCart.setOnClickListener(v -> SendData());
-
         scancafell.setOnClickListener(view -> {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
                 ScanCafe();
@@ -317,7 +310,7 @@ public class MenuActivity extends AppCompatActivity {
 
         cartrl.setOnClickListener(v -> {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
-//                startActivity(new Intent(MenuActivity.this, CartActivity.class));
+                addtocartprogress.setVisibility(View.VISIBLE);
                 SendData();
             } else {
                 startActivity(new Intent(MenuActivity.this, LiveOrderActivity.class));
@@ -532,72 +525,30 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    private void CallQuantity(ProgressBar progressBar, TextviewRegular tvrCartQty, String Quantity, int Position, String ItemId, List<Items> itemsList) {
-        JsonObject object = new JsonObject();
-        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-        object.addProperty("itemid", ItemId);
-        object.addProperty("qty", Quantity);
-        object.addProperty("note", "");
-        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+    private void Addtocart(JsonObject jsonObject) {
 
         Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.AddToCart("application/json", object);
-
+        Call<JsonObject> call = service.addtocartall("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
-                    try {
-                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-                        if (object1.optInt("success") == 1) {
-                            progressBar.setVisibility(View.GONE);
-                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
-                            itemsList.get(Position).setQty(object1.optString("qty"));
-                            tvrCartQty.setText(object1.getString("qty"));
-                            SaveArrylistinShared(itemsList);
-                            TotalQty = object1.optString("totalqty");
-
-                            if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
-                                if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
-                                    if (!TotalQty.equalsIgnoreCase("0")) {
-                                        cartrl.setVisibility(View.VISIBLE);
-                                        quantitytvb.setVisibility(View.VISIBLE);
-                                        quantitytvb.setText(TotalQty + " items in cart");
-                                        viewtvb.setText("View Cart");
-                                    } else {
-                                        cartrl.setVisibility(View.GONE);
-                                    }
-                                } else {
-                                    cartrl.setVisibility(View.VISIBLE);
-                                    quantitytvb.setText(TotalQty + " items in cart");
-                                    quantitytvb.setVisibility(View.GONE);
-                                    viewtvb.setText("View Live Order");
-                                }
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            if (object.optInt("success") == 1) {
+                                addtocartprogress.setVisibility(View.GONE);
+                                startActivity(new Intent(MenuActivity.this,CartActivity.class));
                             } else {
-                                if (!TotalQty.equalsIgnoreCase("0")) {
-                                    cartrl.setVisibility(View.VISIBLE);
-                                    quantitytvb.setVisibility(View.VISIBLE);
-                                    quantitytvb.setText(TotalQty + " items in cart");
-                                } else {
-                                    cartrl.setVisibility(View.GONE);
-                                }
+                                new MakeToast(object.optString("msg"));
+                                addtocartprogress.setVisibility(View.GONE);
                             }
 
-                        } else {
-                            progressBar.setVisibility(View.GONE);
-                            if (Quantity.equalsIgnoreCase("0")) {
-                                new MakeToast(object1.optString("msg"));
-                            } else {
-                                int Quan = Integer.parseInt(Quantity);
-                                tvrCartQty.setText(Quan - 1);
-                                new MakeToast(object1.optString("msg"));
-                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            addtocartprogress.setVisibility(View.GONE);
+
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        progressBar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -605,10 +556,10 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast(R.string.Checkyournetwork);
-                progressBar.setVisibility(View.GONE);
+                addtocartprogress.setVisibility(View.GONE);
+
             }
         });
-
     }
 
     private void SaveArrylistinShared(List<Items> itemsArrayList) {
@@ -622,6 +573,5 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        dbOpenHelper.deletetable();
     }
 }

@@ -2,6 +2,7 @@ package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.CartItemAdapter;
+import com.conceptioni.cafeapp.database.DBOpenHelper;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -45,11 +47,15 @@ public class CartActivity extends AppCompatActivity {
     CartItemAdapter cartItemAdapter;
     RelativeLayout emptycartll,mainrl,nointernetrl;
     LinearLayout bottom,retryll;
+    DBOpenHelper dbOpenHelper;
+    SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+        dbOpenHelper = new DBOpenHelper(CartActivity.this);
+        sqLiteDatabase = dbOpenHelper.getWritableDatabase();
         init();
         click();
     }
@@ -89,14 +95,14 @@ public class CartActivity extends AppCompatActivity {
                     int count = Integer.parseInt(cartModelsarray.get(position).getQty());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
-                    CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id());
+                    CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                 });
                 minusiv.setOnClickListener(v -> {
                     if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")) {
                         int count = Integer.parseInt(cartModelsarray.get(position).getQty());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
-                        CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id());
+                        CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
@@ -112,7 +118,7 @@ public class CartActivity extends AppCompatActivity {
         ivBack.setOnClickListener(v -> finish());
 
         continueordertvr.setOnClickListener(v -> {
-            startActivity(new Intent(CartActivity.this,MenuActivity.class));
+            startActivity(new Intent(CartActivity.this,MenuActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             finish();
         });
         retryll.setOnClickListener(v -> ViewCart());
@@ -171,6 +177,9 @@ public class CartActivity extends AppCompatActivity {
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
+
+//                                updatedatabase(cartModelsarray,subtotal,fee,total);
+
                             } else {
                                 rvCart.setVisibility(View.GONE);
                                 bottom.setVisibility(View.GONE);
@@ -232,6 +241,7 @@ public class CartActivity extends AppCompatActivity {
                                 subtotal = String.valueOf(object.optInt("subtotal"));
                                 total = String.valueOf(object.optInt("total"));
                                 fee = String.valueOf(object.optInt("fee"));
+                                String totalqty = String.valueOf(object.optInt("totalqty"));
                                 cartModelsarray.remove(pos);
                                 cartItemAdapter.notifyDataSetChanged();
                                 if (cartModelsarray.size() == 0) {
@@ -242,6 +252,13 @@ public class CartActivity extends AppCompatActivity {
                                 tvrCartSubTotal.setText(subtotal);
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
+
+                                dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId);
+
+                                dbOpenHelper.updatecolumcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId,totalqty,fee,total);
+
+
+
                             } else {
                                 new MakeToast(object.optString("msg"));
                             }
@@ -298,7 +315,7 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId) {
+    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId,String ItemName) {
 
         JsonObject object = new JsonObject();
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -320,13 +337,16 @@ public class CartActivity extends AppCompatActivity {
                         if (object1.optInt("success") == 1) {
                             cartModelsarray.get(Position).setQty(object1.optString("qty"));
                             tvrCartQty.setText(object1.optString("qty"));
-                            subtotal = object1.optString("subtotal");
-                            fee = object1.optString("fee");
-                            total = object1.optString("total");
-
+                            subtotal = String.valueOf(object1.optInt("subtotal"));
+                            fee = String.valueOf(object1.optInt("fee"));
+                            total = String.valueOf(object1.optInt("total"));
+                            String totalqty = String.valueOf(object1.optInt("totalqty"));
                             tvrCartSubTotal.setText(subtotal);
                             tvrCartFee.setText(fee);
                             tvrCartTotal.setText(total);
+
+                            dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId,ItemName,"",Quantity,totalqty,"",fee,total);
+
                         } else {
                             if (Quantity.equalsIgnoreCase("0")) {
                                 new MakeToast(object1.optString("msg"));
