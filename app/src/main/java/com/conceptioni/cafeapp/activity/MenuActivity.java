@@ -61,7 +61,7 @@ public class MenuActivity extends AppCompatActivity {
     TextviewRegular tvrNodata;
     int pos = 0;
     SwitchCompat vegswitch;
-    String TotalQty = "", Flag = "";
+    String TotalQty = "0", Flag = "";
     boolean isVeg = false;
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
@@ -80,6 +80,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onResume();
         initmenu();
         clicks();
+        pos = 0;
         if (categoryList.size() > 0) {
             categoryList.get(pos).setIsselect(false);
         }
@@ -167,7 +168,6 @@ public class MenuActivity extends AppCompatActivity {
 
                     Log.d("+++Total", "++++" + TotalQty);
 
-                    setData(tvrCartQty, finalQuantity, position, finalItemsList, TotalQty);
                     cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
 
                     if (cartDataArrayList.isEmpty()) {
@@ -182,6 +182,7 @@ public class MenuActivity extends AppCompatActivity {
                         }
 
                     }
+                    setData(tvrCartQty, finalQuantity, position, finalItemsList, TotalQty);
 
                 });
                 minusiv.setOnClickListener(v -> {
@@ -277,14 +278,39 @@ public class MenuActivity extends AppCompatActivity {
                 if (!totalqty.equalsIgnoreCase("0")) {
                     cartrl.setVisibility(View.VISIBLE);
                     quantitytvb.setVisibility(View.VISIBLE);
-                    quantitytvb.setText(totalqty + " items in cart");
+                   // quantitytvb.setText(totalqty + " items in cart");
+                    cartDataArrayList.clear();
+                    cartDataArrayList = dbOpenHelper.getlastinsertCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+
+                    if (cartDataArrayList.isEmpty()){
+                        quantitytvb.setText(TotalQty + " items in cart");
+                    }else {
+                        Log.d("+++++size","+++"+cartDataArrayList.size());
+                        for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                            Log.d("+++++size","+++"+cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY());
+                            quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
+                        }
+                    }
                     viewtvb.setText("View Cart");
                 } else {
                     cartrl.setVisibility(View.GONE);
                 }
             } else {
                 cartrl.setVisibility(View.VISIBLE);
-                quantitytvb.setText(totalqty + " items in cart");
+               // quantitytvb.setText(totalqty + " items in cart");
+                cartDataArrayList.clear();
+                cartDataArrayList = dbOpenHelper.getlastinsertCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+
+                if (cartDataArrayList.isEmpty()){
+                    quantitytvb.setText(TotalQty + " items in cart");
+                }else {
+                    Log.d("+++++size","+++"+cartDataArrayList.size());
+                    for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                        Log.d("+++++size","+++"+cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY());
+                        quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
+                    }
+                }
+               // viewtvb.setText("View Cart");
                 quantitytvb.setVisibility(View.GONE);
                 viewtvb.setText("View Live Order");
             }
@@ -292,7 +318,20 @@ public class MenuActivity extends AppCompatActivity {
             if (!totalqty.equalsIgnoreCase("0")) {
                 cartrl.setVisibility(View.VISIBLE);
                 quantitytvb.setVisibility(View.VISIBLE);
-                quantitytvb.setText(totalqty + " items in cart");
+              //  quantitytvb.setText(totalqty + " items in cart");
+                cartDataArrayList.clear();
+                cartDataArrayList = dbOpenHelper.getlastinsertCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+
+                if (cartDataArrayList.isEmpty()){
+                    quantitytvb.setText(TotalQty + " items in cart");
+                }else {
+                    Log.d("+++++size","+++"+cartDataArrayList.size());
+                    for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                        Log.d("+++++size","+++"+cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY());
+                        quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
+                    }
+                }
+                viewtvb.setText("View Cart");
             } else {
                 cartrl.setVisibility(View.GONE);
             }
@@ -455,8 +494,6 @@ public class MenuActivity extends AppCompatActivity {
                                                     quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
                                                 }
                                             }
-
-
                                             viewtvb.setText("View Cart");
                                         } else {
                                             cartrl.setVisibility(View.GONE);

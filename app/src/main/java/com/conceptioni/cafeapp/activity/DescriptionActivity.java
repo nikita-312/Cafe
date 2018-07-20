@@ -240,16 +240,14 @@ public class DescriptionActivity extends AppCompatActivity {
                                     } else {
                                         for (int j = 0; j < cartDataArrayList.size(); j++) {
                                             if (cartDataArrayList.get(j).getCOLUMN_ITEM_ID().equalsIgnoreCase(ItemId)) {
-                                                Log.d("+++++iddescupdate","+++++"+ItemId);
+                                                Log.d("+++++iddescupdate","+++++"+ItemId+"+++totalqty "+totalqty);
                                                 dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), Quantity, totalqty, Price, fee, total);
                                             } else {
                                                 Log.d("+++++iddescelseadd","+++++"+ItemId);
                                                 dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), Quantity, totalqty, Price, fee, total);
                                             }
                                         }
-
                                     }
-
                                     if (Flag.equalsIgnoreCase("C")) {
                                         startActivity(new Intent(DescriptionActivity.this, MenuActivity.class));
                                         finish();

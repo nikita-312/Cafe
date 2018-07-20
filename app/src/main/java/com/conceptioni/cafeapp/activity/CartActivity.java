@@ -1,6 +1,7 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.database.DBOpenHelper;
+import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -42,7 +44,8 @@ public class CartActivity extends AppCompatActivity {
     ShimmerRecyclerView rvCart;
     TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal,continueordertvr;
     String subtotal, total, fee;
-    List<CartModel> cartModelsarray = new ArrayList<>();
+    List<CartData> cartModelsarray = new ArrayList<>();
+    List<CartData> cartModelsarraydb = new ArrayList<>();
     ImageView ivBack;
     CartItemAdapter cartItemAdapter;
     RelativeLayout emptycartll,mainrl,nointernetrl;
@@ -78,7 +81,16 @@ public class CartActivity extends AppCompatActivity {
         rvCart.setLayoutManager(linearLayoutManager);
         rvCart.showShimmerAdapter();
 
-        ViewCart();
+        cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+        if (!cartModelsarraydb.isEmpty()){
+            rvCart.hideShimmerAdapter();
+            cartItemAdapter = new CartItemAdapter(cartModelsarraydb);
+            rvCart.setAdapter(cartItemAdapter);
+            tvrCartSubTotal.setText(subtotal);
+            tvrCartFee.setText(fee);
+            tvrCartTotal.setText(total);
+        }
+      // ViewCart();
     }
 
     private void click() {
@@ -87,22 +99,26 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 ImageView ivRemove = view.findViewById(R.id.ivRemove);
-                ivRemove.setOnClickListener(v -> showDeleteAlert(position, cartModelsarray.get(position).getItem_id()));
+                ivRemove.setOnClickListener(v -> showDeleteAlert(position, cartModelsarraydb.get(position).getCOLUMN_ITEM_ID()));
                 ImageView plusiv = view.findViewById(R.id.plusiv);
                 ImageView minusiv = view.findViewById(R.id.minusiv);
                 TextviewRegular tvrCartQty = view.findViewById(R.id.tvrCartQty);
                 plusiv.setOnClickListener(v -> {
-                    int count = Integer.parseInt(cartModelsarray.get(position).getQty());
+                    int count = Integer.parseInt(cartModelsarray.get(position).getCOLUMN_ITEMS_QUANTITY());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
-                    CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
+                    dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),cartModelsarray.get(position).getCOLUMN_ITEM_ID(),cartModelsarray.get(position).getCOLUMN_ITEM_NAME(),"",finalQuantity,cartModelsarray.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(),"",fee,total);
+
+                    //CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                 });
                 minusiv.setOnClickListener(v -> {
-                    if (!cartModelsarray.get(position).getQty().equalsIgnoreCase("0")) {
-                        int count = Integer.parseInt(cartModelsarray.get(position).getQty());
+                    if (!cartModelsarray.get(position).getCOLUMN_ITEMS_QUANTITY().equalsIgnoreCase("0")) {
+                        int count = Integer.parseInt(cartModelsarray.get(position).getCOLUMN_ITEMS_QUANTITY());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
-                        CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
+                        dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),cartModelsarray.get(position).getCOLUMN_ITEM_ID(),cartModelsarray.get(position).getCOLUMN_ITEM_NAME(),"",finalQuantity,cartModelsarray.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(),"",fee,total);
+
+                        //  CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
@@ -121,7 +137,15 @@ public class CartActivity extends AppCompatActivity {
             startActivity(new Intent(CartActivity.this,MenuActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             finish();
         });
-        retryll.setOnClickListener(v -> ViewCart());
+        retryll.setOnClickListener(new View.OnClickListener() {
+                                       @Override
+                                       public void onClick(View view) {
+
+                                           //ViewCart()
+                                       }
+                                   }
+
+        );
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
@@ -130,95 +154,104 @@ public class CartActivity extends AppCompatActivity {
                 .setMessage("Are you sure want to remove the product?")
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
-                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> removeCart(pos, ItemId))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId);
+
+                         dbOpenHelper.updatecolumcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId,cartModelsarray.get(pos).getCOLUMN_ITEM_TOTAL_QUANTITY(),fee,total);
+
+                        // removeCart(pos, ItemId)
+                    }
+                })
                 .create().show();
     }
 
-    public void ViewCart() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-        jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
-
-        Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.viewCart("application/json", jsonObject);
-
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null) {
-                    if (response.isSuccessful()) {
-                        try {
-                            nointernetrl.setVisibility(View.GONE);
-                            mainrl.setVisibility(View.VISIBLE);
-                            emptycartll.setVisibility(View.GONE);
-                            rvCart.setVisibility(View.VISIBLE);
-                            bottom.setVisibility(View.VISIBLE);
-                            JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            if (jsonObject1.getInt("success") == 1) {
-                                subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
-                                fee = String.valueOf(jsonObject1.optInt("fee"));
-                                total = String.valueOf(jsonObject1.optInt("total"));
-                                cartModelsarray.clear();
-                                JSONArray jsonArray = jsonObject1.getJSONArray("data");
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject object = jsonArray.getJSONObject(i);
-                                    CartModel cartModel = new CartModel();
-                                    cartModel.setItem_name(object.getString("item_name"));
-                                    cartModel.setItem_id(object.getString("item_id"));
-                                    cartModel.setPrice(object.getString("price"));
-                                    cartModel.setQty(object.getString("qty"));
-                                    cartModel.setImages(object.optString("image"));
-                                    cartModelsarray.add(cartModel);
-                                }
-                                rvCart.hideShimmerAdapter();
-                                cartItemAdapter = new CartItemAdapter(cartModelsarray);
-                                rvCart.setAdapter(cartItemAdapter);
-                                tvrCartSubTotal.setText(subtotal);
-                                tvrCartFee.setText(fee);
-                                tvrCartTotal.setText(total);
-
-//                                updatedatabase(cartModelsarray,subtotal,fee,total);
-
-                            } else {
-                                rvCart.setVisibility(View.GONE);
-                                bottom.setVisibility(View.GONE);
-                                emptycartll.setVisibility(View.VISIBLE);
-                            }
-
-                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
-                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                        }
-                    } else {
-                        new MakeToast("Error while getting data");
-                        rvCart.setVisibility(View.GONE);
-                        bottom.setVisibility(View.GONE);
-                        emptycartll.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    new MakeToast("Error while getting result");
-                    rvCart.setVisibility(View.GONE);
-                    bottom.setVisibility(View.GONE);
-                    emptycartll.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                rvCart.hideShimmerAdapter();
-                rvCart.setVisibility(View.GONE);
-                bottom.setVisibility(View.GONE);
-                emptycartll.setVisibility(View.VISIBLE);
-                mainrl.setVisibility(View.GONE);
-                nointernetrl.setVisibility(View.VISIBLE);
-
-            }
-        });
-    }
+//    public void ViewCart() {
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+//        jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+//        jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+//
+//        Service service = ApiCall.getRetrofit().create(Service.class);
+//        Call<JsonObject> call = service.viewCart("application/json", jsonObject);
+//
+//        call.enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+//                if (response.body() != null) {
+//                    if (response.isSuccessful()) {
+//                        try {
+//                            nointernetrl.setVisibility(View.GONE);
+//                            mainrl.setVisibility(View.VISIBLE);
+//                            emptycartll.setVisibility(View.GONE);
+//                            rvCart.setVisibility(View.VISIBLE);
+//                            bottom.setVisibility(View.VISIBLE);
+//                            JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
+//                            if (jsonObject1.getInt("success") == 1) {
+//                                subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
+//                                fee = String.valueOf(jsonObject1.optInt("fee"));
+//                                total = String.valueOf(jsonObject1.optInt("total"));
+//                                cartModelsarray.clear();
+//                                JSONArray jsonArray = jsonObject1.getJSONArray("data");
+//                                for (int i = 0; i < jsonArray.length(); i++) {
+//                                    JSONObject object = jsonArray.getJSONObject(i);
+//                                    CartModel cartModel = new CartModel();
+//                                    cartModel.setItem_name(object.getString("item_name"));
+//                                    cartModel.setItem_id(object.getString("item_id"));
+//                                    cartModel.setPrice(object.getString("price"));
+//                                    cartModel.setQty(object.getString("qty"));
+//                                    cartModel.setImages(object.optString("image"));
+//                                    cartModelsarray.add(cartModel);
+//                                }
+//                                rvCart.hideShimmerAdapter();
+//                                cartItemAdapter = new CartItemAdapter(cartModelsarray);
+//                                rvCart.setAdapter(cartItemAdapter);
+//                                tvrCartSubTotal.setText(subtotal);
+//                                tvrCartFee.setText(fee);
+//                                tvrCartTotal.setText(total);
+//
+////                                updatedatabase(cartModelsarray,subtotal,fee,total);
+//
+//                            } else {
+//                                rvCart.setVisibility(View.GONE);
+//                                bottom.setVisibility(View.GONE);
+//                                emptycartll.setVisibility(View.VISIBLE);
+//                            }
+//
+//                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
+//                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//
+//                        }
+//                    } else {
+//                        new MakeToast("Error while getting data");
+//                        rvCart.setVisibility(View.GONE);
+//                        bottom.setVisibility(View.GONE);
+//                        emptycartll.setVisibility(View.VISIBLE);
+//                    }
+//                } else {
+//                    new MakeToast("Error while getting result");
+//                    rvCart.setVisibility(View.GONE);
+//                    bottom.setVisibility(View.GONE);
+//                    emptycartll.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+//                rvCart.hideShimmerAdapter();
+//                rvCart.setVisibility(View.GONE);
+//                bottom.setVisibility(View.GONE);
+//                emptycartll.setVisibility(View.VISIBLE);
+//                mainrl.setVisibility(View.GONE);
+//                nointernetrl.setVisibility(View.VISIBLE);
+//
+//            }
+//        });
+//    }
 
     public void removeCart(final int pos, String ItemId) {
         JsonObject jsonObject = new JsonObject();
@@ -315,59 +348,59 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId,String ItemName) {
-
-        JsonObject object = new JsonObject();
-        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-        object.addProperty("itemid", ItemId);
-        object.addProperty("qty", Quantity);
-        object.addProperty("note", "");
-        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
-
-        Service service = ApiCall.getRetrofit().create(Service.class);
-        Call<JsonObject> call = service.AddToCart("application/json", object);
-
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null) {
-                    try {
-                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
-                        if (object1.optInt("success") == 1) {
-                            cartModelsarray.get(Position).setQty(object1.optString("qty"));
-                            tvrCartQty.setText(object1.optString("qty"));
-                            subtotal = String.valueOf(object1.optInt("subtotal"));
-                            fee = String.valueOf(object1.optInt("fee"));
-                            total = String.valueOf(object1.optInt("total"));
-                            String totalqty = String.valueOf(object1.optInt("totalqty"));
-                            tvrCartSubTotal.setText(subtotal);
-                            tvrCartFee.setText(fee);
-                            tvrCartTotal.setText(total);
-
-                            dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId,ItemName,"",Quantity,totalqty,"",fee,total);
-
-                        } else {
-                            if (Quantity.equalsIgnoreCase("0")) {
-                                new MakeToast(object1.optString("msg"));
-                            } else {
-                                int Quan = Integer.parseInt(Quantity);
-                                tvrCartQty.setText(Quan - 1);
-                                new MakeToast(object1.optString("msg"));
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                new MakeToast(R.string.Checkyournetwork);
-            }
-        });
-
-    }
+//    private void CallQuantity(TextviewRegular tvrCartQty,String Quantity, int Position, String ItemId,String ItemName) {
+//
+//        JsonObject object = new JsonObject();
+//        object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+//        object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+//        object.addProperty("itemid", ItemId);
+//        object.addProperty("qty", Quantity);
+//        object.addProperty("note", "");
+//        object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+//
+//        Service service = ApiCall.getRetrofit().create(Service.class);
+//        Call<JsonObject> call = service.AddToCart("application/json", object);
+//
+//        call.enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+//                if (response.body() != null) {
+//                    try {
+//                        JSONObject object1 = new JSONObject(String.valueOf(response.body()));
+//                        if (object1.optInt("success") == 1) {
+//                            cartModelsarray.get(Position).setQty(object1.optString("qty"));
+//                            tvrCartQty.setText(object1.optString("qty"));
+//                            subtotal = String.valueOf(object1.optInt("subtotal"));
+//                            fee = String.valueOf(object1.optInt("fee"));
+//                            total = String.valueOf(object1.optInt("total"));
+//                            String totalqty = String.valueOf(object1.optInt("totalqty"));
+//                            tvrCartSubTotal.setText(subtotal);
+//                            tvrCartFee.setText(fee);
+//                            tvrCartTotal.setText(total);
+//
+//                            dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),ItemId,ItemName,"",Quantity,totalqty,"",fee,total);
+//
+//                        } else {
+//                            if (Quantity.equalsIgnoreCase("0")) {
+//                                new MakeToast(object1.optString("msg"));
+//                            } else {
+//                                int Quan = Integer.parseInt(Quantity);
+//                                tvrCartQty.setText(Quan - 1);
+//                                new MakeToast(object1.optString("msg"));
+//                            }
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+//                new MakeToast(R.string.Checkyournetwork);
+//            }
+//        });
+//
+//    }
 
 }

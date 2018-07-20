@@ -14,6 +14,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
+import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
@@ -24,9 +25,9 @@ import java.util.List;
 public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuViewHolder> {
 
     private Context context;
-    private List<CartModel> cartModelsarray;
+    private List<CartData> cartModelsarray;
 
-    public CartItemAdapter(List<CartModel> cartModelsarray) {
+    public CartItemAdapter(List<CartData> cartModelsarray) {
         this.cartModelsarray = cartModelsarray;
     }
 
@@ -42,9 +43,9 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        holder.tvrCartName.setText(cartModelsarray.get(position).getItem_name());
-        holder.tvrCartQty.setText(cartModelsarray.get(position).getQty());
-        holder.tvbCartPrice.setText(cartModelsarray.get(position).getPrice());
+        holder.tvrCartName.setText(cartModelsarray.get(position).getCOLUMN_ITEM_NAME());
+        holder.tvrCartQty.setText(cartModelsarray.get(position).getCOLUMN_ITEMS_QUANTITY());
+        holder.tvbCartPrice.setText(cartModelsarray.get(position).getCOLUMN_ORIGINAL_PRICE());
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.no_image)
@@ -53,7 +54,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
                 .priority(Priority.HIGH);
 
 
-        Glide.with(context).load(cartModelsarray.get(position).getImages()).apply(options).into(holder.imageView1);
+      //  Glide.with(context).load(cartModelsarray.get(position).getImages()).apply(options).into(holder.imageView1);
     }
 
     @Override
