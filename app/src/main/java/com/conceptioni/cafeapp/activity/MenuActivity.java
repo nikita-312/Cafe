@@ -73,11 +73,15 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         dbOpenHelper = new DBOpenHelper(MenuActivity.this);
         sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+
         initmenu();
         clicks();
         if (categoryList.size() > 0) {
@@ -116,7 +120,9 @@ public class MenuActivity extends AppCompatActivity {
                     }
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
+
                     pos = position;
+                    Log.d("+++++pos","+++cat "+pos);
 
                     if (isVeg) {
                         ShowVegData(categoryList.get(position).getItems());
@@ -152,6 +158,7 @@ public class MenuActivity extends AppCompatActivity {
                 TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
                 ProgressBar progressBar = view.findViewById(R.id.progress);
                 List<Items> itemsList;
+                Log.d("+++++pos","+++ "+pos);
                 itemsList = categoryList.get(pos).getItems();
                 List<Items> finalItemsList = itemsList;
                 plusiv.setOnClickListener(v -> {
@@ -217,9 +224,13 @@ public class MenuActivity extends AppCompatActivity {
                     }
 
                 });
+                Log.d("+++++idmenu","+++++1 "+finalItemsList.get(position).getItem_id()+"pos "+position);
+
                 itemll.setOnClickListener(view1 -> {
+                    Log.d("+++++idmenu","+++++2 "+finalItemsList.get(position).getItem_id()+"pos "+position);
+
                     startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty));
-                    Log.d("+++++idmenu","+++++"+finalItemsList.get(position).getItem_id());
+                    Log.d("+++++idmenu","+++++"+finalItemsList.get(position).getItem_id()+"pos "+position);
                 });
             }
 
@@ -619,6 +630,7 @@ public class MenuActivity extends AppCompatActivity {
             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
         }
     }
+
 
     @Override
     public void onBackPressed() {

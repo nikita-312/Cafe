@@ -47,7 +47,6 @@ public class CardActivity extends AppCompatActivity {
                 CallCard();
             }            else new MakeToast("Please choose payment method");
 
-
         });
         llCard.setOnClickListener(v -> {
             llCard.setBackgroundResource(R.drawable.select_card_drawable);
