@@ -99,7 +99,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         cartDataArrayList.clear();
         SQLiteDatabase db = this.getReadableDatabase();
         @SuppressLint("Recycle") Cursor res =  db.rawQuery( "select * from "+ TABLE_NAME + " WHERE " + COLUMN_USER_ID + " = " + Userid, null );
-        if (res.getCount()>0){
+        if (res.getCount()>0) {
             res.moveToFirst();
             for (int i = 0; i<res.getCount(); i++) {
                 CartData cartData  = new CartData();
