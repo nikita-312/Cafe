@@ -152,6 +152,7 @@ public class MenuActivity extends AppCompatActivity {
                 TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
                 ProgressBar progressBar = view.findViewById(R.id.progress);
                 List<Items> itemsList;
+
                 itemsList = categoryList.get(pos).getItems();
                 List<Items> finalItemsList = itemsList;
                 plusiv.setOnClickListener(v -> {

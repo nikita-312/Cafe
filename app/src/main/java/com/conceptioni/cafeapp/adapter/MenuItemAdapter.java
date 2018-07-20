@@ -2,8 +2,6 @@ package com.conceptioni.cafeapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,8 +17,6 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
-import com.conceptioni.cafeapp.activity.DescriptionActivity;
-import com.conceptioni.cafeapp.activity.MenuActivity;
 import com.conceptioni.cafeapp.database.DBOpenHelper;
 import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.model.Items;
@@ -37,7 +33,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
     private Context context;
     private List<Items> itemsArrayList;
-    List<CartData> cartDataArrayList = new ArrayList<>();
+    private List<CartData> cartDataArrayList = new ArrayList<>();
 
     public MenuItemAdapter(List<Items> itemsArrayList) {
         this.itemsArrayList = itemsArrayList;
@@ -75,20 +71,19 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
 
         DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+//        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
 
         cartDataArrayList.clear();
         cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
 
+
+        /*if quantity is update from menu and in detail user not change in quantity so here we check first database quantity and if there then set database quantity*/
         if (!cartDataArrayList.isEmpty()){
             for (int i = 0; i <cartDataArrayList.size() ; i++) {
                 Log.d("++++size1234","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                 if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(itemsArrayList.get(position).getItem_id())){
                     Log.d("++++size1234if","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                     itemsArrayList.get(position).setQty(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
-//                    holder.quantytvr.setText(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
-
-
                 }
 //                else {
 //                    holder.quantytvr.setText(itemsArrayList.get(position).getQty());
