@@ -52,7 +52,7 @@ public class CartActivity extends AppCompatActivity {
     LinearLayout bottom,retryll;
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
