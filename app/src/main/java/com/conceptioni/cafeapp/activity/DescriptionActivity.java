@@ -84,7 +84,11 @@ public class DescriptionActivity extends AppCompatActivity {
             itemsArrayList.clear();
             itemsArrayList = getArrayList();
             for (int i = 0; i < itemsArrayList.size(); i++) {
+                Log.d("+++++iddesc","+++for "+ItemId+"+++ "+itemsArrayList.get(i).getItem_id());
+
                 if (ItemId.equalsIgnoreCase(itemsArrayList.get(i).getItem_id())) {
+                    Log.d("+++++iddesc","+++if ");
+
                     Itemnametvr.setText(itemsArrayList.get(i).getItem_name());
                     ItemPricetvr.setText(itemsArrayList.get(i).getPrice() + " Rs");
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
