@@ -148,6 +148,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
                 ImageView plusiv = view.findViewById(R.id.plusiv);
                 ImageView minusiv = view.findViewById(R.id.minusiv);
+                LinearLayout itemll = view.findViewById(R.id.itemll);
                 TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
                 ProgressBar progressBar = view.findViewById(R.id.progress);
                 List<Items> itemsList;
@@ -171,7 +172,14 @@ public class MenuActivity extends AppCompatActivity {
                     if (cartDataArrayList.isEmpty()) {
                         dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
                     } else {
-                        dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
+                        for (int i = 0; i < cartDataArrayList.size(); i++) {
+                            if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(finalItemsList.get(position).getItem_id())) {
+                                dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
+                            } else {
+                                dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
+                            }
+                        }
+
                     }
 
                 });
@@ -195,12 +203,23 @@ public class MenuActivity extends AppCompatActivity {
                         if (cartDataArrayList.isEmpty()) {
                             dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
                         } else {
-                            dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
+                            for (int i = 0; i < cartDataArrayList.size(); i++) {
+                                if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(finalItemsList.get(position).getItem_id())) {
+                                    dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
+                                } else {
+                                    dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
+                                }
+                            }
+//                            dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
                         }
                     } else {
                         new MakeToast("Quantity can not be less than 0");
                     }
 
+                });
+                itemll.setOnClickListener(view1 -> {
+                    startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty));
+                    Log.d("+++++idmenu","+++++"+finalItemsList.get(position).getItem_id());
                 });
             }
 
@@ -215,7 +234,7 @@ public class MenuActivity extends AppCompatActivity {
     private void SendData() {
 
         List<CartData> cartDataArrayList;
-        cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+        cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         JsonObject data = new JsonObject();
         JsonArray jsonArray = new JsonArray();
 
@@ -229,17 +248,17 @@ public class MenuActivity extends AppCompatActivity {
                 jsonArray.add(cartdataoject);
             }
 
-            data.addProperty("userid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-            data.addProperty("cafeid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable));
-            data.addProperty("authid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
-            data.add("items",jsonArray);
+            data.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+            data.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+            data.addProperty("authid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
+            data.add("items", jsonArray);
 
             String jsonFormattedString = data.toString().replaceAll("\\\\", "");
-            Log.d("+++++data","++++"+data.toString() + jsonFormattedString + "++++" + data);
+            Log.d("+++++data", "++++" + data.toString() + jsonFormattedString + "++++" + data);
             Addtocart(data);
 
-        }else {
-            Log.d("+++++data","++++else");
+        } else {
+            Log.d("+++++data", "++++else");
         }
 
     }
@@ -422,14 +441,37 @@ public class MenuActivity extends AppCompatActivity {
                                         if (!TotalQty.equalsIgnoreCase("0")) {
                                             cartrl.setVisibility(View.VISIBLE);
                                             quantitytvb.setVisibility(View.VISIBLE);
-                                            quantitytvb.setText(TotalQty + " items in cart");
+
+                                            cartDataArrayList.clear();
+                                            cartDataArrayList = dbOpenHelper.getlastinsertCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+
+                                            if (cartDataArrayList.isEmpty()){
+                                                quantitytvb.setText(TotalQty + " items in cart");
+                                            }else {
+                                                Log.d("+++++size","+++"+cartDataArrayList.size());
+                                                for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                                                    Log.d("+++++size","+++"+cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY());
+                                                    quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
+                                                }
+                                            }
+
+
                                             viewtvb.setText("View Cart");
                                         } else {
                                             cartrl.setVisibility(View.GONE);
                                         }
                                     } else {
                                         cartrl.setVisibility(View.VISIBLE);
-                                        quantitytvb.setText(TotalQty + " items in cart");
+                                        if (cartDataArrayList.isEmpty()){
+                                            quantitytvb.setText(TotalQty + " items in cart");
+                                        }else {
+                                            Log.d("+++++size","+++"+cartDataArrayList.size());
+                                            for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                                                Log.d("+++++size","+++"+cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY());
+                                                quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
+                                            }
+                                        }
+//                                        quantitytvb.setText(TotalQty + " items in cart");
                                         quantitytvb.setVisibility(View.GONE);
                                         viewtvb.setText("View Live Order");
                                     }
@@ -437,7 +479,16 @@ public class MenuActivity extends AppCompatActivity {
                                     if (!TotalQty.equalsIgnoreCase("0")) {
                                         cartrl.setVisibility(View.VISIBLE);
                                         quantitytvb.setVisibility(View.VISIBLE);
-                                        quantitytvb.setText(TotalQty + " items in cart");
+                                        if (cartDataArrayList.isEmpty()){
+                                            quantitytvb.setText(TotalQty + " items in cart");
+                                        }else {
+                                            Log.d("+++++size","+++"+cartDataArrayList.size());
+                                            for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                                                Log.d("+++++size","+++"+cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY());
+                                                quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
+                                            }
+                                        }
+//                                        quantitytvb.setText(TotalQty + " items in cart");
                                     } else {
                                         cartrl.setVisibility(View.GONE);
                                     }
@@ -526,7 +577,6 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void Addtocart(JsonObject jsonObject) {
-
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.addtocartall("application/json", jsonObject);
         call.enqueue(new Callback<JsonObject>() {
@@ -538,7 +588,7 @@ public class MenuActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 addtocartprogress.setVisibility(View.GONE);
-                                startActivity(new Intent(MenuActivity.this,CartActivity.class));
+                                startActivity(new Intent(MenuActivity.this, CartActivity.class));
                             } else {
                                 new MakeToast(object.optString("msg"));
                                 addtocartprogress.setVisibility(View.GONE);

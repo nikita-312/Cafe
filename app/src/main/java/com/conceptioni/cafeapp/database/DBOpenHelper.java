@@ -30,6 +30,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String COLUMN_NOTE = "NOTE";
     private static final String COLUMN_CAFE_ID = "CAFE_ID";
 
+    private List<CartData> cartDataArrayListwithid = new ArrayList<>();
+    private List<CartData> cartDataArrayListwithmaxvalue = new ArrayList<>();
     private List<CartData> cartDataArrayList = new ArrayList<>();
 
     private static final String CREATE_CART_TABLE = "CREATE TABLE " + TABLE_NAME
@@ -69,7 +71,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
     public List<CartData> getCartData(String Userid,String itemid) {
-        cartDataArrayList.clear();
+        cartDataArrayListwithid.clear();
         SQLiteDatabase db = this.getReadableDatabase();
         @SuppressLint("Recycle") Cursor res =  db.rawQuery( "select * from "+ TABLE_NAME + " WHERE " + COLUMN_USER_ID + " = " + Userid + " AND " + COLUMN_ITEM_ID + " = " + itemid , null );
         if (res.getCount()>0){
@@ -86,11 +88,11 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 cartData.setCOLUMN_ORIGINAL_PRICE(res.getString(7));
                 cartData.setCOLUMN_EXTRA_PRICE(res.getString(8));
                 cartData.setCOLUMN_ITEM_TOTAL_PRICE(res.getString(9));
-                cartDataArrayList.add(cartData);
+                cartDataArrayListwithid.add(cartData);
                 res.moveToNext();
             }
         }
-        return cartDataArrayList;
+        return cartDataArrayListwithid;
     }
 
     public List<CartData> getAllCartData(String Userid) {
@@ -116,6 +118,32 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             }
         }
         return cartDataArrayList;
+    }
+
+    public List<CartData> getlastinsertCartData(String Userid) {
+        cartDataArrayListwithmaxvalue.clear();
+        SQLiteDatabase db = this.getReadableDatabase();
+        @SuppressLint("Recycle") Cursor res =  db.rawQuery( "select * , Max(TOTAL_QUANTITY) from "+ TABLE_NAME + " WHERE " + COLUMN_USER_ID + " = " + Userid, null );
+        if (res.getCount()>0){
+            Log.d("+++++size","++++"+res.getCount());
+            res.moveToFirst();
+            for (int i = 0; i<res.getCount(); i++) {
+                CartData cartData  = new CartData();
+                cartData.setCOLUMN_USER_ID(res.getString(0));
+                cartData.setCOLUMN_CAFE_ID(res.getString(1));
+                cartData.setCOLUMN_ITEM_ID(res.getString(2));
+                cartData.setCOLUMN_ITEM_NAME(res.getString(3));
+                cartData.setCOLUMN_NOTE(res.getString(4));
+                cartData.setCOLUMN_ITEMS_QUANTITY(res.getString(5));
+                cartData.setCOLUMN_ITEM_TOTAL_QUANTITY(res.getString(6));
+                cartData.setCOLUMN_ORIGINAL_PRICE(res.getString(7));
+                cartData.setCOLUMN_EXTRA_PRICE(res.getString(8));
+                cartData.setCOLUMN_ITEM_TOTAL_PRICE(res.getString(9));
+                cartDataArrayListwithmaxvalue.add(cartData);
+                res.moveToNext();
+            }
+        }
+        return cartDataArrayListwithmaxvalue;
     }
 
 
@@ -147,7 +175,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public void deletetable(){
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_NAME,null,null);
-        Log.d("++++success","+++");
     }
 
     public void deleterow(String userid,String itemid){

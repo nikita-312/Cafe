@@ -3,8 +3,10 @@ package com.conceptioni.cafeapp.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +20,24 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.DescriptionActivity;
+import com.conceptioni.cafeapp.activity.MenuActivity;
+import com.conceptioni.cafeapp.database.DBOpenHelper;
+import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.model.Items;
+import com.conceptioni.cafeapp.utils.Constant;
+import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuViewHolder> {
 
     private Context context;
     private List<Items> itemsArrayList;
+    List<CartData> cartDataArrayList = new ArrayList<>();
 
     public MenuItemAdapter(List<Items> itemsArrayList) {
         this.itemsArrayList = itemsArrayList;
@@ -49,9 +58,9 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 
-        holder.itemll.setOnClickListener((View v) ->
-                context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId", itemsArrayList.get(position).getItem_id()))
-        );
+//        holder.itemll.setOnClickListener((View v) ->
+//                context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId", itemsArrayList.get(position).getItem_id()))
+//        );
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
@@ -63,6 +72,30 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         Glide.with(context).load(itemsArrayList.get(position).getImage()).apply(options).into(holder.imageView1);
         holder.itemnametvr.setText(itemsArrayList.get(position).getItem_name());
         holder.itempricetvb.setText(itemsArrayList.get(position).getPrice() + " Rs");
+
+
+        DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+
+        cartDataArrayList.clear();
+        cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+
+        if (!cartDataArrayList.isEmpty()){
+            for (int i = 0; i <cartDataArrayList.size() ; i++) {
+                Log.d("++++size1234","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+                if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(itemsArrayList.get(position).getItem_id())){
+                    Log.d("++++size1234if","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+                    itemsArrayList.get(position).setQty(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+//                    holder.quantytvr.setText(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+
+
+                }
+//                else {
+//                    holder.quantytvr.setText(itemsArrayList.get(position).getQty());
+//                }
+            }
+        }
+        Log.d("++++++qty","++++"+itemsArrayList.get(position).getQty());
         holder.quantytvr.setText(itemsArrayList.get(position).getQty());
 
     }

@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/splash_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:src="@drawable/splash_cafe_logo"
         tools:ignore="ContentDescription" />
@@ -30,7 +30,8 @@
         android:text="C A F E"
         android:textColor="@color/colorwhite"
         android:textSize="@dimen/sp_30"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
