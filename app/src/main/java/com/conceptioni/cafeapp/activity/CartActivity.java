@@ -202,6 +202,7 @@ public class CartActivity extends AppCompatActivity {
                 })
                 .create().show();
     }
+
 //    public void ViewCart() {
 //        JsonObject jsonObject = new JsonObject();
 //        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -287,6 +288,7 @@ public class CartActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
+
     public void removeCart(final int pos, String ItemId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("itemid", ItemId);
