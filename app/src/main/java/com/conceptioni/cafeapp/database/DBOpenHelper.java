@@ -29,6 +29,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_ID = "USER_ID";
     private static final String COLUMN_NOTE = "NOTE";
     private static final String COLUMN_CAFE_ID = "CAFE_ID";
+    private static final String COLUMN_ITEM_DESC = "ITEM_DESC";
+    private static final String COLUMN_ITEM_TYPE = "ITEM_TYPE";
+    private static final String COLUMN_ITEM_IMAGE = "ITEM_IMAGE";
 
     private List<CartData> cartDataArrayListwithid = new ArrayList<>();
     private List<CartData> cartDataArrayListwithmaxvalue = new ArrayList<>();
@@ -36,7 +39,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_CART_TABLE = "CREATE TABLE " + TABLE_NAME
             + " (" + COLUMN_USER_ID + " TEXT, " + COLUMN_CAFE_ID + " TEXT, " + COLUMN_ITEM_ID + " TEXT, "+ COLUMN_ITEM_NAME + " TEXT, "+ COLUMN_NOTE + " TEXT, "
-            + COLUMN_ITEMS_QUANTITY +" TEXT, "+ COLUMN_ITEM_TOTAL_QUANTITY + " TEXT, "+ COLUMN_ORIGINAL_PRICE + " TEXT, "+ COLUMN_EXTRA_PRICE + " TEXT, "+ COLUMN_ITEM_TOTAL_PRICE + " TEXT"
+            + COLUMN_ITEMS_QUANTITY +" TEXT, "+ COLUMN_ITEM_TOTAL_QUANTITY + " TEXT, "+ COLUMN_ORIGINAL_PRICE + " TEXT, " + COLUMN_EXTRA_PRICE + " TEXT, "+ COLUMN_ITEM_TOTAL_PRICE + " TEXT, " + COLUMN_ITEM_DESC + " TEXT, " + COLUMN_ITEM_TYPE + " TEXT, " + COLUMN_ITEM_IMAGE + " TEXT"
             + ") ";
 
     public DBOpenHelper(Context context) {
@@ -54,7 +57,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice) {
+    public void addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USER_ID, userid);
@@ -67,6 +70,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ORIGINAL_PRICE, originalprice);
         contentValues.put(COLUMN_EXTRA_PRICE, extraprice);
         contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
+        contentValues.put(COLUMN_ITEM_DESC, desc);
+        contentValues.put(COLUMN_ITEM_TYPE, itemtype);
+        contentValues.put(COLUMN_ITEM_IMAGE, image);
         db.insert(TABLE_NAME, null, contentValues);
     }
 

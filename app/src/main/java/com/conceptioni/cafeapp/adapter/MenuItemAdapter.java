@@ -84,14 +84,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                 if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(itemsArrayList.get(position).getItem_id())){
                     Log.d("++++size1234if","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                     itemsArrayList.get(position).setQty(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+                    Log.d("++++size123456if","++++"+itemsArrayList.get(position).getQty());
+                    holder.quantytvr.setText(itemsArrayList.get(position).getQty());
                 }
 //                else {
 //                    holder.quantytvr.setText(itemsArrayList.get(position).getQty());
 //                }
             }
+        }else {
+            holder.quantytvr.setText(itemsArrayList.get(position).getQty());
         }
-        Log.d("++++++qty","++++"+itemsArrayList.get(position).getQty());
-        holder.quantytvr.setText(itemsArrayList.get(position).getQty());
+
 
     }
 

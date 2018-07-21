@@ -157,11 +157,12 @@ public class MenuActivity extends AppCompatActivity {
                 List<Items> finalItemsList = itemsList;
                 plusiv.setOnClickListener(v -> {
                     Flag = "A";
+                    Log.d("+++Total", "++++" + finalItemsList.get(position).getQty());
                     int count = Integer.parseInt(finalItemsList.get(position).getQty());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
                     progressBar.setVisibility(View.GONE);
-
+                    finalItemsList.get(position).setQty(finalQuantity);
                     int totalqty = Integer.parseInt(TotalQty) + 1;
                     TotalQty = String.valueOf(totalqty);
 
@@ -191,6 +192,7 @@ public class MenuActivity extends AppCompatActivity {
                         String finalQuantity = String.valueOf(Quantity);
                         progressBar.setVisibility(View.GONE);
 
+                        finalItemsList.get(position).setQty(finalQuantity);
                         int totalqty = Integer.parseInt(TotalQty) - 1;
                         TotalQty = String.valueOf(totalqty);
 
@@ -220,14 +222,13 @@ public class MenuActivity extends AppCompatActivity {
         cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
 
         if (cartDataArrayList.isEmpty()) {
-            dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "");
+            dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "",finalItemsList.get(position).getDesc(),finalItemsList.get(position).getItem_type(),finalItemsList.get(position).getImage());
         } else {
             for (int i = 0; i < cartDataArrayList.size(); i++) {
                 if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(finalItemsList.get(position).getItem_id())) {
                     if (finalQuantity.equalsIgnoreCase("0")) {
                         Integer deletedRows = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
                         if (deletedRows > 0) {
-                            Log.d("+++++update","+++++"+TotalQty);
                             boolean isupdate = dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, "", "");
                             if (isupdate) {
                                 List<CartData> cartData;
@@ -235,16 +236,14 @@ public class MenuActivity extends AppCompatActivity {
                             }
                         }
                     }else {
-                        Log.d("+++++update","+++++"+TotalQty);
                         boolean isupdate = dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, "", "");
                     }
 //                    dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "");
                 } else {
-                    dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "");
+                    dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "",finalItemsList.get(position).getDesc(),finalItemsList.get(position).getItem_type(),finalItemsList.get(position).getImage());
                 }
             }
         }
-        Log.d("Total","+++++"+TotalQty);
         setData(tvrCartQty, finalQuantity, position, finalItemsList);
     }
 
@@ -253,8 +252,10 @@ public class MenuActivity extends AppCompatActivity {
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
         itemsList.get(Position).setQty(Quantity);
         tvrCartQty.setText(Quantity);
+//        itemsList.get(Position).setQty(Quantity);
+//        Log.d("+++++++addorupdate","+++++"+Quantity);
         SaveArrylistinShared(itemsList);
-
+//        SetAdapter(itemsList);
         checkdata();
 //        if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
 //            if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0")) {
@@ -420,7 +421,6 @@ public class MenuActivity extends AppCompatActivity {
                                 if (categoryList.size() > 0) {
                                     SetAdapter(categoryList.get(0).getItems());
                                 }
-
                                 checkdata();
 
                             } else {
