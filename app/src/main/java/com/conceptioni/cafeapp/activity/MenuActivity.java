@@ -165,7 +165,6 @@ public class MenuActivity extends AppCompatActivity {
                     finalItemsList.get(position).setQty(finalQuantity);
                     int totalqty = Integer.parseInt(TotalQty) + 1;
                     TotalQty = String.valueOf(totalqty);
-
 //                    Log.d("+++Total456", "++++" + TotalQty + "++++" +Quantity);
 //                    cartDataArrayList.clear();
 //                    cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
