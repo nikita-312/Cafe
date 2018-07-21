@@ -66,16 +66,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
 
         DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
-        List<CartData> cartDataArrayList;
+        List<CartData> cartDataArrayList = new ArrayList<>();
+        cartDataArrayList.clear();
         cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         /*if quantity is update from menu and in detail user not change in quantity so here we check first database quantity and if there then set database quantity*/
         if (!cartDataArrayList.isEmpty()){
             for (int i = 0; i <cartDataArrayList.size() ; i++) {
                 Log.d("++++size1234","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                 if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(itemsArrayList.get(position).getItem_id())){
-                    Log.d("++++size1234if","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
+//                    Log.d("++++size1234if","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                     itemsArrayList.get(position).setQty(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
-                    Log.d("++++size123456if","++++"+itemsArrayList.get(position).getQty());
+//                    Log.d("++++size123456if","++++"+itemsArrayList.get(position).getQty());
                     holder.quantytvr.setText(itemsArrayList.get(position).getQty());
                 }
             }

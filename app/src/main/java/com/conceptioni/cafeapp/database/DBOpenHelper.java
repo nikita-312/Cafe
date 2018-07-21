@@ -74,6 +74,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_TYPE, itemtype);
         contentValues.put(COLUMN_ITEM_IMAGE, image);
         db.insert(TABLE_NAME, null, contentValues);
+        Log.d("+++++++addquery","++++++");
     }
 
     public List<CartData> getCartData(String Userid,String itemid) {
