@@ -51,8 +51,6 @@ public class CartActivity extends AppCompatActivity {
     LinearLayout bottom, retryll;
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
-
-    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,24 +119,44 @@ public class CartActivity extends AppCompatActivity {
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
                     Log.d("+++++finalQuantity","++ "+finalQuantity+"++count "+count);
+
                     dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), "", fee, total);
                     tvrCartQty.setText(finalQuantity);
                     //CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                 });
                 minusiv.setOnClickListener(v -> {
-                    if (!cartModelsarraydb.get(position).getCOLUMN_ITEMS_QUANTITY().equalsIgnoreCase("0")) {
+                    minusiv.setClickable(true);
+
+                    //  if (!cartModelsarraydb.get(position).getCOLUMN_ITEMS_QUANTITY().equalsIgnoreCase("0")) {
                         List<CartData> cartDataList;
                         cartDataList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
                         int count = Integer.parseInt(cartDataList.get(position).getCOLUMN_ITEMS_QUANTITY());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
                         Log.d("+++++finalQuantity","-- "+finalQuantity);
-                        dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), "", fee, total);
-                        tvrCartQty.setText(finalQuantity);
+                        if (Quantity >= 0) {
+                            dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), "", fee, total);
+                            tvrCartQty.setText(finalQuantity);
+                        }else{
+                            minusiv.setClickable(false);
+                        }
+
+                        if (finalQuantity.equalsIgnoreCase("0")) {
+                            Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID());
+                            if (deleteRow > 0)
+                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), fee, total);
+                            cartModelsarraydb.remove(position);
+                            cartItemAdapter.notifyDataSetChanged();
+                            if (cartModelsarraydb.isEmpty()) {
+                                emptycartll.setVisibility(View.VISIBLE);
+                                rvCart.setVisibility(View.GONE);
+                                bottom.setVisibility(View.GONE);
+                            }
+                        }
                         //  CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
-                    } else {
-                        new MakeToast("Quantity can not be less than 0");
-                    }
+//                    } else {
+//                        new MakeToast("Quantity can not be less than 0");
+//                    }
                 });
             }
 
@@ -159,9 +177,9 @@ public class CartActivity extends AppCompatActivity {
                 cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
                 if (!cartModelsarraydb.isEmpty()) {
                     mainrl.setVisibility(View.VISIBLE);
-                            emptycartll.setVisibility(View.GONE);
-                            rvCart.setVisibility(View.VISIBLE);
-                            bottom.setVisibility(View.VISIBLE);
+                    emptycartll.setVisibility(View.GONE);
+                    rvCart.setVisibility(View.VISIBLE);
+                    bottom.setVisibility(View.VISIBLE);
                     rvCart.hideShimmerAdapter();
                     cartItemAdapter = new CartItemAdapter(cartModelsarraydb);
                     rvCart.setAdapter(cartItemAdapter);
@@ -202,7 +220,6 @@ public class CartActivity extends AppCompatActivity {
                 })
                 .create().show();
     }
-
 //    public void ViewCart() {
 //        JsonObject jsonObject = new JsonObject();
 //        jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));

@@ -103,7 +103,6 @@ public class DescriptionActivity extends AppCompatActivity {
                     Glide.with(DescriptionActivity.this).load(itemsArrayList.get(i).getImage()).apply(options).into(itemiv);
                 }
             }
-
         }
     }
 

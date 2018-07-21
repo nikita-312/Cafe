@@ -166,7 +166,6 @@ public class MenuActivity extends AppCompatActivity {
                     TotalQty = String.valueOf(totalqty);
 
                     Log.d("+++Total", "++++" + TotalQty);
-
 //                    cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
 //
 //                    if (cartDataArrayList.isEmpty()) {
@@ -182,8 +181,6 @@ public class MenuActivity extends AppCompatActivity {
 //
 //                    }
                     addorupdatedataindatabase(tvrCartQty,position, finalItemsList, finalQuantity);
-
-
                 });
                 minusiv.setOnClickListener(v -> {
                     if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0")) {
@@ -203,11 +200,10 @@ public class MenuActivity extends AppCompatActivity {
                     } else {
                         minusiv.setClickable(false);
                     }
-
                 });
                 itemll.setOnClickListener(view1 -> {
                     startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty));
-                    Log.d("+++++idmenu", "+++++" + finalItemsList.get(position).getItem_id());
+                    Log.d("+++++idmenu", "+++++" + finalItemsList.get(position).getItem_id()+"++++TotalQty "+TotalQty);
                 });
             }
 
