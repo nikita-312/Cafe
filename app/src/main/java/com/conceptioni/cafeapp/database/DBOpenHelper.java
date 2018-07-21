@@ -162,6 +162,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_EXTRA_PRICE, extraprice);
         contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
+        Log.d("+++++finalQuantity","++++db "+quant);
     }
 
     public void updatecolumcartdata(String userid,String itemid,String totalquant,String extraprice,String totalprice) {
@@ -193,5 +194,4 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         return database.delete(TABLE_NAME, COLUMN_USER_ID + " = ? AND " + COLUMN_ITEM_ID + " = ?",new String[] {userid,itemid});
     }
-
 }
