@@ -19,7 +19,6 @@ import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.adapter.CartItemAdapter;
 import com.conceptioni.cafeapp.database.DBOpenHelper;
 import com.conceptioni.cafeapp.model.CartData;
-import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.RecyclerTouchListener;
@@ -28,7 +27,6 @@ import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
 import com.tabassum.shimmerRecyclerView.ShimmerRecyclerView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,17 +40,18 @@ import retrofit2.Response;
 
 public class CartActivity extends AppCompatActivity {
     ShimmerRecyclerView rvCart;
-    TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal,continueordertvr;
+    TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal, continueordertvr;
     String subtotal, total, fee;
     List<CartData> cartModelsarray = new ArrayList<>();
     List<CartData> cartModelsarraydb = new ArrayList<>();
     ImageView ivBack;
     CartItemAdapter cartItemAdapter;
-    RelativeLayout emptycartll,mainrl,nointernetrl;
-    LinearLayout bottom,retryll;
+    RelativeLayout emptycartll, mainrl, nointernetrl;
+    LinearLayout bottom, retryll;
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
-//
+
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +80,8 @@ public class CartActivity extends AppCompatActivity {
         rvCart.setLayoutManager(linearLayoutManager);
         rvCart.showShimmerAdapter();
 
-        cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-        if (!cartModelsarraydb.isEmpty()){
+        cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        if (!cartModelsarraydb.isEmpty()) {
             rvCart.hideShimmerAdapter();
             cartItemAdapter = new CartItemAdapter(cartModelsarraydb);
             rvCart.setAdapter(cartItemAdapter);
@@ -90,7 +89,7 @@ public class CartActivity extends AppCompatActivity {
             tvrCartFee.setText(fee);
             tvrCartTotal.setText(total);
         }
-      // ViewCart();
+        // ViewCart();
     }
 
     private void click() {
@@ -107,7 +106,7 @@ public class CartActivity extends AppCompatActivity {
                     int count = Integer.parseInt(cartModelsarraydb.get(position).getCOLUMN_ITEMS_QUANTITY());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
-                    dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(),cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(),"",finalQuantity,cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(),"",fee,total);
+                    dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), "", fee, total);
 
                     //CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                 });
@@ -116,7 +115,7 @@ public class CartActivity extends AppCompatActivity {
                         int count = Integer.parseInt(cartModelsarraydb.get(position).getCOLUMN_ITEMS_QUANTITY());
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
-                        dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable),cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(),cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(),"",finalQuantity,cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(),"",fee,total);
+                        dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), "", fee, total);
 
                         //  CallQuantity(tvrCartQty, finalQuantity, position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                     } else {
@@ -134,24 +133,24 @@ public class CartActivity extends AppCompatActivity {
         ivBack.setOnClickListener(v -> finish());
 
         continueordertvr.setOnClickListener(v -> {
-            startActivity(new Intent(CartActivity.this,MenuActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            startActivity(new Intent(CartActivity.this, MenuActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             finish();
         });
         retryll.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View view) {
-                                           cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-                                           if (!cartModelsarraydb.isEmpty()){
-                                               rvCart.hideShimmerAdapter();
-                                               cartItemAdapter = new CartItemAdapter(cartModelsarraydb);
-                                               rvCart.setAdapter(cartItemAdapter);
-                                               tvrCartSubTotal.setText(subtotal);
-                                               tvrCartFee.setText(fee);
-                                               tvrCartTotal.setText(total);
-                                           }
-                                           //ViewCart()
-                                       }
-                                   });
+            @Override
+            public void onClick(View view) {
+                cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+                if (!cartModelsarraydb.isEmpty()) {
+                    rvCart.hideShimmerAdapter();
+                    cartItemAdapter = new CartItemAdapter(cartModelsarraydb);
+                    rvCart.setAdapter(cartItemAdapter);
+                    tvrCartSubTotal.setText(subtotal);
+                    tvrCartFee.setText(fee);
+                    tvrCartTotal.setText(total);
+                }
+                //ViewCart()
+            }
+        });
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
@@ -163,9 +162,12 @@ public class CartActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId);
 
-                         dbOpenHelper.updatecolumcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId,cartModelsarraydb.get(pos).getCOLUMN_ITEM_TOTAL_QUANTITY(),fee,total);
+                        dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
+                        cartModelsarraydb.remove(pos);
+                        cartItemAdapter.notifyDataSetChanged();
+
+                        dbOpenHelper.updatecolumcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId, cartModelsarraydb.get(pos).getCOLUMN_ITEM_TOTAL_QUANTITY(), fee, total);
 
                         // removeCart(pos, ItemId)
                     }
@@ -292,10 +294,9 @@ public class CartActivity extends AppCompatActivity {
                                 tvrCartFee.setText(fee);
                                 tvrCartTotal.setText(total);
 
-                                dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId);
+                                dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
 
-                                dbOpenHelper.updatecolumcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable),ItemId,totalqty,fee,total);
-
+                                dbOpenHelper.updatecolumcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId, totalqty, fee, total);
 
 
                             } else {
@@ -327,22 +328,22 @@ public class CartActivity extends AppCompatActivity {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     try {
                         JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                        if (object.optInt("success") == 1){
+                        if (object.optInt("success") == 1) {
                             new MakeToast(object.optString("msg"));
-                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
-                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"no").apply();
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "1").apply();
+                            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan, "no").apply();
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
-                        }else {
+                        } else {
                             new MakeToast(object.optString("msg"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     new MakeToast("Try after some time....");
                 }
             }
