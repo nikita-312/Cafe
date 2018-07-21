@@ -154,7 +154,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public void updatecartdata(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice){
+    public boolean updatecartdata(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USER_ID, userid);
@@ -167,8 +167,12 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ORIGINAL_PRICE, originalprice);
         contentValues.put(COLUMN_EXTRA_PRICE, extraprice);
         contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
+        contentValues.put(COLUMN_ITEM_DESC, desc);
+        contentValues.put(COLUMN_ITEM_TYPE, itemtype);
+        contentValues.put(COLUMN_ITEM_IMAGE, image);
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
         Log.d("+++++finalQuantity","++++db "+quant);
+        return true;
     }
 
     public void updatecolumcartdata(String userid,String itemid,String totalquant,String extraprice,String totalprice) {

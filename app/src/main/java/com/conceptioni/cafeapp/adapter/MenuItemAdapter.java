@@ -33,7 +33,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
     private Context context;
     private List<Items> itemsArrayList;
-    private List<CartData> cartDataArrayList = new ArrayList<>();
+
 
     public MenuItemAdapter(List<Items> itemsArrayList) {
         this.itemsArrayList = itemsArrayList;
@@ -53,11 +53,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-
-//        holder.itemll.setOnClickListener((View v) ->
-//                context.startActivity(new Intent(context, DescriptionActivity.class).putExtra("ItemId", itemsArrayList.get(position).getItem_id()))
-//        );
-
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.no_image)
@@ -71,12 +66,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
 
 
         DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
-//        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
-
-        cartDataArrayList.clear();
+        List<CartData> cartDataArrayList;
         cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-
-
         /*if quantity is update from menu and in detail user not change in quantity so here we check first database quantity and if there then set database quantity*/
         if (!cartDataArrayList.isEmpty()){
             for (int i = 0; i <cartDataArrayList.size() ; i++) {
@@ -87,9 +78,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
                     Log.d("++++size123456if","++++"+itemsArrayList.get(position).getQty());
                     holder.quantytvr.setText(itemsArrayList.get(position).getQty());
                 }
-//                else {
-//                    holder.quantytvr.setText(itemsArrayList.get(position).getQty());
-//                }
             }
         }else {
             holder.quantytvr.setText(itemsArrayList.get(position).getQty());
