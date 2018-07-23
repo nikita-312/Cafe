@@ -42,7 +42,7 @@ import retrofit2.Response;
 public class CartActivity extends AppCompatActivity {
     ShimmerRecyclerView rvCart;
     TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal, continueordertvr;
-    String subtotal, total, fee ;
+    String subtotal, total, fee,finaltotal ;
     int totalqty=0, totalprice=0;
     List<CartData> cartModelsarray = new ArrayList<>();
     List<CartData> cartModelsarraydb = new ArrayList<>();
@@ -82,15 +82,15 @@ public class CartActivity extends AppCompatActivity {
 
         cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         for (int i = 0; i < cartModelsarraydb.size(); i++) {
-            totalprice = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ORIGINAL_PRICE());
-            totalqty = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ITEMS_QUANTITY());
+            Log.d("++++array","+++ "+cartModelsarraydb.size());
+            totalprice = 1;
+            totalqty = 1;
             Log.d("++++total","+++ "+totalprice+"+++ "+totalqty);
-
-            subtotal = subtotal + totalprice * totalqty;
+            subtotal += String.valueOf(totalprice * totalqty);
+          //  finaltotal = subtotal;
         }
 
         if (!cartModelsarraydb.isEmpty()) {
-            Log.d("++++++if","++subtotal "+subtotal);
             mainrl.setVisibility(View.VISIBLE);
             emptycartll.setVisibility(View.GONE);
             rvCart.setVisibility(View.VISIBLE);
@@ -102,7 +102,6 @@ public class CartActivity extends AppCompatActivity {
             tvrCartFee.setText(fee);
             tvrCartTotal.setText(total);
         }else {
-            Log.d("++++++if","++else");
             emptycartll.setVisibility(View.VISIBLE);
             rvCart.setVisibility(View.GONE);
             bottom.setVisibility(View.GONE);
@@ -110,7 +109,6 @@ public class CartActivity extends AppCompatActivity {
         }
         // ViewCart();
     }
-
     private void click() {
         tvrPlaceOrder.setOnClickListener(v -> placeOrder());
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
@@ -130,6 +128,9 @@ public class CartActivity extends AppCompatActivity {
                     Log.d("+++++finalQuantity","++ "+finalQuantity+"++count "+count);
                     dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, cartModelsarraydb.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY(), cartModelsarraydb.get(position).getCOLUMN_ORIGINAL_PRICE(), fee, total,"","","");
                     tvrCartQty.setText(finalQuantity);
+
+                    subtotal = String.valueOf(Integer.parseInt(subtotal) * Quantity);
+                    tvrCartSubTotal.setText(subtotal);
                     //CallQuantity(tvrCartQty,finalQuantity,position, cartModelsarray.get(position).getItem_id(),cartModelsarray.get(position).getItem_name());
                 });
                 minusiv.setOnClickListener(v -> {
