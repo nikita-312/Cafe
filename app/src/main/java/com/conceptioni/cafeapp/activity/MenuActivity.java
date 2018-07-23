@@ -170,7 +170,13 @@ public class MenuActivity extends AppCompatActivity {
                     finalItemsList.get(position).setQty(finalQuantity);
                     int totalqty = Integer.parseInt(TotalQty) + 1;
                     TotalQty = String.valueOf(totalqty);
-                    addorupdatedataindatabase(tvrCartQty, position, finalItemsList, finalQuantity);
+                    if (totalqty <= 0){
+                        cartrl.setVisibility(View.GONE);
+                    }else {
+                        cartrl.setVisibility(View.VISIBLE);
+                        addorupdatedataindatabase(tvrCartQty, position, finalItemsList, finalQuantity);
+                    }
+
                 });
                 minusiv.setOnClickListener(v -> {
                     if (!finalItemsList.get(position).getQty().equalsIgnoreCase("0")) {
@@ -183,7 +189,12 @@ public class MenuActivity extends AppCompatActivity {
                         finalItemsList.get(position).setQty(finalQuantity);
                         int totalqty = Integer.parseInt(TotalQty) - 1;
                         TotalQty = String.valueOf(totalqty);
-                        Log.d("+++++++","+++++++minus" + Quantity);
+                        if (totalqty <= 0){
+                            cartrl.setVisibility(View.GONE);
+                        }else {
+                            cartrl.setVisibility(View.VISIBLE);
+                            addorupdatedataindatabase(tvrCartQty, position, finalItemsList, finalQuantity);
+                        }
                         addorupdatedataindatabase(tvrCartQty, position, finalItemsList, finalQuantity);
                     } else {
                         minusiv.setClickable(false);
@@ -502,7 +513,9 @@ public class MenuActivity extends AppCompatActivity {
                     quantitytvb.setVisibility(View.VISIBLE);
                     quantitytvb.setText(TotalQty + " items in cart");
                     viewtvb.setText("View Cart");
-                } else {
+                } else if (TotalQty.equalsIgnoreCase("-1")){
+                    cartrl.setVisibility(View.GONE);
+                }else {
                     cartrl.setVisibility(View.GONE);
                 }
             } else {
@@ -511,7 +524,9 @@ public class MenuActivity extends AppCompatActivity {
                     quantitytvb.setVisibility(View.VISIBLE);
                     quantitytvb.setText(TotalQty + " items in cart");
                     viewtvb.setText("View Cart");
-                } else {
+                }  else if (TotalQty.equalsIgnoreCase("-1")){
+                    cartrl.setVisibility(View.GONE);
+                }else {
                     cartrl.setVisibility(View.GONE);
                 }
             }
