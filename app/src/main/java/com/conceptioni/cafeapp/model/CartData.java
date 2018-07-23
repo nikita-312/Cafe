@@ -11,6 +11,15 @@ public class CartData {
     private String COLUMN_ITEM_TOTAL_QUANTITY;
     private String COLUMN_USER_ID;
     private String COLUMN_NOTE;
+    private String COLUMN_SUB_TOTAL;
+
+    public String getCOLUMN_SUB_TOTAL() {
+        return COLUMN_SUB_TOTAL;
+    }
+
+    public void setCOLUMN_SUB_TOTAL(String COLUMN_SUB_TOTAL) {
+        this.COLUMN_SUB_TOTAL = COLUMN_SUB_TOTAL;
+    }
 
     public String getCOLUMN_ITEM_ID() {
         return COLUMN_ITEM_ID;
