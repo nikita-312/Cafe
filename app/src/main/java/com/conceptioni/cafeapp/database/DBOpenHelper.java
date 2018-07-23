@@ -133,7 +133,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         @SuppressLint("Recycle") Cursor res =  db.rawQuery( "SELECT * , MAX(TOTAL_QUANTITY) from "+ TABLE_NAME + " WHERE " + COLUMN_USER_ID + " = " + Userid, null );
         if (res.getCount()>0){
-            Log.d("+++++size","++++"+res.getCount());
             res.moveToFirst();
             for (int i = 0; i<res.getCount(); i++) {
                 CartData cartData  = new CartData();

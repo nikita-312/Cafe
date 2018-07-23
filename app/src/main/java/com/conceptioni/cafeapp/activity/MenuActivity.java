@@ -77,26 +77,12 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("Total12345", "+++resume ");
         initmenu();
         clicks();
         pos = 0;
         if (categoryList.size() > 0) {
             categoryList.get(pos).setIsselect(false);
         }
-//        String total = "";
-//        List<CartData> cartDataList = new ArrayList<>();
-//        cartDataList.clear();
-//        cartDataList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
-//        if (!cartDataList.isEmpty()){
-//            for (int i = 0; i <cartDataList.size() ; i++) {
-//                 total = cartDataList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY();
-//                Log.d("++++total","++++"+total);
-//            }
-//
-//            TotalQty = total;
-//            Log.d("++++total1234","++++"+TotalQty);
-//        }
     }
 
     private void initmenu() {
@@ -165,11 +151,18 @@ public class MenuActivity extends AppCompatActivity {
                 TextviewRegular tvrCartQty = view.findViewById(R.id.quantytvr);
                 ProgressBar progressBar = view.findViewById(R.id.progress);
                 List<Items> itemsList;
-                itemsList = categoryList.get(pos).getItems();
+                if (isVeg){
+                    if (!vegItemsList.isEmpty()){
+                        itemsList = vegItemsList;
+                    }else {
+                        itemsList = categoryList.get(pos).getItems();
+                    }
+                }else {
+                    itemsList = categoryList.get(pos).getItems();
+                }
                 List<Items> finalItemsList = itemsList;
                 plusiv.setOnClickListener(v -> {
                     Flag = "A";
-                    Log.d("+++Total123", "++++" + finalItemsList.get(position).getQty());
                     int count = Integer.parseInt(finalItemsList.get(position).getQty());
                     int Quantity = count + 1;
                     String finalQuantity = String.valueOf(Quantity);
@@ -177,24 +170,6 @@ public class MenuActivity extends AppCompatActivity {
                     finalItemsList.get(position).setQty(finalQuantity);
                     int totalqty = Integer.parseInt(TotalQty) + 1;
                     TotalQty = String.valueOf(totalqty);
-                    Log.d("+++Total456", "++++" + TotalQty + "++++" + Quantity);
-//                    cartDataArrayList.clear();
-//                    cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
-
-//                    cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
-//
-//                    if (cartDataArrayList.isEmpty()) {
-//                        dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
-//                    } else {
-//                        for (int i = 0; i < cartDataArrayList.size(); i++) {
-//                            if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(finalItemsList.get(position).getItem_id())) {
-//                                dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
-//                            } else {
-//                                dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, itemsList.get(position).getPrice(), "", "");
-//                            }
-//                        }
-//
-//                    }
                     addorupdatedataindatabase(tvrCartQty, position, finalItemsList, finalQuantity);
                 });
                 minusiv.setOnClickListener(v -> {
@@ -205,22 +180,18 @@ public class MenuActivity extends AppCompatActivity {
                         int Quantity = count - 1;
                         String finalQuantity = String.valueOf(Quantity);
                         progressBar.setVisibility(View.GONE);
-
                         finalItemsList.get(position).setQty(finalQuantity);
                         int totalqty = Integer.parseInt(TotalQty) - 1;
                         TotalQty = String.valueOf(totalqty);
-
-
+                        Log.d("+++++++","+++++++minus" + Quantity);
                         addorupdatedataindatabase(tvrCartQty, position, finalItemsList, finalQuantity);
-//                        setData(tvrCartQty, finalQuantity, position, finalItemsList, TotalQty);
                     } else {
                         minusiv.setClickable(false);
                     }
                 });
-                itemll.setOnClickListener(view1 -> {
-                    startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty));
-                    Log.d("+++++idmenu", "+++++" + finalItemsList.get(position).getItem_id() + "++++TotalQty " + TotalQty);
-                });
+                itemll.setOnClickListener(view1 ->
+                    startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty))
+                );
             }
 
             @Override
@@ -337,6 +308,7 @@ public class MenuActivity extends AppCompatActivity {
 
                     if (vegItemsList.isEmpty()) {
                         SetAdapter(itemsArrayList);
+
                     } else {
                         SetAdapter(vegItemsList);
                     }
@@ -463,7 +435,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    //
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -512,19 +483,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private void checkdatabasestatus() {
-        cartDataArrayList.clear();
-        cartDataArrayList = dbOpenHelper.getlastinsertCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
-        if (cartDataArrayList.isEmpty()) {
-            quantitytvb.setText(TotalQty + " items in cart");
-        } else {
-            for (int i = 0; i < cartDataArrayList.size(); i++) {
-                quantitytvb.setText(cartDataArrayList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY() + " items in cart");
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -532,22 +490,17 @@ public class MenuActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void checkdata() {
-
-        Log.d("Total12345", "+++++1 " + TotalQty + checkdatabaseisempty());
-
         if (checksharedflag()) {
             if (checkdatabaseisempty()) {
                 List<CartData> cartDataList;
                 cartDataList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
                 for (int i = 0; i < cartDataList.size(); i++) {
                     TotalQty = cartDataList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY();
-                    Log.d("Total1234567+++total","+++++"+TotalQty);
                 }
                 if (!TotalQty.equalsIgnoreCase("0")) {
                     cartrl.setVisibility(View.VISIBLE);
                     quantitytvb.setVisibility(View.VISIBLE);
                     quantitytvb.setText(TotalQty + " items in cart");
-                    Log.d("Total1234589","+++++"+TotalQty);
                     viewtvb.setText("View Cart");
                 } else {
                     cartrl.setVisibility(View.GONE);
@@ -556,7 +509,6 @@ public class MenuActivity extends AppCompatActivity {
                 if (!TotalQty.equalsIgnoreCase("0")) {
                     cartrl.setVisibility(View.VISIBLE);
                     quantitytvb.setVisibility(View.VISIBLE);
-                    Log.d("Total12345", "+++++3 " + TotalQty);
                     quantitytvb.setText(TotalQty + " items in cart");
                     viewtvb.setText("View Cart");
                 } else {
