@@ -81,15 +81,12 @@ public class DescriptionActivity extends AppCompatActivity {
             itemsArrayList.clear();
             itemsArrayList = getArrayList();
             for (int i = 0; i < itemsArrayList.size(); i++) {
-                Log.d("+++++iddesc","+++for "+ItemId+"+++ "+itemsArrayList.get(i).getItem_id());
-
                 if (ItemId.equalsIgnoreCase(itemsArrayList.get(i).getItem_id())) {
                     Log.d("+++++iddesc","+++if ");
                     Itemnametvr.setText(itemsArrayList.get(i).getItem_name());
                     ItemPricetvr.setText(itemsArrayList.get(i).getPrice() + " Rs");
                     Itemdesctvr.setText(itemsArrayList.get(i).getDesc());
-
-//                    Qty = itemsArrayList.get(i).getQty();
+                    Qty = itemsArrayList.get(i).getQty();
 //                    Log.d("+++++again","+++ "+Qty+" array "+cartDataArrayList.toString());
 //                    if (cartDataArrayList.isEmpty()) {
 //                        Log.d("+++++again", "++if "+Qty);
@@ -116,6 +113,21 @@ public class DescriptionActivity extends AppCompatActivity {
                 }
             }
         }
+
+        List<CartData> cartDataList = new ArrayList<>();
+        cartDataList.clear();
+        cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
+        if (!cartDataList.isEmpty()){
+            for (int i = 0; i <cartDataList.size() ; i++) {
+                Log.d("+++item","++++"+ItemId  + "++++++" +cartDataList.get(i).getCOLUMN_ITEM_ID());
+                if (ItemId.equalsIgnoreCase(cartDataList.get(i).getCOLUMN_ITEM_ID())){
+                    Qty = cartDataList.get(i).getCOLUMN_ITEMS_QUANTITY();
+                }
+            }
+        }
+        Log.d("++++qty","+++++"+Qty);
+        qtytvr.setText(Qty);
+
     }
 
     private void allclick() {
@@ -294,6 +306,7 @@ public class DescriptionActivity extends AppCompatActivity {
             for (int i = 0; i < itemsArrayList.size(); i++) {
                 itemsArrayList.get(i).setQty(Quantity);
                 qtytvr.setText(Quantity);
+                Qty = Quantity;
                 SaveArrylistinShared(itemsArrayList);
             }
         }else {

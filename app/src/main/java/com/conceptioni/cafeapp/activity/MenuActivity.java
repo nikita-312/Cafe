@@ -83,6 +83,21 @@ public class MenuActivity extends AppCompatActivity {
         if (categoryList.size() > 0) {
             categoryList.get(pos).setIsselect(false);
         }
+//        String total = "";
+//        List<CartData> cartDataList = new ArrayList<>();
+//        cartDataList.clear();
+//        cartDataList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+//        if (!cartDataList.isEmpty()){
+//            for (int i = 0; i <cartDataList.size() ; i++) {
+//                 total = cartDataList.get(i).getCOLUMN_ITEM_TOTAL_QUANTITY();
+//                Log.d("++++total","++++"+total);
+//            }
+//
+//            TotalQty = total;
+//            Log.d("++++total1234","++++"+TotalQty);
+//        }
+
+
     }
 
     private void initmenu() {
@@ -165,7 +180,7 @@ public class MenuActivity extends AppCompatActivity {
                     finalItemsList.get(position).setQty(finalQuantity);
                     int totalqty = Integer.parseInt(TotalQty) + 1;
                     TotalQty = String.valueOf(totalqty);
-//                    Log.d("+++Total456", "++++" + TotalQty + "++++" +Quantity);
+                    Log.d("+++Total456", "++++" + TotalQty + "++++" +Quantity);
 //                    cartDataArrayList.clear();
 //                    cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
 
