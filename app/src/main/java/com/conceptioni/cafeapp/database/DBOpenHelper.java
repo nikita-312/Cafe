@@ -32,6 +32,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ITEM_DESC = "ITEM_DESC";
     private static final String COLUMN_ITEM_TYPE = "ITEM_TYPE";
     private static final String COLUMN_ITEM_IMAGE = "ITEM_IMAGE";
+    private static final String COLUMN_SUB_TOTAL = "SUB_TOTAL";
 
     private List<CartData> cartDataArrayListwithid = new ArrayList<>();
     private List<CartData> cartDataArrayListwithmaxvalue = new ArrayList<>();
@@ -39,7 +40,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_CART_TABLE = "CREATE TABLE " + TABLE_NAME
             + " (" + COLUMN_USER_ID + " TEXT, " + COLUMN_CAFE_ID + " TEXT, " + COLUMN_ITEM_ID + " TEXT, "+ COLUMN_ITEM_NAME + " TEXT, "+ COLUMN_NOTE + " TEXT, "
-            + COLUMN_ITEMS_QUANTITY +" TEXT, "+ COLUMN_ITEM_TOTAL_QUANTITY + " TEXT, "+ COLUMN_ORIGINAL_PRICE + " TEXT, " + COLUMN_EXTRA_PRICE + " TEXT, "+ COLUMN_ITEM_TOTAL_PRICE + " TEXT, " + COLUMN_ITEM_DESC + " TEXT, " + COLUMN_ITEM_TYPE + " TEXT, " + COLUMN_ITEM_IMAGE + " TEXT"
+            + COLUMN_ITEMS_QUANTITY +" TEXT, "+ COLUMN_ITEM_TOTAL_QUANTITY + " TEXT, "+ COLUMN_ORIGINAL_PRICE + " TEXT, " + COLUMN_EXTRA_PRICE + " TEXT, "+ COLUMN_ITEM_TOTAL_PRICE + " TEXT, " + COLUMN_ITEM_DESC + " TEXT, " + COLUMN_ITEM_TYPE + " TEXT, " + COLUMN_ITEM_IMAGE + " TEXT, "+ COLUMN_SUB_TOTAL + " TEXT"
             + ") ";
 
     public DBOpenHelper(Context context) {
@@ -57,7 +58,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image) {
+    public boolean addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image,String subtotal) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USER_ID, userid);
@@ -73,6 +74,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_DESC, desc);
         contentValues.put(COLUMN_ITEM_TYPE, itemtype);
         contentValues.put(COLUMN_ITEM_IMAGE, image);
+        contentValues.put(COLUMN_SUB_TOTAL, subtotal);
         db.insert(TABLE_NAME, null, contentValues);
         Log.d("+++++++addquery","++++++");
         return true;
@@ -121,6 +123,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 cartData.setCOLUMN_ORIGINAL_PRICE(res.getString(7));
                 cartData.setCOLUMN_EXTRA_PRICE(res.getString(8));
                 cartData.setCOLUMN_ITEM_TOTAL_PRICE(res.getString(9));
+                cartData.setCOLUMN_SUB_TOTAL(res.getString(10));
                 cartDataArrayList.add(cartData);
                 res.moveToNext();
             }
@@ -155,7 +158,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean updatecartdata(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image){
+    public boolean updatecartdata(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image,String subtotal){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USER_ID, userid);
@@ -171,6 +174,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_DESC, desc);
         contentValues.put(COLUMN_ITEM_TYPE, itemtype);
         contentValues.put(COLUMN_ITEM_IMAGE, image);
+        contentValues.put(COLUMN_SUB_TOTAL, subtotal);
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
         Log.d("+++++finalQuantity","++++db "+quant);
         return true;
@@ -185,12 +189,13 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
     }
 
-    public boolean updateAllcartdata(String userid,String totalquant,String extraprice,String totalprice) {
+    public boolean updateAllcartdata(String userid,String totalquant,String extraprice,String totalprice,String subtotal) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM_TOTAL_QUANTITY, totalquant);
         contentValues.put(COLUMN_EXTRA_PRICE, extraprice);
         contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
+        contentValues.put(COLUMN_SUB_TOTAL, subtotal);
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid, null);
         return true;
     }
