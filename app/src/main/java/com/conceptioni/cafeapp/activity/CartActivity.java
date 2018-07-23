@@ -90,10 +90,6 @@ public class CartActivity extends AppCompatActivity {
         }
 
         if (!cartModelsarraydb.isEmpty()) {
-
-
-
-
             Log.d("++++++if","++subtotal "+subtotal);
             mainrl.setVisibility(View.VISIBLE);
             emptycartll.setVisibility(View.GONE);

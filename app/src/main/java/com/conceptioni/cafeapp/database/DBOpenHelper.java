@@ -57,8 +57,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void
-    addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image) {
+    public boolean addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USER_ID, userid);
@@ -76,6 +75,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_IMAGE, image);
         db.insert(TABLE_NAME, null, contentValues);
         Log.d("+++++++addquery","++++++");
+        return true;
     }
 
     public List<CartData> getCartData(String Userid,String itemid) {
