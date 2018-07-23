@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
-public class Category{
+public class Category {
   @SerializedName("cimage")
   @Expose
   private String cimage;

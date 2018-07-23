@@ -42,7 +42,8 @@ import retrofit2.Response;
 public class CartActivity extends AppCompatActivity {
     ShimmerRecyclerView rvCart;
     TextviewRegular tvrPlaceOrder, tvrCartTotal, tvrCartFee, tvrCartSubTotal, continueordertvr;
-    String subtotal, total, fee;
+    String subtotal, total, fee ;
+    int totalqty=0, totalprice=0;
     List<CartData> cartModelsarray = new ArrayList<>();
     List<CartData> cartModelsarraydb = new ArrayList<>();
     ImageView ivBack;
@@ -80,8 +81,20 @@ public class CartActivity extends AppCompatActivity {
         rvCart.showShimmerAdapter();
 
         cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
+        for (int i = 0; i < cartModelsarraydb.size(); i++) {
+            totalprice = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ORIGINAL_PRICE());
+            totalqty = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ITEMS_QUANTITY());
+            Log.d("++++total","+++ "+totalprice+"+++ "+totalqty);
+
+            subtotal = subtotal + totalprice * totalqty;
+        }
+
         if (!cartModelsarraydb.isEmpty()) {
-            Log.d("++++++if","++");
+
+
+
+
+            Log.d("++++++if","++subtotal "+subtotal);
             mainrl.setVisibility(View.VISIBLE);
             emptycartll.setVisibility(View.GONE);
             rvCart.setVisibility(View.VISIBLE);

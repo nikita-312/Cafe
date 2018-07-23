@@ -77,6 +77,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("Total12345","+++resume ");
         initmenu();
         clicks();
         pos = 0;
@@ -96,8 +97,6 @@ public class MenuActivity extends AppCompatActivity {
 //            TotalQty = total;
 //            Log.d("++++total1234","++++"+TotalQty);
 //        }
-
-
     }
 
     private void initmenu() {
@@ -119,7 +118,6 @@ public class MenuActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuActivity.this);
         rvCategory.setLayoutManager(linearLayoutManager);
         rvCategory.showShimmerAdapter();
-
 
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -273,6 +271,7 @@ public class MenuActivity extends AppCompatActivity {
         tvrCartQty.setText(Quantity);
 //        itemsList.get(Position).setQty(Quantity);
 //        Log.d("+++++++addorupdate","+++++"+Quantity);
+        Log.d("+++itemlist","++ "+itemsList.toString());
         SaveArrylistinShared(itemsList);
 //        SetAdapter(itemsList);
         checkdata();
@@ -484,7 +483,7 @@ public class MenuActivity extends AppCompatActivity {
             tvrNodata.setVisibility(View.VISIBLE);
         }
     }
-
+//
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -530,6 +529,7 @@ public class MenuActivity extends AppCompatActivity {
             Gson gson = new Gson();
             String json = gson.toJson(itemsArrayList);
             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
+            Log.d("+++array","++ "+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.ItemData,Constant.notAvailable));
         }
     }
 
@@ -554,7 +554,7 @@ public class MenuActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void checkdata(){
 
-        Log.d("Total12345","+++++"+TotalQty);
+        Log.d("Total12345","+++++1 "+TotalQty);
 
         if (checksharedflag()){
             if (checkdatabaseisempty()){
@@ -566,6 +566,8 @@ public class MenuActivity extends AppCompatActivity {
                 if (!TotalQty.equalsIgnoreCase("0")) {
                     cartrl.setVisibility(View.VISIBLE);
                     quantitytvb.setVisibility(View.VISIBLE);
+                    Log.d("Total12345","+++++2 "+TotalQty);
+
                     quantitytvb.setText(TotalQty + " items in cart");
                     viewtvb.setText("View Cart");
                 } else {
@@ -575,6 +577,7 @@ public class MenuActivity extends AppCompatActivity {
                 if (!TotalQty.equalsIgnoreCase("0")) {
                     cartrl.setVisibility(View.VISIBLE);
                     quantitytvb.setVisibility(View.VISIBLE);
+                    Log.d("Total12345","+++++3 "+TotalQty);
                     quantitytvb.setText(TotalQty + " items in cart");
                     viewtvb.setText("View Cart");
                 } else {
