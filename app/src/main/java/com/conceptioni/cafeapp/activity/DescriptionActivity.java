@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class DescriptionActivity extends AppCompatActivity {
 
-    String ItemData, ItemId, Qty, ItemName, Price, TotalQty = "",Desc="",Image="",ItemType= "";
+    String ItemData, ItemId, Qty, ItemName, Price, TotalQty = "",Desc="",Image="",ItemType= "",gst="";
     List<Items> itemsArrayList = new ArrayList<>();
     TextviewRegular ItemPricetvr, Itemnametvr, Itemdesctvr, qtytvr, addtocarttvr;
     EditText noteset;
@@ -37,6 +38,7 @@ public class DescriptionActivity extends AppCompatActivity {
     List<CartData> cartDataArrayList = new ArrayList<>();
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
+    double percentage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,7 @@ public class DescriptionActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             ItemId = getIntent().getStringExtra("ItemId");
             TotalQty = getIntent().getStringExtra("Total");
-
-
+            gst = getIntent().getStringExtra("gst");
 
             itemsArrayList.clear();
             itemsArrayList = getArrayList();

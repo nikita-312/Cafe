@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:gravity="end"
-                    android:text="Fee"
+                    android:text="GST"
                     android:textColor="@color/colorFont"
                     tools:ignore="HardcodedText" />
 

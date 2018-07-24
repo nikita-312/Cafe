@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +40,9 @@ public class LiveOrderActivity extends AppCompatActivity {
     ShimmerRecyclerView rvliveOrder;
     LinearLayout llBottom, bottom, retryll;
     TextviewRegular tvrCartTotal, tvrCartFee, tvrCartSubTotal, continuetvr, paymenttvr;
-    String subtotal, total, fee;
+    double subtotal=0;
+    double total=0;
+    double fee=0;
     List<CartModel> cartModelsarray = new ArrayList<>();
     ImageView ivBack;
     LiveOrderAdapter liveOrderAdapter;
@@ -64,8 +67,6 @@ public class LiveOrderActivity extends AppCompatActivity {
         });
         ivBack.setOnClickListener(v -> finish());
         retryll.setOnClickListener(v -> viewLiveOrder());
-
-
     }
 
     private void init() {
@@ -124,6 +125,7 @@ public class LiveOrderActivity extends AppCompatActivity {
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+        jsonObject.addProperty("gst", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.gst, Constant.notAvailable));
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.ViewLiveOrder("application/json", jsonObject);
@@ -146,9 +148,9 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"no").apply();
                                 cartModelsarray.clear();
-                                subtotal = String.valueOf(jsonObject1.optInt("subtotal"));
-                                fee = String.valueOf(jsonObject1.optInt("fee"));
-                                total = String.valueOf(jsonObject1.optInt("total"));
+                                subtotal = Double.parseDouble(String.valueOf(jsonObject1.optInt("subtotal")));
+                                fee = Double.parseDouble(String.valueOf(jsonObject1.optString("gst")));
+                                total = Double.parseDouble(String.valueOf(jsonObject1.optInt("total")));
 
                                 JSONArray jsonArray = jsonObject1.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -164,9 +166,9 @@ public class LiveOrderActivity extends AppCompatActivity {
                                 rvliveOrder.hideShimmerAdapter();
                                 liveOrderAdapter = new LiveOrderAdapter(cartModelsarray);
                                 rvliveOrder.setAdapter(liveOrderAdapter);
-                                tvrCartSubTotal.setText(subtotal);
-                                tvrCartFee.setText(fee);
-                                tvrCartTotal.setText(total);
+                                tvrCartSubTotal.setText(String.valueOf(subtotal));
+                                tvrCartFee.setText(String.valueOf(fee));
+                                tvrCartTotal.setText(String.valueOf(total));
                             } else {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
@@ -177,7 +179,6 @@ public class LiveOrderActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-
                         }
                     } else {
                         new MakeToast("Error while getting data");

@@ -60,7 +60,7 @@ public class MenuActivity extends AppCompatActivity {
     TextviewRegular tvrNodata;
     int pos = 0;
     SwitchCompat vegswitch;
-    String TotalQty, Flag = "";
+    String TotalQty, Flag = "", gst="";
     boolean isVeg = false;
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
@@ -201,7 +201,7 @@ public class MenuActivity extends AppCompatActivity {
                     }
                 });
                 itemll.setOnClickListener(view1 ->
-                    startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty))
+                    startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty).putExtra("gst",gst))
                 );
             }
 
@@ -219,9 +219,9 @@ public class MenuActivity extends AppCompatActivity {
         cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
 
         if (cartDataArrayList.isEmpty()) {
-            boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
+            boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), gst, "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
             if (isadd){
-                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                 setData(tvrCartQty, finalQuantity, position, finalItemsList);
             }
         } else {
@@ -230,23 +230,23 @@ public class MenuActivity extends AppCompatActivity {
                     if (finalQuantity.equalsIgnoreCase("0")) {
                         Integer deletedRows = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), finalItemsList.get(position).getItem_id());
                         if (deletedRows > 0) {
-                            boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
+                            boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), gst, "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
                             if (isupdate) {
-                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                                 setData(tvrCartQty, finalQuantity, position, finalItemsList);
                             }
                         }
                     } else {
-                        boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
+                        boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), gst, "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
                         if (isupdate) {
-                            dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                            dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                             setData(tvrCartQty, finalQuantity, position, finalItemsList);
                         }
                     }
                 } else {
-                    boolean isdd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), "", "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
+                    boolean isdd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), gst, "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
                     if (isdd) {
-                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                         setData(tvrCartQty, finalQuantity, position, finalItemsList);
                     }
                 }
@@ -342,7 +342,7 @@ public class MenuActivity extends AppCompatActivity {
         object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
         object.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         object.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
-
+        Log.d("+++getmenu","+++ "+object.toString());
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.getMenuItem("application/json", object);
 
@@ -358,6 +358,8 @@ public class MenuActivity extends AppCompatActivity {
                             JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (data.optString("success").equalsIgnoreCase("1")) {
                                 TotalQty = data.optString("totalQty");
+                                gst = data.optString("gst");
+                                SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.gst,gst).apply();
                                 categoryList.clear();
                                 JSONArray categoryarray = data.getJSONArray("category");
                                 for (int i = 0; i < categoryarray.length(); i++) {
