@@ -264,11 +264,6 @@ public class MenuActivity extends AppCompatActivity {
         checkdata();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     private void clicks() {
         scancafell.setOnClickListener(view -> {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
@@ -496,11 +491,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     @SuppressLint("SetTextI18n")
     private void checkdata() {
         if (checksharedflag()) {
@@ -560,5 +550,10 @@ public class MenuActivity extends AppCompatActivity {
 
     private boolean checksharedflag() {
         return SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
