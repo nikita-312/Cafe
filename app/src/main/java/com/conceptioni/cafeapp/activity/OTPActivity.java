@@ -1,9 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
@@ -61,7 +63,7 @@ public class OTPActivity extends AppCompatActivity {
             if (!pinview1.getValue().equalsIgnoreCase("")){
                 checkOTP();
             }else {
-                new MakeToast("Please Enter OTP");
+                showErrorDialog("Please Enter OTP");
             }
         });
     }
@@ -116,7 +118,7 @@ public class OTPActivity extends AppCompatActivity {
                                     }
 
                                 }else {
-                                    new MakeToast("Please Enter Correct Otp");
+                                    showErrorDialog("Please Enter Correct Otp");
                                 }
                             }
 
@@ -131,6 +133,16 @@ public class OTPActivity extends AppCompatActivity {
             }
         });
     }
-
-
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(OTPActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+    }
 }

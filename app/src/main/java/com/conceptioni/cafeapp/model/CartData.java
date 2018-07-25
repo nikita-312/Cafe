@@ -12,6 +12,33 @@ public class CartData {
     private String COLUMN_USER_ID;
     private String COLUMN_NOTE;
     private String COLUMN_SUB_TOTAL;
+    private String COLUMN_IMAGE;
+    private String COLUMN_ITEM_TYPE;
+    private String COLUMN_ITEM_DESC;
+
+    public String getCOLUMN_ITEM_TYPE() {
+        return COLUMN_ITEM_TYPE;
+    }
+
+    public void setCOLUMN_ITEM_TYPE(String COLUMN_ITEM_TYPE) {
+        this.COLUMN_ITEM_TYPE = COLUMN_ITEM_TYPE;
+    }
+
+    public String getCOLUMN_ITEM_DESC() {
+        return COLUMN_ITEM_DESC;
+    }
+
+    public void setCOLUMN_ITEM_DESC(String COLUMN_ITEM_DESC) {
+        this.COLUMN_ITEM_DESC = COLUMN_ITEM_DESC;
+    }
+
+    public String getCOLUMN_IMAGE() {
+        return COLUMN_IMAGE;
+    }
+
+    public void setCOLUMN_IMAGE(String COLUMN_IMAGE) {
+        this.COLUMN_IMAGE = COLUMN_IMAGE;
+    }
 
     public String getCOLUMN_SUB_TOTAL() {
         return COLUMN_SUB_TOTAL;

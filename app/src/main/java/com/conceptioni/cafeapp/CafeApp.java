@@ -59,7 +59,7 @@ public class CafeApp extends Application {
                 isInBackground = false;
             }
         }
-        Log.d("+++++++background","++++++"+isInBackground);
+
         return isInBackground;
     }
 

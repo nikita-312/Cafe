@@ -1,8 +1,10 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,8 +14,8 @@ import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
+import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.utils.Constant;
-import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.google.gson.JsonObject;
@@ -21,6 +23,8 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -45,7 +49,7 @@ public class CardActivity extends AppCompatActivity {
         llNext.setOnClickListener(v -> {
             if (type!= null) {
                 CallCard();
-            }            else new MakeToast("Please choose payment method");
+            }            else showDialog();
 
         });
         llCard.setOnClickListener(v -> {
@@ -73,7 +77,7 @@ public class CardActivity extends AppCompatActivity {
             if (type != null) {
                 CallCard();
             }
-            else new MakeToast("Please choose payment method");
+            else showDialog();
         });
     }
 
@@ -110,14 +114,13 @@ public class CardActivity extends AppCompatActivity {
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                new MakeToast(object.optString("msg"));
+
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.orderid,object.getString("orderid")).apply();
                                 startActivity(new Intent(CardActivity.this, RatingActivity.class));
                                 finish();
-                            } else
-                                new MakeToast(object.optString("msg"));
+                            } else showErrorDialog(object.optString("msg"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -132,6 +135,31 @@ public class CardActivity extends AppCompatActivity {
                 nointernetrl.setVisibility(View.VISIBLE);
             }
         });
+    }
+    private void showDialog() {
+        new AlertDialog.Builder(CardActivity.this)
+                .setMessage("Please choose payment method")
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                       dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+    }
+
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(CardActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
     }
 
     @Override

@@ -40,7 +40,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_CART_TABLE = "CREATE TABLE " + TABLE_NAME
             + " (" + COLUMN_USER_ID + " TEXT, " + COLUMN_CAFE_ID + " TEXT, " + COLUMN_ITEM_ID + " TEXT, "+ COLUMN_ITEM_NAME + " TEXT, "+ COLUMN_NOTE + " TEXT, "
-            + COLUMN_ITEMS_QUANTITY +" TEXT, "+ COLUMN_ITEM_TOTAL_QUANTITY + " TEXT, "+ COLUMN_ORIGINAL_PRICE + " TEXT, " + COLUMN_EXTRA_PRICE + " TEXT, "+ COLUMN_ITEM_TOTAL_PRICE + " TEXT, " + COLUMN_ITEM_DESC + " TEXT, " + COLUMN_ITEM_TYPE + " TEXT, " + COLUMN_ITEM_IMAGE + " TEXT, "+ COLUMN_SUB_TOTAL + " TEXT"
+            + COLUMN_ITEMS_QUANTITY +" TEXT, "+ COLUMN_ITEM_TOTAL_QUANTITY + " TEXT, "+ COLUMN_ORIGINAL_PRICE + " TEXT, " + COLUMN_EXTRA_PRICE + " TEXT, "+
+            COLUMN_ITEM_TOTAL_PRICE + " TEXT, " + COLUMN_ITEM_DESC + " TEXT, " + COLUMN_ITEM_TYPE + " TEXT, " + COLUMN_ITEM_IMAGE + " TEXT, "+ COLUMN_SUB_TOTAL + " TEXT"
             + ") ";
 
     public DBOpenHelper(Context context) {
@@ -76,7 +77,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_IMAGE, image);
         contentValues.put(COLUMN_SUB_TOTAL, subtotal);
         db.insert(TABLE_NAME, null, contentValues);
-        Log.d("+++++++addquery","++++++");
+
         return true;
     }
 
@@ -122,8 +123,13 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 cartData.setCOLUMN_ITEM_TOTAL_QUANTITY(res.getString(6));
                 cartData.setCOLUMN_ORIGINAL_PRICE(res.getString(7));
                 cartData.setCOLUMN_EXTRA_PRICE(res.getString(8));
+                Log.d("++++gst","++db "+res.getString(8));
+
                 cartData.setCOLUMN_ITEM_TOTAL_PRICE(res.getString(9));
-                cartData.setCOLUMN_SUB_TOTAL(res.getString(10));
+                cartData.setCOLUMN_ITEM_DESC(res.getString(10));
+                cartData.setCOLUMN_ITEM_TYPE(res.getString(11));
+                cartData.setCOLUMN_IMAGE(res.getString(12));
+                cartData.setCOLUMN_SUB_TOTAL(res.getString(13));
                 cartDataArrayList.add(cartData);
                 res.moveToNext();
             }
@@ -176,7 +182,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_IMAGE, image);
         contentValues.put(COLUMN_SUB_TOTAL, subtotal);
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
-        Log.d("+++++finalQuantity","++++db "+quant);
+
         return true;
     }
 

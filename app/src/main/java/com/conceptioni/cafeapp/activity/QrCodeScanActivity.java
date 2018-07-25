@@ -1,11 +1,13 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -95,7 +97,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
            progress.setVisibility(View.VISIBLE);
            CheckTabelApi(separated[0],separated[1]);
        }else {
-           new MakeToast("Please scan valid qr code");
+           showErrorDialog("Please scan valid QR code");
            finish();
        }
     }
@@ -128,12 +130,12 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     @OnPermissionDenied(Manifest.permission.CAMERA)
     void showDeniedcameradialogue() {
-        new MakeToast(R.string.denied_camera);
+         showErrorDialog("you denied camera permission");
     }
 
     @OnNeverAskAgain(Manifest.permission.CAMERA)
     void showNeverAskeddialogue() {
-        new MakeToast(R.string.never_ask_camera);
+        showErrorDialog("we need camera permission");
     }
 
     @Override
@@ -188,7 +190,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 progress.setVisibility(View.GONE);
-                                new MakeToast(object.optString("msg"));
+
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Table_status, "Free").apply();
@@ -197,10 +199,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",object.optString("tableno")));
                                 finish();
                             } else{
-                                new MakeToast(object.optString("msg"));
                                 progress.setVisibility(View.GONE);
-                                startActivity(new Intent(QrCodeScanActivity.this,HomeActivity.class));
-                                finish();
+                                showErrorDialog1(object.optString("msg"));
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -215,5 +216,31 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 new MakeToast(R.string.Checkyournetwork);
             }
         });
+    }
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(QrCodeScanActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+    }
+    private void showErrorDialog1(String msg) {
+        new AlertDialog.Builder(QrCodeScanActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        startActivity(new Intent(QrCodeScanActivity.this,HomeActivity.class));
+                        finish();
+                    }
+                })
+                .create().show();
     }
 }

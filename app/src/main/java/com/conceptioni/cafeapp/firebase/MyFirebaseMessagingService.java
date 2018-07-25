@@ -84,7 +84,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", authtoken);
 
-        Log.d("+++++type", "+++ " + jsonObject.toString());
+
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.sessionexpire("application/json", jsonObject);
@@ -102,9 +102,9 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 if (CafeApp.isAppIsInBackground(getApplicationContext())){
-                                    Log.d("+++++background","++++++");
+
                                 }else {
-                                    Log.d("+++++notbackground","++++++");
+
                                     startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                                 }
                             }else {

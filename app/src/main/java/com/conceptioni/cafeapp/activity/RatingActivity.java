@@ -1,9 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -161,8 +163,7 @@ public class RatingActivity extends AppCompatActivity {
                                 startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                                 finish();
                             } else
-                                new MakeToast(object.optString("msg"));
-
+                                showErrorDialog(object.optString("msg"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -187,5 +188,18 @@ public class RatingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         ScanCafe();
+    }
+
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(RatingActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
     }
 }

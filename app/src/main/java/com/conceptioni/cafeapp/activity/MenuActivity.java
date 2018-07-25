@@ -1,10 +1,12 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SwitchCompat;
@@ -200,8 +202,13 @@ public class MenuActivity extends AppCompatActivity {
                         minusiv.setClickable(false);
                     }
                 });
-                itemll.setOnClickListener(view1 ->
-                    startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty).putExtra("gst",gst))
+                itemll.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View view) {
+                                                  startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty).putExtra("gst", gst));
+                                              }
+                                          }
+
                 );
             }
 
@@ -220,6 +227,7 @@ public class MenuActivity extends AppCompatActivity {
 
         if (cartDataArrayList.isEmpty()) {
             boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), gst, "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
+            Log.d("++++img","++++ "+finalItemsList.get(position).getImage());
             if (isadd){
                 dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                 setData(tvrCartQty, finalQuantity, position, finalItemsList);
@@ -245,6 +253,7 @@ public class MenuActivity extends AppCompatActivity {
                     }
                 } else {
                     boolean isdd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), finalItemsList.get(position).getItem_id(), finalItemsList.get(position).getItem_name(), "", finalQuantity, TotalQty, finalItemsList.get(position).getPrice(), gst, "", finalItemsList.get(position).getDesc(), finalItemsList.get(position).getItem_type(), finalItemsList.get(position).getImage(),"");
+
                     if (isdd) {
                         dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                         setData(tvrCartQty, finalQuantity, position, finalItemsList);
@@ -269,7 +278,7 @@ public class MenuActivity extends AppCompatActivity {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
                 ScanCafe();
             } else {
-                new MakeToast("You still have live order!");
+                showErrorDialog("You still have live order!");
             }
         });
 
@@ -352,6 +361,7 @@ public class MenuActivity extends AppCompatActivity {
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject data = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (data.optString("success").equalsIgnoreCase("1")) {
+
                                 TotalQty = data.optString("totalQty");
                                 gst = data.optString("gst");
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.gst,gst).apply();
@@ -401,19 +411,19 @@ public class MenuActivity extends AppCompatActivity {
                                 checkdata();
 
                             } else {
-                                new MakeToast(data.optString("msg"));
+                                showErrorDialog(data.optString("msg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
                     } else {
-                        new MakeToast("Error while getting data");
+                        showErrorDialog("Error while getting data");
                         rvCategory.hideShimmerAdapter();
                         rvCategoryitem.hideShimmerAdapter();
                     }
                 } else {
-                    new MakeToast("Error while getting data");
+                    showErrorDialog("Error while getting data");
                     rvCategory.hideShimmerAdapter();
                     rvCategoryitem.hideShimmerAdapter();
                 }
@@ -467,8 +477,7 @@ public class MenuActivity extends AppCompatActivity {
                                 finish();
 
                             } else
-                                new MakeToast(object.optString("msg"));
-
+                                showErrorDialog(object.optString("msg"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -555,5 +564,18 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(MenuActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
     }
 }

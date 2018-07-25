@@ -1,6 +1,7 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -38,7 +39,6 @@ public class DescriptionActivity extends AppCompatActivity {
     List<CartData> cartDataArrayList = new ArrayList<>();
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
-    double percentage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +121,11 @@ public class DescriptionActivity extends AppCompatActivity {
             cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
 
             if (cartDataArrayList.isEmpty()) {
-                boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "",Desc,ItemType,Image,"");
+                boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "",Desc,ItemType,Image,"");
                 qtytvr.setText(finalQuantity);
                 if (isadd){
-                    dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                    dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst
+                            ,"","");
                 }
             } else {
                 for (int j = 0; j < cartDataArrayList.size(); j++) {
@@ -132,24 +133,24 @@ public class DescriptionActivity extends AppCompatActivity {
                         if (finalQuantity.equalsIgnoreCase("0")) {
                             Integer deletedRows = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
                             if (deletedRows > 0) {
-                                boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "", Desc, ItemType , Image,"");
+                                boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType , Image,"");
                                 if (isupdate) {
-                                    dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                                    dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                                     setData(finalQuantity);
                                 }
                             }
                         } else {
-                            boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "", Desc, ItemType, Image,"");
+                            boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType, Image,"");
                             if (isupdate) {
-                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                                 setData(finalQuantity);
                             }
                         }
                     } else {
-                        boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "", Desc, ItemType, Image,"");
+                        boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType, Image,"");
                         qtytvr.setText(finalQuantity);
                         if (isadd){
-                            dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                            dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                         }
                     }
                 }
@@ -167,10 +168,10 @@ public class DescriptionActivity extends AppCompatActivity {
                 setData(finalQuantity);
                 cartDataArrayList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
                 if (cartDataArrayList.isEmpty()) {
-                    boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "",Desc,ItemType,Image,"");
+                    boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "",Desc,ItemType,Image,"");
                     qtytvr.setText(finalQuantity);
                     if (isadd){
-                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                     }
 
                 } else {
@@ -180,26 +181,26 @@ public class DescriptionActivity extends AppCompatActivity {
                                 minusiv.setClickable(false);
                                 Integer deletedRows = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
                                 if (deletedRows > 0) {
-                                    boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "", Desc, ItemType , Image,"");
+                                    boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType , Image,"");
                                     if (isupdate) {
-                                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                                         setData(finalQuantity);
                                     }
                                 }
                             } else {
                                 minusiv.setClickable(true);
-                                boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "", Desc, ItemType, Image,"");
+                                boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType, Image,"");
                                 if (isupdate) {
-                                    dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                                    dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                                     setData(finalQuantity);
                                 }
                             }
                         } else {
                             minusiv.setClickable(true);
-                            boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, "", "", Desc, ItemType, Image,"");
+                            boolean isadd = dbOpenHelper.addCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType, Image,"");
                             qtytvr.setText(finalQuantity);
                             if (isadd){
-                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,"","","");
+                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                             }
                         }
                     }
@@ -208,8 +209,7 @@ public class DescriptionActivity extends AppCompatActivity {
         });
 
         addtocarttvr.setOnClickListener(v -> {
-            startActivity(new Intent(DescriptionActivity.this, MenuActivity.class));
-            finish();
+            onBackPressed();
         });
 
         backiv.setOnClickListener(v -> onBackPressed());

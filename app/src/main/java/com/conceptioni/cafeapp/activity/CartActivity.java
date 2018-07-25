@@ -96,8 +96,10 @@ public class CartActivity extends AppCompatActivity {
         for (int i = 0; i < cartModelsarraydb.size(); i++) {
             totalprice = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ORIGINAL_PRICE());
             totalqty = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ITEMS_QUANTITY());
-
-            gst = Double.parseDouble(cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE());
+            Log.d("++++gst","++ "+cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE());
+            if (!cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE().equalsIgnoreCase("")) {
+                gst = Double.parseDouble(cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE());
+            }
 
             subtotal = (totalprice * totalqty) + subtotal;
             finaltotal = subtotal;
@@ -111,7 +113,7 @@ public class CartActivity extends AppCompatActivity {
             total = Double.parseDouble(str);
             fee = Double.parseDouble(str1);
             finaltotal = Double.parseDouble(str2);
-            Log.d("++++gst", "+++ " + totalGST + "++++" + fee + "+++" + total);
+            Log.d("++++gst", "+++ " +"++"+gst +"+++ "+totalGST + "++++" + fee + "+++" + total);
         }
 
         if (!cartModelsarraydb.isEmpty()) {
@@ -161,7 +163,7 @@ public class CartActivity extends AppCompatActivity {
                     totalGST = finaltotal * gst;
                     fee = totalGST / 100;
                     total = finaltotal + fee;
-                    boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, TotalQty, cartModelsarraydb.get(position).getCOLUMN_ORIGINAL_PRICE(), String.valueOf(fee), String.valueOf(total), "", "", "", String.valueOf(finaltotal));
+                    boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), cartModelsarraydb.get(position).getCOLUMN_NOTE(), finalQuantity, TotalQty, cartModelsarraydb.get(position).getCOLUMN_ORIGINAL_PRICE(), String.valueOf(fee), String.valueOf(total), cartModelsarraydb.get(position).getCOLUMN_ITEM_DESC(), cartModelsarraydb.get(position).getCOLUMN_ITEM_TYPE(), cartModelsarraydb.get(position).getCOLUMN_IMAGE(), String.valueOf(finaltotal));
                     if (isupdate) {
                         dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
                     }
@@ -195,7 +197,7 @@ public class CartActivity extends AppCompatActivity {
                         totalGST = finaltotal * gst;
                         fee = totalGST / 100;
                         total = finaltotal + fee;
-                        boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), "", finalQuantity, TotalQty, cartModelsarraydb.get(position).getCOLUMN_ORIGINAL_PRICE(), String.valueOf(fee), String.valueOf(total), "", "", "", String.valueOf(finaltotal));
+                        boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), cartModelsarraydb.get(position).getCOLUMN_NOTE(), finalQuantity, TotalQty, cartModelsarraydb.get(position).getCOLUMN_ORIGINAL_PRICE(), String.valueOf(fee), String.valueOf(total), cartModelsarraydb.get(position).getCOLUMN_ITEM_DESC(), cartModelsarraydb.get(position).getCOLUMN_ITEM_TYPE(), cartModelsarraydb.get(position).getCOLUMN_IMAGE(), String.valueOf(finaltotal));
                         if (isupdate) {
                             dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
                         }
@@ -334,14 +336,15 @@ public class CartActivity extends AppCompatActivity {
                         if (object.optInt("success") == 1) {
                             progressDialog.dismiss();
                             dbOpenHelper.deletetable();
-                            new MakeToast(object.optString("msg"));
+
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "1").apply();
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan, "no").apply();
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         } else {
                             progressDialog.dismiss();
-                            new MakeToast(object.optString("msg"));
+                            showErrorDialog(object.optString("msg"));
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -350,7 +353,7 @@ public class CartActivity extends AppCompatActivity {
                     }
                 } else {
                     progressDialog.dismiss();
-                    new MakeToast("Try after some time....");
+                    showErrorDialog("Try after some time....");
                 }
             }
 
@@ -409,8 +412,8 @@ public class CartActivity extends AppCompatActivity {
                             if (object.optInt("success") == 1) {
                                placeOrder();
                             } else {
-                                new MakeToast(object.optString("msg"));
-                              progressDialog.hide();
+                                showErrorDialog(object.optString("msg"));
+                                progressDialog.hide();
                             }
 
                         } catch (JSONException e) {
@@ -428,5 +431,16 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(CartActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+    }
 }

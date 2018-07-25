@@ -1,7 +1,9 @@
 package com.conceptioni.cafeapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.ApiCall;
+import com.conceptioni.cafeapp.activity.LiveOrderActivity;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.CurrentOrderModel;
 import com.conceptioni.cafeapp.utils.Constant;
@@ -137,9 +140,9 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
                                     holder.ivUp.setImageDrawable(context.getResources().getDrawable(R.drawable.unfill_like));
                                     holder.ivDown.setImageDrawable(context.getResources().getDrawable(R.drawable.fill_unlike));
                                 }
-                                new MakeToast(object.optString("msg"));
+
                             } else
-                                new MakeToast(object.optString("msg"));
+                                showErrorDialog(object.optString("msg"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -169,6 +172,17 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
             ivDown = itemView.findViewById(R.id.ivDown);
         }
     }
-
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(context)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+    }
 }
 

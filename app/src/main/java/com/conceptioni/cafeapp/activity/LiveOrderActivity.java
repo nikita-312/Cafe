@@ -1,8 +1,10 @@
 package com.conceptioni.cafeapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -62,7 +64,6 @@ public class LiveOrderActivity extends AppCompatActivity {
             finish();
         });
         continuetvr.setOnClickListener(v -> {
-            startActivity(new Intent(LiveOrderActivity.this, MenuActivity.class));
             finish();
         });
         ivBack.setOnClickListener(v -> finish());
@@ -181,13 +182,13 @@ public class LiveOrderActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     } else {
-                        new MakeToast("Error while getting data");
+                        showErrorDialog("Error while getting data");
                         rvliveOrder.setVisibility(View.GONE);
                         bottom.setVisibility(View.GONE);
                         emptycartll.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    new MakeToast("Error while getting result");
+                    showErrorDialog("Error while getting data");
                     rvliveOrder.setVisibility(View.GONE);
                     bottom.setVisibility(View.GONE);
                     emptycartll.setVisibility(View.VISIBLE);
@@ -223,10 +224,10 @@ public class LiveOrderActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-                                new MakeToast(object.optString("msg"));
+
                                 viewLiveOrder();
                             } else {
-                                new MakeToast(object.optString("msg"));
+                                showErrorDialog(object.optString("msg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -240,5 +241,17 @@ public class LiveOrderActivity extends AppCompatActivity {
                 new MakeToast(R.string.Checkyournetwork);
             }
         });
+    }
+    private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(LiveOrderActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
     }
 }

@@ -3,8 +3,10 @@ package com.conceptioni.cafeapp.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,6 +14,7 @@ import android.widget.LinearLayout;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.ApiCall;
 import com.conceptioni.cafeapp.activity.HomeActivity;
+import com.conceptioni.cafeapp.activity.LiveOrderActivity;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
@@ -76,7 +79,7 @@ public class EnterNameDialogue {
                             context.startActivity(new Intent(context,HomeActivity.class));
                             ((Activity)context).finish();
                         }else {
-                            new MakeToast( object.optString("msg"));
+                            showErrorDialog(object.optString("msg"));
                         }
                     }
 
@@ -89,5 +92,17 @@ public class EnterNameDialogue {
                 new MakeToast(R.string.Checkyournetwork);
             }
         });
+    } private void showErrorDialog(String msg) {
+        new AlertDialog.Builder(context)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
     }
+
 }

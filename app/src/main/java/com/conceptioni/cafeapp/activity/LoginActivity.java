@@ -1,6 +1,7 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -137,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS})
     void denied_read_sms() {
-        new MakeToast(R.string.denied_read_sms);
+        showErrorDialog(R.string.denied_read_sms);
     }
 
     public void SendOtp(){
@@ -173,5 +175,17 @@ public class LoginActivity extends AppCompatActivity {
                 new MakeToast(R.string.Checkyournetwork);
             }
         });
+    }
+    private void showErrorDialog(int msg) {
+        new AlertDialog.Builder(LoginActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
     }
 }

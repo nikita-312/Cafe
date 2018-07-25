@@ -109,7 +109,6 @@ public class CafeInfoActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 new MakeToast(R.string.Checkyournetwork);
             }
-
         });
     }
 }
