@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -278,7 +279,7 @@ public class CartActivity extends AppCompatActivity {
                         String quant = "", amt = "",totalQTY="";
                         int lastQty=0;
                         List<CartData> cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
-
+                        Log.d("+++++++++id","+++++"+ItemId);
                         Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
                         if (deleteRow > 0) {
                             for (int j = 0; j < cartDataList.size(); j++) {
@@ -342,14 +343,13 @@ public class CartActivity extends AppCompatActivity {
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         } else {
+
                             progressDialog.dismiss();
                             showErrorDialog(object.optString("msg"));
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         progressDialog.dismiss();
-
                     }
                 } else {
                     progressDialog.dismiss();
@@ -396,7 +396,7 @@ public class CartActivity extends AppCompatActivity {
 
     }
     private void Addtocart(JsonObject jsonObject) {
-         progressDialog = new ProgressDialog(CartActivity.this);
+        progressDialog = new ProgressDialog(CartActivity.this);
         progressDialog.setMessage("Your order is in progress...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -412,10 +412,18 @@ public class CartActivity extends AppCompatActivity {
                             if (object.optInt("success") == 1) {
                                placeOrder();
                             } else {
-                                showErrorDialog(object.optString("msg"));
+                                object.optString("delete");
+                                String deltedId = object.optString("items");
+                                if (object.optString("delete").equalsIgnoreCase("yes")){
+                                    List<String> items = Arrays.asList(deltedId.split("\\s*,\\s*"));
+                                    Log.d("++++items","+++ "+items);
+                                    showDeleteDialog("Want to remove deleted items?",items);
+                                }else {
+                                    showErrorDialog(object.optString("msg"));
+
+                                }
                                 progressDialog.hide();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             progressDialog.hide();
@@ -439,6 +447,37 @@ public class CartActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+    }
+
+    private void showDeleteDialog(String msg,List<String> items) {
+        new AlertDialog.Builder(CartActivity.this)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        List<CartData> cartDataList1 = new ArrayList<>();
+                        List<String> idStringList = new ArrayList<>();
+                        cartDataList1 = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
+                        if (!cartDataList1.isEmpty()){
+                            idStringList.clear();
+                            for (int l = 0; l <cartDataList1.size() ; l++) {
+                                for (int k = 0; k <items.size() ; k++) {
+                                    if (cartDataList1.get(l).getCOLUMN_ITEM_ID().equalsIgnoreCase(items.get(k))){
+//                                        idStringList.add(items.get(k));
+                                        Log.d("+++++id","++++"+items.get(k));
+                                        showDeleteAlert(k,items.get(k));
+
+                                    }
+                                }
+                            }
+                            dialogInterface.dismiss();
+                        }
+
+
                     }
                 })
                 .create().show();

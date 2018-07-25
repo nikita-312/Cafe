@@ -114,7 +114,6 @@ public class CardActivity extends AppCompatActivity {
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
-
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.orderid,object.getString("orderid")).apply();
@@ -136,6 +135,7 @@ public class CardActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showDialog() {
         new AlertDialog.Builder(CardActivity.this)
                 .setMessage("Please choose payment method")
