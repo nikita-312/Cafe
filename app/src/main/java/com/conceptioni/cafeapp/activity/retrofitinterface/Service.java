@@ -15,12 +15,6 @@ public interface Service {
     Call<JsonObject> getMenuItem(@Header("Content-Type") String content, @Body JsonObject jsonObject);
     @POST("userapi/verifyOTP")
     Call<JsonObject> verifyotp(@Header("Content-Type") String content,@Body JsonObject object);
-    @POST("userapi/view_cart")
-    Call<JsonObject> viewCart(@Header("Content-Type") String content, @Body JsonObject object);
-    @POST("userapi/add_to_cart")
-    Call<JsonObject> AddToCart(@Header("Content-Type") String content,@Body JsonObject object);
-    @POST("userapi/remove_from_cart")
-    Call<JsonObject> removeCart(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/place_order")
     Call<JsonObject> placeOrder(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/live_order_list")
@@ -37,10 +31,10 @@ public interface Service {
     Call<JsonObject> cafeInfo(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/check_table")
     Call<JsonObject> checktable(@Header("Content-Type") String content, @Body JsonObject object);
-    @POST("userapi/session_expire")
-    Call<JsonObject> sessionexpire(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/store_username")
     Call<JsonObject> storeusername(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/add_to_cart_all")
     Call<JsonObject> addtocartall(@Header("Content-Type") String content, @Body JsonObject object);
+    @POST("userapi/session_expire")
+    Call<JsonObject> sessionexpire(@Header("Content-Type") String content, @Body JsonObject object);
 }

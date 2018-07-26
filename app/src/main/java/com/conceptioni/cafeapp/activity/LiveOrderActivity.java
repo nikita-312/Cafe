@@ -42,9 +42,10 @@ public class LiveOrderActivity extends AppCompatActivity {
     ShimmerRecyclerView rvliveOrder;
     LinearLayout llBottom, bottom, retryll;
     TextviewRegular tvrCartTotal, tvrCartFee, tvrCartSubTotal, continuetvr, paymenttvr;
-    double subtotal=0;
-    double total=0;
-    double fee=0;
+    String subtotal,total,fee;
+//    double total=0;
+//    double fee=0;
+
     List<CartModel> cartModelsarray = new ArrayList<>();
     ImageView ivBack;
     LiveOrderAdapter liveOrderAdapter;
@@ -144,15 +145,13 @@ public class LiveOrderActivity extends AppCompatActivity {
                             rvliveOrder.setVisibility(View.VISIBLE);
                             bottom.setVisibility(View.VISIBLE);
                             JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
-
                             if (jsonObject1.getInt("success") == 1) {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"1").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"no").apply();
+                                subtotal = jsonObject1.optString("subtotal");
+                                fee = jsonObject1.optString("gst");
+                                total = jsonObject1.optString("total");
                                 cartModelsarray.clear();
-                                subtotal = Double.parseDouble(String.valueOf(jsonObject1.optInt("subtotal")));
-                                fee = Double.parseDouble(String.valueOf(jsonObject1.optString("gst")));
-                                total = Double.parseDouble(String.valueOf(jsonObject1.optInt("total")));
-
                                 JSONArray jsonArray = jsonObject1.getJSONArray("data");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object = jsonArray.getJSONObject(i);

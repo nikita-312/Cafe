@@ -1,8 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -68,6 +71,13 @@ public class MenuActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     ProgressBar addtocartprogress;
 
+    private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            GetMenu();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +89,8 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Constant.active = true;
+        registerReceiver(messageReceiver, new IntentFilter("broadcast_chat_message"));
         initmenu();
         clicks();
         pos = 0;
@@ -202,12 +214,7 @@ public class MenuActivity extends AppCompatActivity {
                         minusiv.setClickable(false);
                     }
                 });
-                itemll.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View view) {
-                                                  startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty).putExtra("gst", gst));
-                                              }
-                                          }
+                itemll.setOnClickListener(view1 -> startActivity(new Intent(MenuActivity.this, DescriptionActivity.class).putExtra("ItemId", finalItemsList.get(position).getItem_id()).putExtra("Total", TotalQty).putExtra("gst", gst))
 
                 );
             }
@@ -276,7 +283,7 @@ public class MenuActivity extends AppCompatActivity {
     private void clicks() {
         scancafell.setOnClickListener(view -> {
             if (SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.canScan, Constant.notAvailable).equalsIgnoreCase("yes")) {
-                ScanCafe();
+               ScanCafe();
             } else {
                 showErrorDialog("You still have live order!");
             }
@@ -440,19 +447,6 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    private void SetAdapter(List<Items> itemsArrayList1) {
-        if (!itemsArrayList1.isEmpty()) {
-            tvrNodata.setVisibility(View.GONE);
-            rvCategoryitem.setVisibility(View.VISIBLE);
-            menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
-            rvCategoryitem.hideShimmerAdapter();
-            rvCategoryitem.setAdapter(menuItemAdapter);
-        } else {
-            rvCategoryitem.setVisibility(View.GONE);
-            tvrNodata.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -490,6 +484,19 @@ public class MenuActivity extends AppCompatActivity {
                 new MakeToast(R.string.Checkyournetwork);
             }
         });
+    }
+
+    private void SetAdapter(List<Items> itemsArrayList1) {
+        if (!itemsArrayList1.isEmpty()) {
+            tvrNodata.setVisibility(View.GONE);
+            rvCategoryitem.setVisibility(View.VISIBLE);
+            menuItemAdapter = new MenuItemAdapter(itemsArrayList1);
+            rvCategoryitem.hideShimmerAdapter();
+            rvCategoryitem.setAdapter(menuItemAdapter);
+        } else {
+            rvCategoryitem.setVisibility(View.GONE);
+            tvrNodata.setVisibility(View.VISIBLE);
+        }
     }
 
     private void SaveArrylistinShared(List<Items> itemsArrayList) {
@@ -566,6 +573,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+
+
     private void showErrorDialog(String msg) {
         new AlertDialog.Builder(MenuActivity.this)
                 .setMessage(msg)
@@ -577,5 +586,25 @@ public class MenuActivity extends AppCompatActivity {
                     }
                 })
                 .create().show();
+    }
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Constant.active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Constant.active = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Constant.active = false;
     }
 }

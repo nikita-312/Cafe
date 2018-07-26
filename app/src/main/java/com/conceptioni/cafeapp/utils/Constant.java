@@ -4,4 +4,6 @@ public class Constant {
 
     public static String ApiUrl = "http://citechnology.in/cafe/api/";
     public static String notAvailable = "N/A";
+
+    public static boolean active = false;
 }

@@ -414,7 +414,7 @@ public class CartActivity extends AppCompatActivity {
                                 if (object.optString("delete").equalsIgnoreCase("yes")){
                                     List<String> items = Arrays.asList(deltedId.split("\\s*,\\s*"));
                                     Log.d("++++items","+++ "+items);
-                                    showDeleteDialog("Want to remove deleted items?",items);
+                                    showDeleteDialog("Want to remove unavailable items?",items);
                                 }else {
                                     showErrorDialog(object.optString("msg"));
 
