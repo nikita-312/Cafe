@@ -54,6 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 Log.d("++++++type", "+++++" + object.toString());
 
+
                 if (type.equalsIgnoreCase("logout")) {
                    ScanCafe(auth);
                 } else if (type.equalsIgnoreCase("delete")) {

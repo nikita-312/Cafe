@@ -44,13 +44,13 @@
             android:layout_height="wrap_content"
             android:background="@drawable/login_drawable"
             android:layout_gravity="center"
-            android:text="CONTINUE SHOP"
+            android:text="ASK FOR BILL"
             android:textColor="@color/colorwhite"
             android:paddingTop="@dimen/dp_7"
             android:paddingBottom="@dimen/dp_7"
             android:paddingLeft="@dimen/dp_40"
             android:paddingRight="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_20"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
     </LinearLayout>
 </RelativeLayout>
