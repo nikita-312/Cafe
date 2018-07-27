@@ -221,25 +221,17 @@ public class QrCodeScanActivity extends AppCompatActivity {
         new AlertDialog.Builder(QrCodeScanActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
     private void showErrorDialog1(String msg) {
         new AlertDialog.Builder(QrCodeScanActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        startActivity(new Intent(QrCodeScanActivity.this,HomeActivity.class));
-                        finish();
-                    }
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    startActivity(new Intent(QrCodeScanActivity.this,HomeActivity.class));
+                    finish();
                 })
                 .create().show();
     }
