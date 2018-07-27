@@ -434,7 +434,6 @@ public class MenuActivity extends AppCompatActivity {
                     rvCategory.hideShimmerAdapter();
                     rvCategoryitem.hideShimmerAdapter();
                 }
-
             }
 
             @Override

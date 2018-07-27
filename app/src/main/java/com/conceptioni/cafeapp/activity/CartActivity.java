@@ -265,6 +265,7 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
+
         new AlertDialog.Builder(CartActivity.this)
                 .setTitle("Remove?")
                 .setMessage("Are you sure want to remove the product?")
@@ -306,7 +307,6 @@ public class CartActivity extends AppCompatActivity {
                             dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
                             cartModelsarraydb.remove(pos);
                             cartItemAdapter.notifyDataSetChanged();
-
                         }
                         if (cartModelsarraydb.isEmpty()) {
                             emptycartll.setVisibility(View.VISIBLE);
