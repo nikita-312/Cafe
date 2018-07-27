@@ -47,7 +47,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
     TextviewRegular scaninfotv;
     String CafeId;
     ProgressBar progress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +68,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     private void startScan() {
+        Log.d("scan","++++++++++");
         final MaterialBarcodeScanner materialBarcodeScanner;
         materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
                 .withActivity(QrCodeScanActivity.this)
@@ -104,7 +104,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     @NeedsPermission(Manifest.permission.CAMERA)
     public void opencamera(){
-        startScan();
+            startScan();
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
