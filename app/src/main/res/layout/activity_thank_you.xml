@@ -6,14 +6,36 @@
     android:layout_height="match_parent"
     android:background="@color/colorwhite"
     tools:context="com.conceptioni.cafeapp.activity.ThankYouActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UnusedAttribute"
+        android:background="@color/colorwhite"
+        >
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingEnd="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:src="@drawable/back"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="#f8f8f8"
         android:elevation="@dimen/dp_20"
+        android:layout_below="@+id/toolbar"
         android:padding="25dp">
         <ImageView
             android:layout_width="wrap_content"

@@ -340,7 +340,6 @@ public class CartActivity extends AppCompatActivity {
                             startActivity(new Intent(CartActivity.this, ThankYouActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             finish();
                         } else {
-
                             progressDialog.dismiss();
                             showErrorDialog(object.optString("msg"));
                         }
