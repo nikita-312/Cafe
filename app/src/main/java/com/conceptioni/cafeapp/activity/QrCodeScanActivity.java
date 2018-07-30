@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -141,7 +140,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.d("+++++key","++++++");
             onBackPressed();
             return true;
         }
@@ -235,5 +233,4 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 })
                 .create().show();
     }
-    /*nnn*/
 }
