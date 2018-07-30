@@ -1,7 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.MakeToast;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
-
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
 import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -42,20 +40,22 @@ import retrofit2.Response;
 @RuntimePermissions
 public class QrCodeScanActivity extends AppCompatActivity {
 
-    Barcode barcodeResult;
     public static final String BARCODE_KEY = "BARCODE";
+    Barcode barcodeResult;
     TextviewRegular scaninfotv;
-    String CafeId;
+    String CafeId = "";
     ProgressBar progress;
+    boolean isscan = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code_scan);
         init();
         QrCodeScanActivityPermissionsDispatcher.opencameraWithPermissionCheck(QrCodeScanActivity.this);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             Barcode restoredBarcode = savedInstanceState.getParcelable(BARCODE_KEY);
-            if(restoredBarcode != null) {
+            if (restoredBarcode != null) {
                 scaninfotv.setText(restoredBarcode.rawValue);
                 barcodeResult = restoredBarcode;
             }
@@ -68,7 +68,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     private void startScan() {
-        Log.d("scan","++++++++++");
         final MaterialBarcodeScanner materialBarcodeScanner;
         materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
                 .withActivity(QrCodeScanActivity.this)
@@ -77,8 +76,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .withBackfacingCamera()
                 .withText("Scanning...")
                 .withOnlyQRCodeScanning()
-                .withCenterTracker(R.drawable.material_barcode_square_512,R.drawable.material_barcode_square_512_green)
+                .withCenterTracker(R.drawable.material_barcode_square_512, R.drawable.material_barcode_square_512_green)
                 .withResultListener(barcode -> {
+                    isscan = true;
                     barcodeResult = barcode;
                     CafeId = barcode.rawValue;
                     SplitString(CafeId);
@@ -87,24 +87,24 @@ public class QrCodeScanActivity extends AppCompatActivity {
         materialBarcodeScanner.startScan();
     }
 
-    private void SplitString(String value){
-       if (value.contains("_")){
-           String[] separated = value.split("_");
+    private void SplitString(String value) {
+        if (value.contains("_")) {
+            String[] separated = value.split("_");
 
-           SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
-           SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
+            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, separated[0]).apply();
+            SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, separated[1]).apply();
 
-           progress.setVisibility(View.VISIBLE);
-           CheckTabelApi(separated[0],separated[1]);
-       }else {
-           showErrorDialog("Please scan valid QR code");
-           finish();
-       }
+            progress.setVisibility(View.VISIBLE);
+            CheckTabelApi(separated[0], separated[1]);
+        } else {
+            showErrorDialog("Please scan valid QR code");
+            finish();
+        }
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
-    public void opencamera(){
-            startScan();
+    public void opencamera() {
+        startScan();
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
@@ -130,7 +130,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
 
     @OnPermissionDenied(Manifest.permission.CAMERA)
     void showDeniedcameradialogue() {
-         showErrorDialog("you denied camera permission");
+        showErrorDialog("you denied camera permission");
     }
 
     @OnNeverAskAgain(Manifest.permission.CAMERA)
@@ -141,6 +141,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Log.d("+++++key","++++++");
             onBackPressed();
             return true;
         }
@@ -166,13 +167,10 @@ public class QrCodeScanActivity extends AppCompatActivity {
                     System.exit(0);
                 });
 
-        alertDialog.setNegativeButton("NO",
-                (dialog, which) -> dialog.cancel());
-
         alertDialog.show();
     }
 
-    private void CheckTabelApi(String CafeId,String TableNo){
+    private void CheckTabelApi(String CafeId, String TableNo) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
@@ -196,9 +194,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Table_status, "Free").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag, "0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan, "yes").apply();
-                                startActivity(new Intent(QrCodeScanActivity.this,CafeInfoActivity.class).putExtra("table_no",object.optString("tableno")));
+                                startActivity(new Intent(QrCodeScanActivity.this, CafeInfoActivity.class).putExtra("table_no", object.optString("tableno")));
                                 finish();
-                            } else{
+                            } else {
                                 progress.setVisibility(View.GONE);
                                 showErrorDialog1(object.optString("msg"));
 
@@ -217,6 +215,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showErrorDialog(String msg) {
         new AlertDialog.Builder(QrCodeScanActivity.this)
                 .setMessage(msg)
@@ -224,13 +223,14 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
+
     private void showErrorDialog1(String msg) {
         new AlertDialog.Builder(QrCodeScanActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
                     dialogInterface.dismiss();
-                    startActivity(new Intent(QrCodeScanActivity.this,HomeActivity.class));
+                    startActivity(new Intent(QrCodeScanActivity.this, HomeActivity.class));
                     finish();
                 })
                 .create().show();

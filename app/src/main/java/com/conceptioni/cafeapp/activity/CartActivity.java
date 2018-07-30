@@ -388,7 +388,6 @@ public class CartActivity extends AppCompatActivity {
             Log.d("+++++data","++++"+data);
             Addtocart(data);
 
-        }else {
         }
 
     }
