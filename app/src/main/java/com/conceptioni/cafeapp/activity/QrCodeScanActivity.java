@@ -235,4 +235,5 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 })
                 .create().show();
     }
+    /*nnn*/
 }
