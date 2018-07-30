@@ -11,7 +11,8 @@
         android:id="@+id/itemll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -47,7 +48,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:maxLines="1"
-                    android:text="The Cappucinno"
                     android:textColor="@color/colorFont"
                     android:layout_marginTop="@dimen/dp_8"
                     android:textSize="@dimen/sp_14"
@@ -69,17 +69,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_5"
-                   android:src="@drawable/unfill_like"/>
+                   android:src="@drawable/unfill_like"
+                    tools:ignore="ContentDescription" />
                 <ImageView
                     android:id="@+id/ivDown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:src="@drawable/unfill_unlike"/>
+                    android:src="@drawable/unfill_unlike"
+                    android:layout_marginStart="@dimen/dp_10"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
-
 
         </LinearLayout>
 

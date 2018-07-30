@@ -1,7 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -54,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         initlogin();
         clicklogin();
         LoginActivityPermissionsDispatcher.read_smsWithPermissionCheck(LoginActivity.this);
-        //test1
+
     }
 
     private void clicklogin() {
@@ -146,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_phoneno", "+91"+phonenoet.getText().toString());
-
+        Log.d("++++login","++ "+jsonObject);
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.sendotp(  "application/json", jsonObject);
 
@@ -155,6 +154,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<JsonObject> callback, @NonNull Response<JsonObject> response) {
                 try {
                     JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                    Log.d("++++login","++res "+jsonObject1);
+
                     if (jsonObject1.optString("success").equalsIgnoreCase("1")){
                         loginprogress.setVisibility(View.GONE);
                         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Phone_No,phonenoet.getText().toString()).apply();
@@ -180,12 +181,7 @@ public class LoginActivity extends AppCompatActivity {
         new AlertDialog.Builder(LoginActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 }

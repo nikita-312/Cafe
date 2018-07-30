@@ -1,6 +1,5 @@
 package com.conceptioni.cafeapp.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -62,12 +61,8 @@ public class RatingActivity extends AppCompatActivity {
     }
 
     private void clicks() {
-        tvrSubmit.setOnClickListener(v -> {
-            ScanCafe();
-        });
-        ivSkip.setOnClickListener(v -> {
-            ScanCafe();
-        });
+        tvrSubmit.setOnClickListener(v -> ScanCafe());
+        ivSkip.setOnClickListener(v -> ScanCafe());
         retryll.setOnClickListener(v -> CallReviewCurrentOrder());
     }
 
@@ -116,7 +111,7 @@ public class RatingActivity extends AppCompatActivity {
                                     currentOrderModel.setItem_name(object1.optString("item_name"));
                                     currentOrderModel.setLike(object1.optString("like"));
                                     currentOrderModel.setUnlike(object1.optString("unlike"));
-                                    currentOrderModel.setImage("image");
+                                    currentOrderModel.setImage(object1.optString("image"));
                                     currentOrderModelsArray.add(currentOrderModel);
                                 }
                                 ratingAdapter = new RatingAdapter(currentOrderModelsArray);
@@ -195,12 +190,7 @@ public class RatingActivity extends AppCompatActivity {
         new AlertDialog.Builder(RatingActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 

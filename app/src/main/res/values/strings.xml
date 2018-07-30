@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CafeApp</string>
+    <string name="app_name">Dineore</string>
 
     <string name="denied_camera">you denied camera permission</string>
     <string name="never_ask_camera">we need camera permission</string>

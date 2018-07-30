@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="The americano"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/sp_16"
             tools:ignore="HardcodedText" />
@@ -91,7 +90,6 @@
                         android:id="@+id/ItemPricetvr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$ 20.00"
                         android:textColor="@color/colorPrimary"
                         android:textSize="24sp" />
 
@@ -139,7 +137,6 @@
                     android:id="@+id/Itemdesctvr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummytext"
                     android:textColor="@color/colorFont"
                     android:textSize="@dimen/sp_14" />
 

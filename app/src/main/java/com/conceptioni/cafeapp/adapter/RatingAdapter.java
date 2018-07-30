@@ -1,10 +1,10 @@
 package com.conceptioni.cafeapp.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.ApiCall;
-import com.conceptioni.cafeapp.activity.LiveOrderActivity;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
 import com.conceptioni.cafeapp.model.CurrentOrderModel;
 import com.conceptioni.cafeapp.utils.Constant;
@@ -64,7 +63,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-
+        Log.d("++++rate","+++ "+currentOrderModelsArray.get(position).getImage());
         Glide.with(context).load(currentOrderModelsArray.get(position).getImage()).apply(options).into(holder.imageView1);
 
         if (currentOrderModelsArray.get(position).getLike().equalsIgnoreCase("0")) {
@@ -176,12 +175,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.Holder> {
         new AlertDialog.Builder(context)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 }

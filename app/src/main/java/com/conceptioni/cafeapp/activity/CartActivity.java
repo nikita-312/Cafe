@@ -2,7 +2,6 @@ package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,7 +52,6 @@ public class CartActivity extends AppCompatActivity {
     int mTotal = 0;
     double totalGST = 0;
     double gst = 0;
-    List<CartData> cartModelsarray = new ArrayList<>();
     List<CartData> cartModelsarraydb = new ArrayList<>();
     ImageView ivBack;
     CartItemAdapter cartItemAdapter;
@@ -97,7 +94,7 @@ public class CartActivity extends AppCompatActivity {
         for (int i = 0; i < cartModelsarraydb.size(); i++) {
             totalprice = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ORIGINAL_PRICE());
             totalqty = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ITEMS_QUANTITY());
-            Log.d("++++gst","++ "+cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE());
+
             if (!cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE().equalsIgnoreCase("")) {
                 gst = Double.parseDouble(cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE());
             }
@@ -114,7 +111,7 @@ public class CartActivity extends AppCompatActivity {
             total = Double.parseDouble(str);
             fee = Double.parseDouble(str1);
             finaltotal = Double.parseDouble(str2);
-            Log.d("++++gst", "+++ " +"++"+gst +"+++ "+totalGST + "++++" + fee + "+++" + total);
+
         }
 
         if (!cartModelsarraydb.isEmpty()) {
@@ -271,48 +268,45 @@ public class CartActivity extends AppCompatActivity {
                 .setMessage("Are you sure want to remove the product?")
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String quant = "", amt = "",totalQTY="";
-                        int lastQty=0;
-                        List<CartData> cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
-                        Log.d("+++++++++id","+++++"+ItemId);
-                        Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
-                        if (deleteRow > 0) {
-                            for (int j = 0; j < cartDataList.size(); j++) {
-                                quant = cartDataList.get(j).getCOLUMN_ITEMS_QUANTITY();
-                                amt = cartDataList.get(j).getCOLUMN_ORIGINAL_PRICE();
-                                totalQTY = cartDataList.get(j).getCOLUMN_ITEM_TOTAL_QUANTITY();
-                            }
-                            lastQty = Integer.parseInt(totalQTY) - Integer.parseInt(quant);
-                            TotalQty = String.valueOf(lastQty);
-                            Log.d("+++totalQ","++++ "+TotalQty);
-                            int deduct = Integer.parseInt(quant) * Integer.parseInt(amt);
-                            finaltotal = finaltotal - deduct;
-                            totalGST = finaltotal * gst;
-                            fee = totalGST / 100;
-                            total = finaltotal + fee;
-                            Log.d("++++remove", "++ " + deduct + "+++" + finaltotal);
-                            numberFormat = new DecimalFormat("##.##");
-                            String str = numberFormat.format(total);
-                            String str1 = numberFormat.format(fee);
-                            String str2 = numberFormat.format(finaltotal);
-                            total = Double.parseDouble(str);
-                            fee = Double.parseDouble(str1);
-                            finaltotal = Double.parseDouble(str2);
-                            tvrCartSubTotal.setText(String.valueOf(finaltotal));
-                            tvrCartFee.setText(String.valueOf(fee));
-                            tvrCartTotal.setText(String.valueOf(total));
-                            dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
-                            cartModelsarraydb.remove(pos);
-                            cartItemAdapter.notifyDataSetChanged();
+                .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+                    String quant = "", amt = "",totalQTY="";
+                    int lastQty=0;
+                    List<CartData> cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
+
+                    Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
+                    if (deleteRow > 0) {
+                        for (int j = 0; j < cartDataList.size(); j++) {
+                            quant = cartDataList.get(j).getCOLUMN_ITEMS_QUANTITY();
+                            amt = cartDataList.get(j).getCOLUMN_ORIGINAL_PRICE();
+                            totalQTY = cartDataList.get(j).getCOLUMN_ITEM_TOTAL_QUANTITY();
                         }
-                        if (cartModelsarraydb.isEmpty()) {
-                            emptycartll.setVisibility(View.VISIBLE);
-                            rvCart.setVisibility(View.GONE);
-                            bottom.setVisibility(View.GONE);
-                        }
+                        lastQty = Integer.parseInt(totalQTY) - Integer.parseInt(quant);
+                        TotalQty = String.valueOf(lastQty);
+
+                        int deduct = Integer.parseInt(quant) * Integer.parseInt(amt);
+                        finaltotal = finaltotal - deduct;
+                        totalGST = finaltotal * gst;
+                        fee = totalGST / 100;
+                        total = finaltotal + fee;
+
+                        numberFormat = new DecimalFormat("##.##");
+                        String str = numberFormat.format(total);
+                        String str1 = numberFormat.format(fee);
+                        String str2 = numberFormat.format(finaltotal);
+                        total = Double.parseDouble(str);
+                        fee = Double.parseDouble(str1);
+                        finaltotal = Double.parseDouble(str2);
+                        tvrCartSubTotal.setText(String.valueOf(finaltotal));
+                        tvrCartFee.setText(String.valueOf(fee));
+                        tvrCartTotal.setText(String.valueOf(total));
+                        dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
+                        cartModelsarraydb.remove(pos);
+                        cartItemAdapter.notifyDataSetChanged();
+                    }
+                    if (cartModelsarraydb.isEmpty()) {
+                        emptycartll.setVisibility(View.VISIBLE);
+                        rvCart.setVisibility(View.GONE);
+                        bottom.setVisibility(View.GONE);
                     }
                 })
                 .create().show();
@@ -382,9 +376,6 @@ public class CartActivity extends AppCompatActivity {
             data.addProperty("gst",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.gst,Constant.notAvailable));
             data.addProperty("authid",SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token,Constant.notAvailable));
             data.add("items",jsonArray);
-
-            String jsonFormattedString = data.toString().replaceAll("\\\\", "");
-            Log.d("+++++data","++++"+data);
             Addtocart(data);
 
         }
@@ -411,7 +402,7 @@ public class CartActivity extends AppCompatActivity {
                                 String deltedId = object.optString("items");
                                 if (object.optString("delete").equalsIgnoreCase("yes")){
                                     List<String> items = Arrays.asList(deltedId.split("\\s*,\\s*"));
-                                    Log.d("++++items","+++ "+items);
+
                                     showDeleteDialog("Want to remove unavailable items?",items);
                                 }else {
                                     showErrorDialog(object.optString("msg"));
@@ -438,12 +429,7 @@ public class CartActivity extends AppCompatActivity {
         new AlertDialog.Builder(CartActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 
@@ -451,12 +437,9 @@ public class CartActivity extends AppCompatActivity {
         new AlertDialog.Builder(CartActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                            showDeleteItemAlert(items);
-                            dialogInterface.dismiss();
-                    }
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                        showDeleteItemAlert(items);
+                        dialogInterface.dismiss();
                 })
                 .create().show();
     }
@@ -467,53 +450,50 @@ public class CartActivity extends AppCompatActivity {
                 .setMessage("Are you sure want to remove the product?")
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        for (int k = 0; k <items.size() ; k++) {
-                            String quant = "", amt = "",totalQTY="";
-                            int lastQty=0;
-                            List<CartData> cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), items.get(k));
-                            Log.d("+++++++++id","+++++"+items.get(k));
-                            Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), items.get(k));
-                            if (deleteRow > 0) {
-                                for (int j = 0; j < cartDataList.size(); j++) {
-                                    quant = cartDataList.get(j).getCOLUMN_ITEMS_QUANTITY();
-                                    amt = cartDataList.get(j).getCOLUMN_ORIGINAL_PRICE();
-                                    totalQTY = cartDataList.get(j).getCOLUMN_ITEM_TOTAL_QUANTITY();
-                                }
-                                lastQty = Integer.parseInt(totalQTY) - Integer.parseInt(quant);
-                                TotalQty = String.valueOf(lastQty);
-                                Log.d("+++totalQ","++++ "+TotalQty);
-                                int deduct = Integer.parseInt(quant) * Integer.parseInt(amt);
-                                finaltotal = finaltotal - deduct;
-                                totalGST = finaltotal * gst;
-                                fee = totalGST / 100;
-                                total = finaltotal + fee;
-                                Log.d("++++remove", "++ " + deduct + "+++" + finaltotal);
-                                numberFormat = new DecimalFormat("##.##");
-                                String str = numberFormat.format(total);
-                                String str1 = numberFormat.format(fee);
-                                String str2 = numberFormat.format(finaltotal);
-                                total = Double.parseDouble(str);
-                                fee = Double.parseDouble(str1);
-                                finaltotal = Double.parseDouble(str2);
-                                tvrCartSubTotal.setText(String.valueOf(finaltotal));
-                                tvrCartFee.setText(String.valueOf(fee));
-                                tvrCartTotal.setText(String.valueOf(total));
-                                dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
+                .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+                    for (int k = 0; k <items.size() ; k++) {
+                        String quant = "", amt = "",totalQTY="";
+                        int lastQty=0;
+                        List<CartData> cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), items.get(k));
 
-                                SetAdapter(dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable)));
+                        Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), items.get(k));
+                        if (deleteRow > 0) {
+                            for (int j = 0; j < cartDataList.size(); j++) {
+                                quant = cartDataList.get(j).getCOLUMN_ITEMS_QUANTITY();
+                                amt = cartDataList.get(j).getCOLUMN_ORIGINAL_PRICE();
+                                totalQTY = cartDataList.get(j).getCOLUMN_ITEM_TOTAL_QUANTITY();
+                            }
+                            lastQty = Integer.parseInt(totalQTY) - Integer.parseInt(quant);
+                            TotalQty = String.valueOf(lastQty);
 
-                            }
-                            if (cartModelsarraydb.isEmpty()) {
-                                emptycartll.setVisibility(View.VISIBLE);
-                                rvCart.setVisibility(View.GONE);
-                                bottom.setVisibility(View.GONE);
-                            }
+                            int deduct = Integer.parseInt(quant) * Integer.parseInt(amt);
+                            finaltotal = finaltotal - deduct;
+                            totalGST = finaltotal * gst;
+                            fee = totalGST / 100;
+                            total = finaltotal + fee;
+
+                            numberFormat = new DecimalFormat("##.##");
+                            String str = numberFormat.format(total);
+                            String str1 = numberFormat.format(fee);
+                            String str2 = numberFormat.format(finaltotal);
+                            total = Double.parseDouble(str);
+                            fee = Double.parseDouble(str1);
+                            finaltotal = Double.parseDouble(str2);
+                            tvrCartSubTotal.setText(String.valueOf(finaltotal));
+                            tvrCartFee.setText(String.valueOf(fee));
+                            tvrCartTotal.setText(String.valueOf(total));
+                            dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
+
+                            SetAdapter(dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable)));
+
                         }
-                        dialogInterface.dismiss();
+                        if (cartModelsarraydb.isEmpty()) {
+                            emptycartll.setVisibility(View.VISIBLE);
+                            rvCart.setVisibility(View.GONE);
+                            bottom.setVisibility(View.GONE);
+                        }
                     }
+                    dialogInterface.dismiss();
                 })
                 .create().show();
 

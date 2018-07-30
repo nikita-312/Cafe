@@ -1,12 +1,10 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -208,9 +206,7 @@ public class DescriptionActivity extends AppCompatActivity {
             }
         });
 
-        addtocarttvr.setOnClickListener(v -> {
-            onBackPressed();
-        });
+        addtocarttvr.setOnClickListener(v -> onBackPressed());
 
         backiv.setOnClickListener(v -> onBackPressed());
 

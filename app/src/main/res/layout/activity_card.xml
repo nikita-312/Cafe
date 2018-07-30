@@ -102,6 +102,7 @@
         android:background="@drawable/login_drawable"
         android:layout_marginBottom="@dimen/dp_10"
         android:layout_centerHorizontal="true"
+        android:clickable="true"
         android:paddingTop="@dimen/dp_7"
         android:paddingBottom="@dimen/dp_7"
         android:paddingLeft="@dimen/dp_60"

@@ -1,7 +1,6 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -97,7 +96,7 @@ public class OTPActivity extends AppCompatActivity {
         jsonObject.addProperty("user_phoneno", "+91"+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Phone_No, Constant.notAvailable));
         jsonObject.addProperty("OTP", pinview1.getValue());
         jsonObject.addProperty("deviceid", SharedPrefs.getSharedPref().getString(SharedPrefs.tokendetail.refreshtoken,Constant.notAvailable));
-
+        Log.d("++++otp","+++ "+jsonObject);
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.verifyotp(  "application/json", jsonObject);
 
@@ -107,6 +106,8 @@ public class OTPActivity extends AppCompatActivity {
                         try {
                             if (response.body() != null) {
                                 JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                                Log.d("++++otp","+++object "+object);
+
                                 if (object.optString("success").equalsIgnoreCase("1")){
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Auth_token,object.optString("auth_token")).apply();
                                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.User_id,object.optString("id")).apply();
@@ -138,12 +139,7 @@ public class OTPActivity extends AppCompatActivity {
         new AlertDialog.Builder(OTPActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 }

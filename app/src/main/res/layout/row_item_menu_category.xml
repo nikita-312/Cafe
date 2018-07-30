@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        tools:ignore="UselessParent"
+        tools:ignore="KeyboardInaccessibleWidget,UselessParent"
         android:clickable="true">
 
         <LinearLayout
@@ -52,7 +52,6 @@
                     android:layout_marginLeft="@dimen/dp_5"
                     android:layout_marginStart="@dimen/dp_5"
                     android:maxLines="1"
-                    android:text="The Coffe Macchiato"
                     android:textSize="@dimen/sp_14"
                     tools:ignore="HardcodedText" />
 

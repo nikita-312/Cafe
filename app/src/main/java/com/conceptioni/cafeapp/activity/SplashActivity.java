@@ -30,12 +30,8 @@ public class SplashActivity extends AppCompatActivity {
     private void initsplash() {
 
         new Handler().postDelayed(() -> {
-
-//            && !SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Name,
-//                    Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)
             if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,
                     Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {
-                Log.d("+++++cafeid","++ "+SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable));
                 if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)
                         && !SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Table_status,Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable) ){
                     startActivity(new Intent(SplashActivity.this, MenuActivity.class));
@@ -45,10 +41,6 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
                 }
             } else {
-//                if (isTableExists("ADDTOCART",true)){
-//                    boolean isexist = isTableExists("ADDTOCART",true);
-//                    Log.d("+++++is","+++++"+isexist);
-//                }
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 finish();
             }
@@ -56,27 +48,4 @@ public class SplashActivity extends AppCompatActivity {
         }, 2000);
 
     }
-
-//    public boolean isTableExists(String tableName, boolean openDb) {
-//        if(openDb) {
-//            if(sqLiteDatabase == null || !sqLiteDatabase.isOpen()) {
-//                sqLiteDatabase = dbOpenHelper.getReadableDatabase();
-//            }
-//
-//            if(!sqLiteDatabase.isReadOnly()) {
-//                sqLiteDatabase.close();
-//                sqLiteDatabase = dbOpenHelper.getReadableDatabase();
-//            }
-//        }
-//
-//        Cursor cursor = sqLiteDatabase.rawQuery("select from ADDTOCART where ADDTOCART = '"+tableName+"'", null);
-//        if(cursor!=null) {
-//            if(cursor.getCount()>0) {
-//                cursor.close();
-//                return true;
-//            }
-//            cursor.close();
-//        }
-//        return false;
-//    }
 }

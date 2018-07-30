@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 
 import com.conceptioni.cafeapp.CafeApp;
 
-
-/**
- * Created by abg on 12/22/2015.
- */
 public class SharedPrefs {
 
     public static SharedPreferences getSharedPref() {

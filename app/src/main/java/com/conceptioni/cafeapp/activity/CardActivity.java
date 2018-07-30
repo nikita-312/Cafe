@@ -1,6 +1,5 @@
 package com.conceptioni.cafeapp.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.widget.RelativeLayout;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.activity.retrofitinterface.Service;
-import com.conceptioni.cafeapp.model.CartData;
 import com.conceptioni.cafeapp.utils.Constant;
 import com.conceptioni.cafeapp.utils.SharedPrefs;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
@@ -22,9 +20,6 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -101,6 +96,7 @@ public class CardActivity extends AppCompatActivity {
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         jsonObject.addProperty("payment", type);
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
+        Log.d("+++++card","+++json "+jsonObject);
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.makePayment("application/json", jsonObject);
@@ -113,6 +109,7 @@ public class CardActivity extends AppCompatActivity {
                             nointernetrl.setVisibility(View.GONE);
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+                            Log.d("+++++card","+++ "+object+"+++ "+jsonObject);
                             if (object.optInt("success") == 1) {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
@@ -140,12 +137,7 @@ public class CardActivity extends AppCompatActivity {
         new AlertDialog.Builder(CardActivity.this)
                 .setMessage("Please choose payment method")
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                       dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 
@@ -153,12 +145,7 @@ public class CardActivity extends AppCompatActivity {
         new AlertDialog.Builder(CardActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 

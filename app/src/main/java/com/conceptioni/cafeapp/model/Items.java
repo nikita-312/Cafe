@@ -2,9 +2,7 @@ package com.conceptioni.cafeapp.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-/**
- * Awesome Pojo Generator
- * */
+
 public class Items{
   @SerializedName("image")
   @Expose

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -74,6 +75,7 @@ public class EnterNameDialogue {
                 try {
                     if (response.body() != null) {
                         JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
+
                         if (object.optString("success").equalsIgnoreCase("1")) {
                             SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Name,Name).apply();
                             context.startActivity(new Intent(context,HomeActivity.class));

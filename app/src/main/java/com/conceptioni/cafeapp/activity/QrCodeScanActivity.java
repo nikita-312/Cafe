@@ -186,7 +186,6 @@ public class QrCodeScanActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
                             if (object.optInt("success") == 1) {
                                 progress.setVisibility(View.GONE);
-
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Cafe_Id, CafeId).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.table_number, TableNo).apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Table_status, "Free").apply();
@@ -233,4 +232,5 @@ public class QrCodeScanActivity extends AppCompatActivity {
                 })
                 .create().show();
     }
+
 }

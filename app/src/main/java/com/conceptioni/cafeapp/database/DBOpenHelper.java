@@ -35,7 +35,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SUB_TOTAL = "SUB_TOTAL";
 
     private List<CartData> cartDataArrayListwithid = new ArrayList<>();
-    private List<CartData> cartDataArrayListwithmaxvalue = new ArrayList<>();
     private List<CartData> cartDataArrayList = new ArrayList<>();
 
     private static final String CREATE_CART_TABLE = "CREATE TABLE " + TABLE_NAME
@@ -123,8 +122,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 cartData.setCOLUMN_ITEM_TOTAL_QUANTITY(res.getString(6));
                 cartData.setCOLUMN_ORIGINAL_PRICE(res.getString(7));
                 cartData.setCOLUMN_EXTRA_PRICE(res.getString(8));
-                Log.d("++++gst","++db "+res.getString(8));
-
                 cartData.setCOLUMN_ITEM_TOTAL_PRICE(res.getString(9));
                 cartData.setCOLUMN_ITEM_DESC(res.getString(10));
                 cartData.setCOLUMN_ITEM_TYPE(res.getString(11));
@@ -136,33 +133,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         }
         return cartDataArrayList;
     }
-
-    public List<CartData> getlastinsertCartData(String Userid) {
-        cartDataArrayListwithmaxvalue.clear();
-        SQLiteDatabase db = this.getReadableDatabase();
-        @SuppressLint("Recycle") Cursor res =  db.rawQuery( "SELECT * , MAX(TOTAL_QUANTITY) from "+ TABLE_NAME + " WHERE " + COLUMN_USER_ID + " = " + Userid, null );
-        if (res.getCount()>0){
-            res.moveToFirst();
-            for (int i = 0; i<res.getCount(); i++) {
-                CartData cartData  = new CartData();
-                cartData.setCOLUMN_USER_ID(res.getString(0));
-                cartData.setCOLUMN_CAFE_ID(res.getString(1));
-                cartData.setCOLUMN_ITEM_ID(res.getString(2));
-                cartData.setCOLUMN_ITEM_NAME(res.getString(3));
-                cartData.setCOLUMN_NOTE(res.getString(4));
-                cartData.setCOLUMN_ITEMS_QUANTITY(res.getString(5));
-                cartData.setCOLUMN_ITEM_TOTAL_QUANTITY(res.getString(6));
-                Log.d("++++totalqtydb","++ "+res.getString(6));
-                cartData.setCOLUMN_ORIGINAL_PRICE(res.getString(7));
-                cartData.setCOLUMN_EXTRA_PRICE(res.getString(8));
-                cartData.setCOLUMN_ITEM_TOTAL_PRICE(res.getString(9));
-                cartDataArrayListwithmaxvalue.add(cartData);
-                res.moveToNext();
-            }
-        }
-        return cartDataArrayListwithmaxvalue;
-    }
-
 
     public boolean updatecartdata(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image,String subtotal){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -184,15 +154,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
 
         return true;
-    }
-
-    public void updatecolumcartdata(String userid,String itemid,String totalquant,String extraprice,String totalprice) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_ITEM_TOTAL_QUANTITY, totalquant);
-        contentValues.put(COLUMN_EXTRA_PRICE, extraprice);
-        contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
-        database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid + " AND " + COLUMN_ITEM_ID + " = " + itemid, null);
     }
 
     public boolean updateAllcartdata(String userid,String totalquant,String extraprice,String totalprice,String subtotal) {

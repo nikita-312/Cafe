@@ -3,7 +3,6 @@ package com.conceptioni.cafeapp.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.model.CartData;
-import com.conceptioni.cafeapp.model.CartModel;
 import com.conceptioni.cafeapp.utils.TextviewBold;
 import com.conceptioni.cafeapp.utils.TextviewRegular;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -53,7 +51,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.MenuVi
                 .error(R.drawable.no_image)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
-        Log.d("+++img","++ "+cartModelsarray.get(position).getCOLUMN_IMAGE());
         Glide.with(context).load(cartModelsarray.get(position).getCOLUMN_IMAGE()).apply(options).into(holder.imageView1);
     }
 

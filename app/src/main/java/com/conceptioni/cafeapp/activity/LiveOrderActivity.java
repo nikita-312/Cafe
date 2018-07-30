@@ -1,13 +1,11 @@
 package com.conceptioni.cafeapp.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,13 +36,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LiveOrderActivity extends AppCompatActivity {
-//    private static final String SHOWCASE_ID = "simple example";
     ShimmerRecyclerView rvliveOrder;
     LinearLayout llBottom, bottom, retryll;
     TextviewRegular tvrCartTotal, tvrCartFee, tvrCartSubTotal, continuetvr, paymenttvr;
     String subtotal,total,fee;
-//    double total=0;
-//    double fee=0;
+
 
     List<CartModel> cartModelsarray = new ArrayList<>();
     ImageView ivBack;
@@ -64,9 +60,7 @@ public class LiveOrderActivity extends AppCompatActivity {
             startActivity(new Intent(LiveOrderActivity.this, CardActivity.class));
             finish();
         });
-        continuetvr.setOnClickListener(v -> {
-            finish();
-        });
+        continuetvr.setOnClickListener(v -> finish());
         ivBack.setOnClickListener(v -> finish());
         retryll.setOnClickListener(v -> viewLiveOrder());
     }
@@ -87,7 +81,6 @@ public class LiveOrderActivity extends AppCompatActivity {
         nointernetrl = findViewById(R.id.nointernetrl);
         retryll = findViewById(R.id.retryll);
 
-        //presentShowcaseView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LiveOrderActivity.this);
         rvliveOrder.setLayoutManager(linearLayoutManager);
@@ -107,20 +100,6 @@ public class LiveOrderActivity extends AppCompatActivity {
             }
         }));
     }
-
-//    private void presentShowcaseView() {
-//        new MaterialShowcaseView.Builder(this)
-//                .setMaskColour(Color.argb(150, 0, 0, 0))
-//                .setTarget(reorderiv)
-//                .setTitleText("Re-Order")
-//                .setDismissText("GOT IT")
-//                .setContentText("want to re-order?")
-//                .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
-//                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
-//                .useFadeAnimation() // remove comment if you want to use fade animations for Lollipop & up
-//                .setShapePadding(20)
-//                .show();
-//    }
 
     public void viewLiveOrder() {
         JsonObject jsonObject = new JsonObject();
@@ -245,12 +224,7 @@ public class LiveOrderActivity extends AppCompatActivity {
         new AlertDialog.Builder(LiveOrderActivity.this)
                 .setMessage(msg)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create().show();
     }
 }

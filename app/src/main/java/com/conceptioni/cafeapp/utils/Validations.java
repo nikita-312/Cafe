@@ -2,9 +2,6 @@ package com.conceptioni.cafeapp.utils;
 
 import android.widget.EditText;
 
-/**
- * Created by Admin on 8/10/2015.
- */
 public class Validations {
 
     public boolean isEmpty(EditText editText) {

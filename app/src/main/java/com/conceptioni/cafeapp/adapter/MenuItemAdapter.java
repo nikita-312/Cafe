@@ -34,7 +34,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
     private Context context;
     private List<Items> itemsArrayList;
 
-
     public MenuItemAdapter(List<Items> itemsArrayList) {
         this.itemsArrayList = itemsArrayList;
 
@@ -72,19 +71,14 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuVi
         /*if quantity is update from menu and in detail user not change in quantity so here we check first database quantity and if there then set database quantity*/
         if (!cartDataArrayList.isEmpty()){
             for (int i = 0; i <cartDataArrayList.size() ; i++) {
-                Log.d("++++size1234","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                 if (cartDataArrayList.get(i).getCOLUMN_ITEM_ID().equalsIgnoreCase(itemsArrayList.get(position).getItem_id())){
-//                    Log.d("++++size1234if","+++"+cartDataArrayList.size() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEM_ID() + "++++" + cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
                     itemsArrayList.get(position).setQty(cartDataArrayList.get(i).getCOLUMN_ITEMS_QUANTITY());
-//                    Log.d("++++size123456if","++++"+itemsArrayList.get(position).getQty());
                     holder.quantytvr.setText(itemsArrayList.get(position).getQty());
                 }
             }
         }else {
             holder.quantytvr.setText(itemsArrayList.get(position).getQty());
         }
-
-
     }
 
     @Override
