@@ -42,6 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if (type.equalsIgnoreCase("logout")) {
                    ScanCafe(auth);
                 } else if (type.equalsIgnoreCase("delete")) {
+                    /*if menu screen is active then update or refresh*/
                     if (Constant.active) {
                         updateChatScreen();
                     }

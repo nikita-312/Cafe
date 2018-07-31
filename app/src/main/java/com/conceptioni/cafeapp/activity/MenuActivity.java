@@ -69,6 +69,7 @@ public class MenuActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     ProgressBar addtocartprogress;
 
+    /*for refresh activity get broadcast when delete push occur*/
     private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -117,6 +118,7 @@ public class MenuActivity extends AppCompatActivity {
         rvCategory.setLayoutManager(linearLayoutManager);
         rvCategory.showShimmerAdapter();
 
+        /*category item click listener*/
         rvCategory.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategory, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -126,6 +128,7 @@ public class MenuActivity extends AppCompatActivity {
                             categoryList.get(i).setIsselect(false);
                         }
                     }
+                    /*use pos for do selection like make category ornage selection*/
                     categoryList.get(pos).setIsselect(false);
                     categoryList.get(position).setIsselect(true);
                     pos = position;
@@ -135,8 +138,9 @@ public class MenuActivity extends AppCompatActivity {
                     } else {
                         ShowAllData(categoryList.get(position).getItems());
                     }
+                    /*for refresh adapter*/
                     menuAdapter.notifyDataSetChanged();
-
+                    /*save data in shared to show it in detail screen*/
                     Gson gson = new Gson();
                     String json = gson.toJson(categoryList.get(position).getItems());
                     SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.ItemData, json).apply();
@@ -154,6 +158,7 @@ public class MenuActivity extends AppCompatActivity {
         rvCategoryitem.setLayoutManager(linearLayoutManager1);
         rvCategoryitem.showShimmerAdapter();
 
+        /*recycler view item click*/
         rvCategoryitem.addOnItemTouchListener(new RecyclerTouchListener(MenuActivity.this, rvCategoryitem, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -225,6 +230,8 @@ public class MenuActivity extends AppCompatActivity {
         GetMenu();
     }
 
+    /*if user click on plus or minus do all operation like add update delete method*/
+    /*update quantity totalquantity etc*/
     private void addorupdatedataindatabase(TextviewRegular tvrCartQty, int position, List<Items> finalItemsList, String finalQuantity) {
 
         cartDataArrayList.clear();
@@ -310,6 +317,7 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    /*veg nonveg data filter*/
     private void ShowVegData(List<Items> itemsArrayList) {
         vegItemsList.clear();
         if (!itemsArrayList.isEmpty()) {
@@ -341,10 +349,12 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    /*if filter is not selected show all data*/
     private void ShowAllData(List<Items> itemsArrayList) {
         SetAdapter(itemsArrayList);
     }
 
+    /*api for display menu and category*/
     public void GetMenu() {
         JsonObject object = new JsonObject();
         object.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
@@ -442,6 +452,7 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    /*scan another cafe api*/
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -502,6 +513,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    /*method for display totalquantity in footer*/
     @SuppressLint("SetTextI18n")
     private void checkdata() {
         if (checksharedflag()) {
@@ -553,12 +565,14 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    /*checkdatabase empty method*/
     private boolean checkdatabaseisempty() {
         List<CartData> cartDataList;
         cartDataList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         return !cartDataList.isEmpty();
     }
 
+    /*check wheter live data is empty or not manage flag if flag = 1 then live order has data and flag = 0 then cart has data*/
     private boolean checksharedflag() {
         return SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Flag, Constant.notAvailable).equalsIgnoreCase("0");
     }
@@ -568,8 +582,6 @@ public class MenuActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
-
     private void showErrorDialog(String msg) {
         new AlertDialog.Builder(MenuActivity.this)
                 .setMessage(msg)
@@ -578,23 +590,24 @@ public class MenuActivity extends AppCompatActivity {
                 .create().show();
     }
 
-
-
     @Override
     public void onStart() {
         super.onStart();
+        /*for update ui*/
         Constant.active = true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        /*for update ui*/
         Constant.active = false;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        /*for update ui*/
         Constant.active = false;
     }
 }

@@ -80,6 +80,7 @@ public class RatingActivity extends AppCompatActivity {
         CallReviewCurrentOrder();
     }
 
+    /*api for show list of item user order*/
     public void CallReviewCurrentOrder() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -149,6 +150,8 @@ public class RatingActivity extends AppCompatActivity {
         startActivity(new Intent(RatingActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
         finish();
     }
+
+    /*session expire api*/
     private void ScanCafe() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));

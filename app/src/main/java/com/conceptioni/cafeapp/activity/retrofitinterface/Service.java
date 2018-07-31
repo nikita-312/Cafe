@@ -9,6 +9,8 @@ import retrofit2.http.POST;
 
 public interface Service {
 
+    /*all api*/
+
     @POST("userapi/userLogin")
     Call<JsonObject> sendotp(@Header("Content-Type") String content, @Body JsonObject object);
     @POST("userapi/get_cafeMenu")

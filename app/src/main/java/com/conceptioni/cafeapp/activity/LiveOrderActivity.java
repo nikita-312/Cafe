@@ -220,6 +220,7 @@ public class LiveOrderActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showErrorDialog(String msg) {
         new AlertDialog.Builder(LiveOrderActivity.this)
                 .setMessage(msg)

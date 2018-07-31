@@ -66,6 +66,8 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        /*database initialization*/
         dbOpenHelper = new DBOpenHelper(CartActivity.this);
         sqLiteDatabase = dbOpenHelper.getWritableDatabase();
         init();
@@ -90,20 +92,21 @@ public class CartActivity extends AppCompatActivity {
         rvCart.setLayoutManager(linearLayoutManager);
         rvCart.showShimmerAdapter();
 
+        /*retrive data from database*/
         cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         for (int i = 0; i < cartModelsarraydb.size(); i++) {
             totalprice = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ORIGINAL_PRICE());
             totalqty = Integer.parseInt(cartModelsarraydb.get(i).getCOLUMN_ITEMS_QUANTITY());
-
             if (!cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE().equalsIgnoreCase("")) {
                 gst = Double.parseDouble(cartModelsarraydb.get(i).getCOLUMN_EXTRA_PRICE());
             }
-
             subtotal = (totalprice * totalqty) + subtotal;
             finaltotal = subtotal;
             totalGST = finaltotal * gst;
             fee = totalGST / 100;
             total = finaltotal + fee;
+
+            /*set desimal formate*/
             numberFormat = new DecimalFormat("##.##");
             String str = numberFormat.format(total);
             String str1 = numberFormat.format(fee);
@@ -137,6 +140,8 @@ public class CartActivity extends AppCompatActivity {
 
     private void click() {
         tvrPlaceOrder.setOnClickListener(v -> SendData());
+
+        /*recycler item click*/
         rvCart.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), rvCart, new RecyclerTouchListener.ClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -146,23 +151,31 @@ public class CartActivity extends AppCompatActivity {
                 ImageView plusiv = view.findViewById(R.id.plusiv);
                 ImageView minusiv = view.findViewById(R.id.minusiv);
                 TextviewRegular tvrCartQty = view.findViewById(R.id.tvrCartQty);
+
+                /*when user click on plus*/
                 plusiv.setOnClickListener(v -> {
                     List<CartData> cartDataList;
+                    /*get data from database for update data like quantity,totalquantity,totalprice etc so first retrive from db*/
                     cartDataList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
                     int count = Integer.parseInt(cartDataList.get(position).getCOLUMN_ITEMS_QUANTITY());
+                    /*update quantity*/
                     int Quantity = count + 1;
                     TotalQty = cartDataList.get(position).getCOLUMN_ITEM_TOTAL_QUANTITY();
+                    /*update total quantity*/
                     int totalqty = Integer.parseInt(TotalQty) + 1;
                     TotalQty = String.valueOf(totalqty);
                     int price = Integer.parseInt(cartDataList.get(position).getCOLUMN_ORIGINAL_PRICE());
                     String finalQuantity = String.valueOf(Quantity);
+                    /*calculation for finaltotal*/
                     mTotal = (price * count);
                     finaltotal = finaltotal + price;
                     totalGST = finaltotal * gst;
                     fee = totalGST / 100;
                     total = finaltotal + fee;
+                    /*update db*/
                     boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), cartModelsarraydb.get(position).getCOLUMN_ITEM_ID(), cartModelsarraydb.get(position).getCOLUMN_ITEM_NAME(), cartModelsarraydb.get(position).getCOLUMN_NOTE(), finalQuantity, TotalQty, cartModelsarraydb.get(position).getCOLUMN_ORIGINAL_PRICE(), String.valueOf(fee), String.valueOf(total), cartModelsarraydb.get(position).getCOLUMN_ITEM_DESC(), cartModelsarraydb.get(position).getCOLUMN_ITEM_TYPE(), cartModelsarraydb.get(position).getCOLUMN_IMAGE(), String.valueOf(finaltotal));
                     if (isupdate) {
+                        /*update data in all row of column of db bcs totalprice,totalquantity must be same for all item */
                         dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
                     }
                     numberFormat = new DecimalFormat("##.##");
@@ -177,6 +190,8 @@ public class CartActivity extends AppCompatActivity {
                     tvrCartFee.setText(String.valueOf(fee));
                     tvrCartTotal.setText(String.valueOf(total));
                 });
+
+                /*when user click on minus*/
                 minusiv.setOnClickListener(v -> {
                     minusiv.setClickable(true);
                     List<CartData> cartDataList;
@@ -239,6 +254,7 @@ public class CartActivity extends AppCompatActivity {
             startActivity(new Intent(CartActivity.this, MenuActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             finish();
         });
+        /*no internet retry button*/
         retryll.setOnClickListener(view -> {
             cartModelsarraydb = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
             if (!cartModelsarraydb.isEmpty()) {
@@ -262,7 +278,6 @@ public class CartActivity extends AppCompatActivity {
     }
 
     private void showDeleteAlert(final int pos, String ItemId) {
-
         new AlertDialog.Builder(CartActivity.this)
                 .setTitle("Remove?")
                 .setMessage("Are you sure want to remove the product?")
@@ -271,8 +286,9 @@ public class CartActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
                     String quant = "", amt = "",totalQTY="";
                     int lastQty=0;
+                    /* get data as per itemid*/
                     List<CartData> cartDataList = dbOpenHelper.getCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
-
+                    /*delete row as per itemid*/
                     Integer deleteRow = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
                     if (deleteRow > 0) {
                         for (int j = 0; j < cartDataList.size(); j++) {
@@ -299,6 +315,9 @@ public class CartActivity extends AppCompatActivity {
                         tvrCartSubTotal.setText(String.valueOf(finaltotal));
                         tvrCartFee.setText(String.valueOf(fee));
                         tvrCartTotal.setText(String.valueOf(total));
+
+                        /*after delete success update database*/
+
                         dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), TotalQty, String.valueOf(fee), String.valueOf(total), String.valueOf(finaltotal));
                         cartModelsarraydb.remove(pos);
                         cartItemAdapter.notifyDataSetChanged();
@@ -311,6 +330,8 @@ public class CartActivity extends AppCompatActivity {
                 })
                 .create().show();
     }
+
+    /*proceed order api*/
     public void placeOrder() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -354,8 +375,8 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
+    /*prepare data for send data to server*/
     private void SendData() {
-
         List<CartData> cartDataArrayList;
         cartDataArrayList = dbOpenHelper.getAllCartData(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable));
         JsonObject data = new JsonObject();
@@ -381,6 +402,8 @@ public class CartActivity extends AppCompatActivity {
         }
 
     }
+
+    /*api for send all cart data to server*/
     private void Addtocart(JsonObject jsonObject) {
         progressDialog = new ProgressDialog(CartActivity.this);
         progressDialog.setMessage("Your order is in progress...");
@@ -401,8 +424,8 @@ public class CartActivity extends AppCompatActivity {
                                 object.optString("delete");
                                 String deltedId = object.optString("items");
                                 if (object.optString("delete").equalsIgnoreCase("yes")){
+                                    /*if any item in cart which is deleted from backend */
                                     List<String> items = Arrays.asList(deltedId.split("\\s*,\\s*"));
-
                                     showDeleteDialog("Want to remove unavailable items?",items);
                                 }else {
                                     showErrorDialog(object.optString("msg"));
@@ -425,6 +448,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showErrorDialog(String msg) {
         new AlertDialog.Builder(CartActivity.this)
                 .setMessage(msg)
@@ -444,6 +468,7 @@ public class CartActivity extends AppCompatActivity {
                 .create().show();
     }
 
+    /*delete item from cart which is deleted from backend*/
     private void showDeleteItemAlert(List<String> items) {
         new AlertDialog.Builder(CartActivity.this)
                 .setTitle("Remove?")

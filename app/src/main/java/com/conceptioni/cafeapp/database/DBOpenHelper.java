@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.conceptioni.cafeapp.model.CartData;
 
@@ -58,6 +57,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    /*add data to database*/
     public boolean addCartData(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image,String subtotal) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -80,6 +80,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /*get data as per item id*/
     public List<CartData> getCartData(String Userid,String itemid) {
         cartDataArrayListwithid.clear();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -105,6 +106,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return cartDataArrayListwithid;
     }
 
+    /*get all cart data*/
     public List<CartData> getAllCartData(String Userid) {
         cartDataArrayList.clear();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -134,6 +136,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return cartDataArrayList;
     }
 
+    /*update data as per item id*/
     public boolean updatecartdata(String userid,String cafeid,String itemid,String itemname,String note,String quant,String totalquant,String originalprice,String extraprice,String totalprice,String desc,String itemtype,String image,String subtotal){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -156,7 +159,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateAllcartdata(String userid,String totalquant,String extraprice,String totalprice,String subtotal) {
+    /*update all row data*/
+    public void updateAllcartdata(String userid, String totalquant, String extraprice, String totalprice, String subtotal) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM_TOTAL_QUANTITY, totalquant);
@@ -164,15 +168,15 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_TOTAL_PRICE, totalprice);
         contentValues.put(COLUMN_SUB_TOTAL, subtotal);
         database.update(TABLE_NAME, contentValues, COLUMN_USER_ID + " = " + userid, null);
-        return true;
     }
 
-
+    /*delete table*/
     public void deletetable(){
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_NAME,null,null);
     }
 
+    /*delete row*/
     public Integer deleterow(String userid,String itemid){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.delete(TABLE_NAME, COLUMN_USER_ID + " = ? AND " + COLUMN_ITEM_ID + " = ?",new String[] {userid,itemid});

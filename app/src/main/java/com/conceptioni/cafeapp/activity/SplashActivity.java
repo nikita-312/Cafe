@@ -1,12 +1,10 @@
 package com.conceptioni.cafeapp.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.conceptioni.cafeapp.R;
 import com.conceptioni.cafeapp.database.DBOpenHelper;
@@ -28,7 +26,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initsplash() {
-
         new Handler().postDelayed(() -> {
             if (!SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,
                     Constant.notAvailable).equalsIgnoreCase(Constant.notAvailable)) {

@@ -43,7 +43,6 @@ public class CafeInfoActivity extends AppCompatActivity {
 
     private void clicks() {
         SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();
-
         tvrContinue.setOnClickListener(v -> {
             startActivity(new Intent(CafeInfoActivity.this, MenuActivity.class));
             finish();
@@ -63,6 +62,8 @@ public class CafeInfoActivity extends AppCompatActivity {
         cafeInfo();
     }
 
+
+    /*user scan table info*/
     public void cafeInfo() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));

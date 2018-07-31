@@ -67,6 +67,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     private void startScan() {
+
+        /*Qr code scan used library com.edwardvanraak:MaterialBarcodeScanner:0.0.6-ALPHA*/
+
         final MaterialBarcodeScanner materialBarcodeScanner;
         materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
                 .withActivity(QrCodeScanActivity.this)
@@ -87,6 +90,9 @@ public class QrCodeScanActivity extends AppCompatActivity {
     }
 
     private void SplitString(String value) {
+
+        /*when user scan invalid qrcode*/
+
         if (value.contains("_")) {
             String[] separated = value.split("_");
 
@@ -105,6 +111,8 @@ public class QrCodeScanActivity extends AppCompatActivity {
     public void opencamera() {
         startScan();
     }
+
+    /*marshwello runtime permission*/
 
     @OnShowRationale(Manifest.permission.CAMERA)
     void showRationaleForCamera(final PermissionRequest request) {
@@ -168,6 +176,8 @@ public class QrCodeScanActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    /*api for check if table is free or reserve*/
     private void CheckTabelApi(String CafeId, String TableNo) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
@@ -213,6 +223,7 @@ public class QrCodeScanActivity extends AppCompatActivity {
         });
     }
 
+    /*for manage never ask again checkbox*/
     private void showErrorDialog(String msg) {
         new AlertDialog.Builder(QrCodeScanActivity.this)
                 .setMessage(msg)

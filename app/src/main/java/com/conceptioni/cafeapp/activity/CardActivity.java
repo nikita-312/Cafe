@@ -68,6 +68,8 @@ public class CardActivity extends AppCompatActivity {
             type = "Cash";
         });
         ivBack.setOnClickListener(v -> finish());
+
+        /*no internet screen button click*/
         retryll.setOnClickListener(v -> {
             if (type != null) {
                 CallCard();
@@ -90,13 +92,13 @@ public class CardActivity extends AppCompatActivity {
         retryll = findViewById(R.id.retryll);
     }
 
+    /*api for which payment method used*/
     public void CallCard() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable));
         jsonObject.addProperty("auth_token", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Auth_token, Constant.notAvailable));
         jsonObject.addProperty("payment", type);
         jsonObject.addProperty("cafeid", SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable));
-        Log.d("+++++card","+++json "+jsonObject);
 
         Service service = ApiCall.getRetrofit().create(Service.class);
         Call<JsonObject> call = service.makePayment("application/json", jsonObject);
@@ -109,7 +111,6 @@ public class CardActivity extends AppCompatActivity {
                             nointernetrl.setVisibility(View.GONE);
                             mainrl.setVisibility(View.VISIBLE);
                             JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).toString());
-                            Log.d("+++++card","+++ "+object+"+++ "+jsonObject);
                             if (object.optInt("success") == 1) {
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.Flag,"0").apply();
                                 SharedPrefs.getSharedPref().edit().putString(SharedPrefs.userSharedPrefData.canScan,"yes").apply();

@@ -128,11 +128,14 @@ public class DescriptionActivity extends AppCompatActivity {
             } else {
                 for (int j = 0; j < cartDataArrayList.size(); j++) {
                     if (cartDataArrayList.get(j).getCOLUMN_ITEM_ID().equalsIgnoreCase(ItemId)) {
+                        /*if user do quantity 0 then delete row from db */
                         if (finalQuantity.equalsIgnoreCase("0")) {
                             Integer deletedRows = dbOpenHelper.deleterow(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), ItemId);
                             if (deletedRows > 0) {
+                                /*update database*/
                                 boolean isupdate = dbOpenHelper.updatecartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id, Constant.notAvailable), SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.Cafe_Id, Constant.notAvailable), ItemId, ItemName, noteset.getText().toString(), finalQuantity, TotalQty, Price, gst, "", Desc, ItemType , Image,"");
                                 if (isupdate) {
+                                    /*update all row colum data*/
                                     dbOpenHelper.updateAllcartdata(SharedPrefs.getSharedPref().getString(SharedPrefs.userSharedPrefData.User_id,Constant.notAvailable),TotalQty,gst,"","");
                                     setData(finalQuantity);
                                 }
