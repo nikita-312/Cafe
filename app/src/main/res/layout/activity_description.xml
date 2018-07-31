@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.conceptioni.cafeapp.activity.DescriptionActivity">
+    tools:context="com.dineore.app.activity.DescriptionActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -21,7 +21,7 @@
             android:clickable="true"
             tools:ignore="ContentDescription,RtlSymmetry" />
 
-        <com.conceptioni.cafeapp.utils.TextviewRegular
+        <com.dineore.app.utils.TextviewRegular
             android:id="@+id/Itemnametvr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:gravity="center">
 
-                    <com.conceptioni.cafeapp.utils.TextviewRegular
+                    <com.dineore.app.utils.TextviewRegular
                         android:id="@+id/ItemPricetvr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                             android:layout_marginRight="@dimen/dp_10"
                             android:background="@drawable/round">
 
-                            <com.conceptioni.cafeapp.utils.TextviewRegular
+                            <com.dineore.app.utils.TextviewRegular
                                 android:id="@+id/qtytvr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/Itemdesctvr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
         android:gravity="center"
         android:weightSum="2">
 
-        <com.conceptioni.cafeapp.utils.TextviewRegular
+        <com.dineore.app.utils.TextviewRegular
             android:id="@+id/addtocarttvr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

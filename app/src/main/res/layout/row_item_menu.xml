@@ -44,7 +44,7 @@
 
             </RelativeLayout>
 
-            <com.conceptioni.cafeapp.utils.TextviewRegular
+            <com.dineore.app.utils.TextviewRegular
                 android:id="@+id/tvrCatName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

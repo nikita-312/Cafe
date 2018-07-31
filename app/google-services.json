@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "290760978835",
-    "firebase_url": "https://cafeapp-3343a.firebaseio.com",
-    "project_id": "cafeapp-3343a",
-    "storage_bucket": "cafeapp-3343a.appspot.com"
+    "project_number": "781765287759",
+    "firebase_url": "https://dineore-556da.firebaseio.com",
+    "project_id": "dineore-556da",
+    "storage_bucket": "dineore-556da.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:290760978835:android:b8f8fe3e24558da3",
+        "mobilesdk_app_id": "1:781765287759:android:a1b369a260013d14",
         "android_client_info": {
-          "package_name": "com.conceptioni.cafeapp"
+          "package_name": "com.dineore.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "290760978835-8tqquq374qvnl9iskfjkt3veatmpi1p4.apps.googleusercontent.com",
+          "client_id": "781765287759-kgf1nccr586i6vambql1palrft4ls05i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.conceptioni.cafeapp",
-            "certificate_hash": "27df1b20101d555c15f592b2b9497f16267059b2"
+            "package_name": "com.dineore.app",
+            "certificate_hash": "86547b0ba041356fb7627c252ae5d26c71a638b9"
           }
         },
         {
-          "client_id": "290760978835-2bdmpic7qlksqndtsv6j9avt1eb7n57j.apps.googleusercontent.com",
+          "client_id": "781765287759-qlp80mscfpvk46hphc006rv4qs8gab6r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAEYZC-v5kjh225TWHvDMa2a52LBgzOgVk"
+          "current_key": "AIzaSyDjKCqjccfCvRP5gUQ6osnuneQosOKFZ7Q"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "290760978835-2bdmpic7qlksqndtsv6j9avt1eb7n57j.apps.googleusercontent.com",
+              "client_id": "781765287759-qlp80mscfpvk46hphc006rv4qs8gab6r.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

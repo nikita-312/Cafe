@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/tvrCartName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                 android:layout_marginRight="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5">
 
-                <com.conceptioni.cafeapp.utils.TextviewBold
+                <com.dineore.app.utils.TextviewBold
                     android:id="@+id/tvbCartPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                                 android:src="@drawable/round"
                                 android:padding="@dimen/dp_5"/>
 
-                            <com.conceptioni.cafeapp.utils.TextviewRegular
+                            <com.dineore.app.utils.TextviewRegular
                                 android:id="@+id/tvrCartQty"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

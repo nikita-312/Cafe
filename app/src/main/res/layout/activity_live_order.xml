@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorwhite"
-    tools:context="com.conceptioni.cafeapp.activity.CartActivity">
+    tools:context="com.dineore.app.activity.CartActivity">
 
     <RelativeLayout
         android:id="@+id/mainrl"
@@ -32,7 +32,7 @@
                 android:src="@drawable/back"
                 tools:ignore="ContentDescription,RtlSymmetry" />
 
-            <com.conceptioni.cafeapp.utils.TextviewRegular
+            <com.dineore.app.utils.TextviewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -90,7 +90,7 @@
                 android:weightSum="1"
                 tools:ignore="UnusedAttribute">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
@@ -98,7 +98,7 @@
                     android:text="Sub total"
                     android:textColor="@color/colorFont" />
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/tvrCartSubTotal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                 android:padding="@dimen/dp_5"
                 android:weightSum="1">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
@@ -129,7 +129,7 @@
                     android:text="GST"
                     android:textColor="@color/colorFont" />
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/tvrCartFee"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                 android:padding="@dimen/dp_5"
                 android:weightSum="1">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
@@ -160,7 +160,7 @@
                     android:text="Total"
                     android:textColor="@color/colorFont" />
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/tvrCartTotal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
                 android:layout_margin="@dimen/dp_10"
                 android:weightSum="2">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/continuetvr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -193,7 +193,7 @@
                     android:textColor="@color/colorwhite"
                     android:textSize="@dimen/sp_14" />
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/paymenttvr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
             android:background="@color/colorwhite"
             android:src="@drawable/internet" />
 
-        <com.conceptioni.cafeapp.utils.TextviewBold
+        <com.dineore.app.utils.TextviewBold
             android:id="@+id/connectionerror"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -238,7 +238,7 @@
             android:textColor="@color/colorblack"
             android:textSize="@dimen/sp_14" />
 
-        <com.conceptioni.cafeapp.utils.TextviewRegular
+        <com.dineore.app.utils.TextviewRegular
             android:id="@+id/checknet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
             android:paddingBottom="@dimen/dp_10"
             android:paddingTop="@dimen/dp_10">
 
-            <com.conceptioni.cafeapp.utils.TextviewRegular
+            <com.dineore.app.utils.TextviewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Retry"

@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10">
 
-                <com.conceptioni.cafeapp.utils.TextviewRegular
+                <com.dineore.app.utils.TextviewRegular
                     android:id="@+id/itemnametvr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5">
 
-                <com.conceptioni.cafeapp.utils.TextviewBold
+                <com.dineore.app.utils.TextviewBold
                     android:id="@+id/itempricetvb"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                                 android:src="@drawable/round"
                                 tools:ignore="ContentDescription" />
 
-                            <com.conceptioni.cafeapp.utils.TextviewRegular
+                            <com.dineore.app.utils.TextviewRegular
                                 android:id="@+id/quantytvr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

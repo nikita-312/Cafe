@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/scan_qr" />
     </LinearLayout>
-    <com.conceptioni.cafeapp.utils.TextviewBold
+    <com.dineore.app.utils.TextviewBold
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tap To Scan Qr Code"

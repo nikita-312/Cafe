@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".activity.QrCodeScanActivity">
 
-    <com.conceptioni.cafeapp.utils.TextviewRegular
+    <com.dineore.app.utils.TextviewRegular
         android:id="@+id/scaninfotv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
